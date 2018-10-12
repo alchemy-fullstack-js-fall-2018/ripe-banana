@@ -22,5 +22,17 @@ describe ('Actor model', () => {
 
         const errors = getErrors(actor.validateSync(), 1);
         expect(errors.name.properties.message).toEqual('Path `name` is required.');
-    });    
+    });   
+    
+    // it('requires a properly formatted date', () => {
+    //     const actor = new Actor({
+    //         name: 'Wanda Wanderson',
+    //         dob: '01-01-197',
+    //         pob: 'Peoria'
+    //     });
+
+    //     const errors = getErrors(actor.validateSync(), 1);
+    //     console.log(errors.dob)
+    //     expect(errors.dob.properties.message).toEqual('Path `name` is required.');
+    // });  
 });
