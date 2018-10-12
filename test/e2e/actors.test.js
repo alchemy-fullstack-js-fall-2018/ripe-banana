@@ -61,4 +61,14 @@ describe('actors pub/sub API', () => {
                 });
             });
     });
+
+    it('gets all actors on get', () => {
+        return request(app)
+            .get('/api/actors')
+            .then(retrievedActors => {
+                createdActors.forEach(createdActor => {
+                    expect(retrievedActors.body).toContainEqual({ _id: createdActor._id, name: createdActor.name });
+                });
+            });
+    });
 });
