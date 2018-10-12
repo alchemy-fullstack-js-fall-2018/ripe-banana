@@ -77,4 +77,18 @@ describe('studios pub/sub API', () => {
             });
     });
 
+    it('gets all studios', () => {
+        return request(app)
+            .get('/api/studios')
+            .then(retrievedStudios => {
+                createdStudios.forEach(createdStudio => {
+                    expect(retrievedStudios.body).toContainEqual({ _id: createdStudio._id, name: createdStudio.name });
+                });
+            });
+    });
+
+    
+
+
+
 });
