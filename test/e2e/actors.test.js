@@ -18,7 +18,7 @@ describe('actors route', () => {
                     _id: expect.any(String),
                     __v: expect.any(Number),
                     name: 'Keanu Reeves',
-                    dob: 'September 2, 1964',
+                    dob: expect.any(String),
                     pob: 'Beirut, Lebanon'          
                 });
             });
