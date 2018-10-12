@@ -70,6 +70,14 @@ describe('studio', () => {
                     expect(retrievedStudios.body).toContainEqual(createdStudio);
                 });
             });
+    });
+
+    it('retrieve one studio by id', () => {
+        return request(app)
+            .get(`/studios/${createdStudios[0]._id}`)
+            .then(retrievedStudio => {
+                expect(retrievedStudio.body).toEqual(createdStudios[0]);
+            });
 
     });
 
