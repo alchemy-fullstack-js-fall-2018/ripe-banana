@@ -4,7 +4,7 @@ const Studio = require('../../lib/models/Studio');
 describe('Studio Model', () => {
     it('validates the Studio Schema Model', () => {
         const data = {
-            name: 'Compost Cinema',
+            name: 'Compost Cinema', //false positive ?, required failing
             address: {
                 city: 'Portland',
                 state: 'OR',
