@@ -5,7 +5,7 @@ describe('studio model', () => {
     it('validates a model', () => {
         const data = {
             name: 'Marvel Studios',
-            address:{
+            address: {
                 city: 'Burbank',
                 state: 'California',
                 country: 'United States'
@@ -19,7 +19,7 @@ describe('studio model', () => {
 
     it('requires a name', () => {
         const studio = new Studio({
-            address:{
+            address: {
                 city: 'Burbank',
                 state: 'California',
                 country: 'United States'
