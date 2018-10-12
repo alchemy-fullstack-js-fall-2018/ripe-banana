@@ -3,6 +3,8 @@ require('../../lib/util/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
+const Studio = require('../../lib/models/Studio');
+
 describe('studio route', () => {
 
     let studios = [
@@ -32,10 +34,30 @@ describe('studio route', () => {
         }
     ];
 
-    // const createStudio = studio => {
-    //     return request(app)
-    //         .post
-    // }
+    let createdStudios;
+
+    const createStudio = studio => {
+        return request(app)
+            .post('/api/studios/')
+            .send(studio)
+            .then(res => res.body);
+    };
+
+    beforeEach(() => {
+        return Studio.deleteMany();
+    });
+
+    beforeEach(() => {
+        return Promise.all(studios.map(createStudio))
+            .then(studiosRes => {
+                createdStudios = studiosRes;
+            });
+    });
+
+    afterAll(() => {
+        mongoose.disconnect();
+    });
+
     it('creates a studio on POST', () => {
         return request(app).post('/api/studios')
             .send({
@@ -56,6 +78,15 @@ describe('studio route', () => {
                         state: 'NY',
                         country: 'USA'
                     }           
+                });
+            });
+    });
+
+    it('gets all studios', () => {
+        return request(app).get('/api/studios')
+            .then(retrievedStudios => {
+                createdStudios.forEach(createdStudio => {
+                    expect(retrievedStudios.body).toContainEqual(createdStudio);
                 });
             });
     });
