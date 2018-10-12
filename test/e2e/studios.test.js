@@ -85,7 +85,7 @@ describe('studio', () => {
         return request(app)
             .delete(`/studios/${createdStudios[0]._id}`)
             .then(deletedStatus => {
-                expect(deletedStatus).toEqual({ removed: true });
+                expect(deletedStatus.body).toEqual({ removed: true });
             });
     });
 
