@@ -90,4 +90,11 @@ describe('studio route', () => {
                 });
             });
     });
+
+    it('gets a studio by id', () => {
+        return request(app).get(`/api/studios/${createdStudios[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ ...createdStudios[0], __v: expect.any(Number) });
+            });
+    });
 });
