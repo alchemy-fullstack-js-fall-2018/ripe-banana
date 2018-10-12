@@ -38,7 +38,9 @@ describe('studio', () => {
 
     beforeEach(() => {
         return Promise.all(studios.map(createStudio))
-            .then(studiosRes => { createdStudios = studiosRes });
+            .then(studiosRes => { 
+                createdStudios = studiosRes; 
+            });
     });
 
     it('creates a studio', () => {
