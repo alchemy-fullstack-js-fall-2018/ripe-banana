@@ -62,9 +62,16 @@ describe('studio', () => {
             });
     });
 
-    // it('retrieve all studios on get request', () => {
+    it('retrieve all studios on get request', () => {
+        return request(app)
+            .get('/studios')
+            .then(retrievedStudios => {
+                createdStudios.forEach(createdStudio => {
+                    expect(retrievedStudios.body).toContainEqual(createdStudio);
+                });
+            });
 
-    // })
+    });
 
 });
 
