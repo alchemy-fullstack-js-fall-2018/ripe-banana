@@ -89,4 +89,12 @@ describe('actors pub/sub API', () => {
             });
     });
 
+    it('deletes an actor by id', () => {
+        return request(app)
+            .delete(`/api/actors/${createdActors[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ removed: true });
+            });
+    });
+
 });
