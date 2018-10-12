@@ -1,4 +1,4 @@
-const Actor = require('../../lib/model/Actor');
+const Actor = require('../../lib/models/Actor');
 const { getErrors } = require('../util/helpers');
 
 describe('actor model', () => {
