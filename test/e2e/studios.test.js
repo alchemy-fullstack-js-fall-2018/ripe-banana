@@ -72,13 +72,21 @@ describe('studio', () => {
             });
     });
 
-    it('retrieve one studio by id', () => {
+    it('retrieves one studio by id', () => {
         return request(app)
             .get(`/studios/${createdStudios[0]._id}`)
             .then(retrievedStudio => {
                 expect(retrievedStudio.body).toEqual(createdStudios[0]);
             });
 
+    });
+
+    it('deleted one studio by id', () => {
+        return request(app)
+            .delete(`/studios/${createdStudios[0]._id}`)
+            .then(deletedStatus => {
+                expect(deletedStatus).toEqual({ removed: true });
+            });
     });
 
 });
