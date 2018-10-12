@@ -1,5 +1,7 @@
+const { dropCollection } = require('./db');
 const request = require('supertest');
 const app = require('../../lib/app');
+
 
 describe('validates a vertical slice of the Studio route', () => {
 
@@ -7,7 +9,7 @@ describe('validates a vertical slice of the Studio route', () => {
         return request(app)
             .post('/api/studios')
             .send({
-                name: 'Compost Cinema', //false positive ?, required failing
+                name: 'Compost Cinema', 
                 address: {
                     city: 'Portland',
                     state: 'OR',
@@ -17,7 +19,7 @@ describe('validates a vertical slice of the Studio route', () => {
             .then(res => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
-                    __v: expect.any(String),
+                    __v: expect.any(Number),
                     name: 'Compost Cinema',
                     address: {
                         city: 'Portland',
