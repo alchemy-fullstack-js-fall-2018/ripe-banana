@@ -14,7 +14,7 @@ describe('Studio model', () => {
 
         const studio = new Studio(data);
         const jsonStudio = studio.toJSON();
-        expect(jsonStudio).toEqual({ ...data, _id: expect.any(Object)})
+        expect(jsonStudio).toEqual({ ...data, _id: expect.any(Object) });
     });
 
     it('requires a name', () => {

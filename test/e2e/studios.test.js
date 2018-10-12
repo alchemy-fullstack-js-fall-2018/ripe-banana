@@ -1,8 +1,8 @@
+require('dotenv').config();
+require('../../lib/util/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
-const Studio = require('../../lib/models/Studio');
-
 describe('studio route', () => {
 
     let studios = [
