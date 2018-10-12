@@ -13,9 +13,13 @@
   },
   "jest": {
     "reporters": [
-        ["jest-nyan-reporter", 
-        { "suppressErrorReporter": false }]
+      [
+        "jest-nyan-reporter",
+        {
+          "suppressErrorReporter": false
+        }
       ]
+    ]
   },
   "repository": {
     "type": "git",
