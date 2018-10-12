@@ -30,7 +30,7 @@ describe ('Studio model', () => {
         expect(errors.name.properties.message).toEqual('Path `name` is required.');
 
 
-    })
+    });
 
 
     

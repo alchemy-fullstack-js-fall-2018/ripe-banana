@@ -89,6 +89,15 @@ describe('studio', () => {
             });
     });
 
+    it('tries to delete one studio by id and returns false when supplied a bogus id', () => {
+        const bogusId = '123456789012345678901234';
+        return request(app)
+            .delete(`/studios/${bogusId}`)
+            .then(deletedStatus => {
+                expect(deletedStatus.body).toEqual({ removed: false });
+            });
+    });
+
 });
 
 
