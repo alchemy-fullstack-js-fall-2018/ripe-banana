@@ -23,4 +23,5 @@ describe('actor model', () => {
         const errors = getErrors(actor.validateSync(), 1);
         expect(errors.name.properties.message).toEqual('Path `name` is required.');
     });
+
 });
