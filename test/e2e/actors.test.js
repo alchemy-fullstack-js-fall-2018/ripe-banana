@@ -79,5 +79,14 @@ describe('actors pub/sub API', () => {
                 expect(res.body).toEqual({ ...createdActors[0], __v: expect.any(Number) });
             });     
     });
-    
+
+    it('updates an actor by id', () => {
+        return request(app)
+            .put(`/api/actors/${createdActors[0]._id}`)
+            .send({ name: 'Idris Elba' })
+            .then(res => {
+                expect(res.body).toEqual({ ...createdActors[0], name: 'Idris Elba' });
+            });
+    });
+
 });
