@@ -13,4 +13,14 @@ describe('actor model', () => {
         const jsonActor = actor.toJSON();
         expect(jsonActor).toEqual({ ...data, _id: expect.any(Object) });
     });
+
+    it('requires a name', () => {
+        const actor = new Actor({
+            dob: new Date(1986, 6, 11),
+            pob: 'Los Angeles, CA'
+        });
+
+        const errors = getErrors(actor.validateSync(), 1);
+        expect(errors.name.properties.message).toEqual('Path `name` is required.');
+    });
 });
