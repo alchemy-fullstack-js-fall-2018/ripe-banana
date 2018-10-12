@@ -1,4 +1,4 @@
-// const { getErrors } = require('./helpers');
+const { getErrors } = require('./helpers');
 const Studio = require('../../lib/models/Studio');
 
 describe('Studio Model', () => {
@@ -17,11 +17,16 @@ describe('Studio Model', () => {
         expect(jsonStudio).toEqual({ ...data, _id: expect.any(Object) });
     });
 
+    it('fails when no name is invalid', () => {
+        const studio = new Studio ({
+            address: {
+                city: 'Dumpsville',
+                state: 'ZZ',
+                country: 'Sarahstan'
+            }
+        });
+        const errors = getErrors(studio.validateSync(), 2);
+        expect(errors.name.properties.message).toEqual('Path `name` is required.');
+    });
+
 });
-
-
-//start with Studio, Actors, Reviewer, (thses do not refrence other models)
-//write model, route and test, vertical slices
-//then make Film which refrences Studio and Actors(cast array)
-//then => Review relies on Film and Reviewers
-
