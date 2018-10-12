@@ -87,7 +87,25 @@ describe('studios pub/sub API', () => {
             });
     });
 
-    
+    it('gets a studio by id', () => {
+        return request(app)
+            .get(`/api/studios/${createdStudios[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ ...createdStudios[0], __v: expect.any(Number) });
+            });
+    });
+
+    it('deletes a studio by id', () => {
+        return request(app)
+            .delete(`/api/studios/${createdStudios[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ removed: true });
+            });
+    });
+
+
+
+
 
 
 
