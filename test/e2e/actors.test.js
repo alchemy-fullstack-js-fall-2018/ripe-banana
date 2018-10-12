@@ -81,6 +81,27 @@ describe('actors', () => {
             });
     });
 
+    it('tries to delete one actor by id and returns false when supplied a bogus id', () => {
+        const bogusId = '123456789012345678901234';
+        return request(app)
+            .delete(`/actors/${bogusId}`)
+            .then(deletedStatus => {
+                expect(deletedStatus.body).toEqual({ removed: false });
+            });
+    });
+
+    it('updates an actor when supplied id and new data', () => {
+        const id = createdActors[0]._id;
+        const newData = createdActors[0];
+        newData.name = 'Neil Damon';
+        return request(app)
+            .put(`/actors/${id}`)
+            .send(newData)
+            .then(result => {
+                expect(result.body).toEqual(newData);
+            });
+    });
+
 
 
 });
