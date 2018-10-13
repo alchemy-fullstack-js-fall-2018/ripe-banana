@@ -91,9 +91,17 @@ describe('validates a vertical slice of the Studio route', () => {
         return request(app)
             .get(`/api/studios/${createdStudios[1]._id}`)
             .then(res => {
-                expect(res.body).toEqual(createdStudios[1])
+                expect(res.body).toEqual(createdStudios[1]);
             });
 
+    });
+
+    it('deletes a studio by id', () => {
+        return request(app)
+            .delete(`/api/studios/${createdStudios[1]._id}`)
+            .then(modifiedList => {
+                expect(modifiedList.body).toEqual({ removed: true });
+            });
     });
 
 });
