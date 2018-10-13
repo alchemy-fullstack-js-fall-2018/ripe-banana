@@ -57,5 +57,23 @@ describe('reviewer pub/sub API', () => {
             });
     });
 
+    it('gets all reviewers', () => {
+        return request(app)
+            .get('/api/reviewers')
+            .then(retrievedReviewers => {
+                createdReviewers.forEach(createdReviewer => {
+                    expect(retrievedReviewers.body).toContainEqual(createdReviewer);
+                });
+            });
+    });
+
+    it('gets reviewer by id', () => {
+        return request(app)
+            .get(`/api/reviewers/${createdReviewers[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ ...createdReviewers[0], __v: expect.any(Number) });
+            });
+    });
+
 
 });
