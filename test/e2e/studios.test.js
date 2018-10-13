@@ -87,6 +87,15 @@ describe('validates a vertical slice of the Studio route', () => {
             });
     });
 
+    it('gets a studio by id', () => {
+        return request(app)
+            .get(`/api/studios/${createdStudios[1]._id}`)
+            .then(res => {
+                expect(res.body).toEqual(createdStudios[1])
+            });
+
+    });
+
 });
 
 
