@@ -74,5 +74,14 @@ describe('actors route', () => {
                 });
             });
     })
+
+    it('gets actor by id', () => {
+        return request(app).get(`/api/actors/${createdActors[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ ...createdActors[0], __v: expect.any(Number) })
+            })
+    })
+
+    
 });
 
