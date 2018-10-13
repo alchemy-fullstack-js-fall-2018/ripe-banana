@@ -4,6 +4,53 @@ const app = require('../../lib/app');
 
 
 describe('validates a vertical slice of the Studio route', () => {
+   
+    let studios =  [{
+        name: 'Compost Cinema', 
+        address: {
+            city: 'Portland',
+            state: 'OR',
+            country: 'United States'
+        }
+    },
+    {
+        name: 'Compost Cinema2', 
+        address: {
+            city: 'Portland2',
+            state: 'OR',
+            country: 'United States'
+        }
+    },
+    {
+        name: 'Compost Cinema3', 
+        address: {
+            city: 'Portland3',
+            state: 'OR',
+            country: 'United States'
+        }
+    },
+    ];
+
+    
+    let createdStudios;
+        
+    const createStudio = studio => {
+        return request(app)
+            .post('/api/studios')
+            .send(studio)
+            .then(res => res.body);
+    };
+        
+    beforeEach(() => {
+        return dropCollection('studios');
+    });
+        
+    beforeEach(() => {
+        return Promise.all(studios.map(createStudio)).then(studiosRes => {
+            createdStudios = studiosRes;
+        });
+    });
+
 
     it('Posts to Studio', () => {
         return request(app)
@@ -30,9 +77,16 @@ describe('validates a vertical slice of the Studio route', () => {
             });
     });
 
+    it('gets all Studios', () => {
+        return request(app)
+            .get('/api/studios')
+            .then(res => {
+                expect(res.body).toContainEqual(createdStudios[0]);
+                expect(res.body).toContainEqual(createdStudios[1]);
+                expect(res.body).toContainEqual(createdStudios[2]);
+            });
+    });
 
-
-    
 });
 
 
