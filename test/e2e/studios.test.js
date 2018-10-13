@@ -104,6 +104,31 @@ describe('validates a vertical slice of the Studio route', () => {
             });
     });
 
+    it('updates a studio by id', () => {
+        return request(app)
+            .put(`/api/studios/${createdStudios[1]._id}`)
+            .send({
+                name: 'Compost Cinema5', 
+                address: {
+                    city: 'Portland5',
+                    state: 'OR',
+                    country: 'United States'
+                }
+            })
+            .then(res => {
+                expect(res.body).toEqual({
+                    _id: expect.any(String),
+                    __v: expect.any(Number),
+                    name: 'Compost Cinema5', 
+                    address: {
+                        city: 'Portland5',
+                        state: 'OR',
+                        country: 'United States'
+                    }
+                });
+            });
+    });
+
 });
 
 
