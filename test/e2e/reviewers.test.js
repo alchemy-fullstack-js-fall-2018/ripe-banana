@@ -75,5 +75,14 @@ describe('reviewer pub/sub API', () => {
             });
     });
 
+    it('updates an reviewer by id', () => {
+        return request(app)
+            .put(`/api/reviewers/${createdReviewers[0]._id}`)
+            .send({ name: 'Cole Smithy' })
+            .then(res => {
+                expect(res.body).toEqual({ ...createdReviewers[0], name: 'Cole Smithy' });
+            });
+    });
+
 
 });
