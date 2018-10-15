@@ -146,4 +146,40 @@ describe('film routes', () => {
             });
     });
 
+    it('gets a film when supplied film id', () =>{
+        const id = createdFilms[0]._id;
+        return request(app)
+            .get(`/films/${id}`)
+            .then(returnedFilm => {
+                expect(returnedFilm.body).toEqual({
+                    title: createdFilms[0].title,
+                    released: createdFilms[0].released,
+                    studio: {
+                        _id: createdStudio._id,
+                        name: createdStudio.name
+                    },
+                    cast: [
+                        { 
+                            _id: expect.any(String), 
+                            role: 'Chief Troublemaker', 
+                            actor: {
+                                _id: createdActors[0]._id,
+                                name: createdActors[0].name 
+                            }
+                        },
+                        { 
+                            _id: expect.any(String), 
+                            role: 'Sidekick', 
+                            actor: {
+                                _id: createdActors[1]._id,
+                                name: createdActors[1].name 
+                            }
+                        }
+
+                    ]                 
+                });
+            });
+        
+    });
+
 });
