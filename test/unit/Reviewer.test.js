@@ -13,4 +13,13 @@ describe('reviewer model', () => {
         expect(jsonReviewer).toEqual({ ...data, _id: expect.any(Object) });
     
     });
+
+    it('it requires a name', () => {
+        const reviewer = new Reviewer({
+            company: 'FilmCriticsRUs'
+        });
+
+        const errors = getErrors(reviewer.validateSync(), 1);
+        expect(errors.name.kind).toEqual('required');
+    });
 });
