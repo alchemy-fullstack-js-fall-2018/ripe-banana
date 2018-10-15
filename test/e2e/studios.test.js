@@ -1,4 +1,4 @@
-const { dropCollection } = require('./db');
+const { dropCollection, createdStudios } = require('./db');
 const request = require('supertest');
 const app = require('../../lib/app');
 
@@ -30,7 +30,6 @@ describe('validates a vertical slice of the Studio route', () => {
         }
     },
     ];
-
     
     let createdStudios;
         

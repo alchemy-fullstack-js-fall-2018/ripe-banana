@@ -1,6 +1,6 @@
 require('dotenv').config();
 const connect = require('../../lib/util/connect');
-connect(`${process.env.MONGODB_URI}_test`);
+connect(`${process.env.MONGODB_URI}`);
 const mongoose = require('mongoose');
 
 afterAll(() => {
