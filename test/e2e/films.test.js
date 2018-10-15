@@ -149,8 +149,7 @@ describe('validates a vertical slice of the Films route', () => {
                     { 
                         title: createdFilms[1].title, 
                         released: createdFilms[1].released, 
-                        studio: 
-                        { 
+                        studio: { 
                             _id: createdFilms[1].studio, 
                             name: createdStudios[1].name 
                         }, 
@@ -164,7 +163,6 @@ describe('validates a vertical slice of the Films route', () => {
                         }] 
                     });
             });
-
     });
 
     it('deletes a film by id', () => {
@@ -172,34 +170,6 @@ describe('validates a vertical slice of the Films route', () => {
             .delete(`/api/films/${createdFilms[1]._id}`)
             .then(modifiedList => {
                 expect(modifiedList.body).toEqual({ removed: true });
-            });
-    });
-
-    it('updates a film by id', () => {
-        return request(app)
-            .put(`/api/films/${createdFilms[0]._id}`)
-            .send({
-                title: 'BladeRunner',
-                studio: createdStudios[1]._id,
-                released: 1998,
-                cast: [{
-                    role: 'Joi',
-                    actor: createdActors[1]._id
-                }]
-            })
-            .then(res => {
-                expect(res.body).toEqual({
-                    _id: expect.any(String),
-                    __v: expect.any(Number),
-                    title: 'BladeRunner',
-                    studio: createdStudios[1]._id,
-                    released: 1998,
-                    cast: [{
-                        _id: expect.any(String),
-                        role: 'Joi',
-                        actor: createdActors[1]._id
-                    }]
-                });            
             });
     });
 
