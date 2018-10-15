@@ -4,6 +4,7 @@ const app = require('../../lib/app');
 
 
 describe('validates a vertical slice of the Films route', () => {
+    
     beforeEach(() => {
         return dropCollection('studios');
     });
@@ -160,7 +161,7 @@ describe('validates a vertical slice of the Films route', () => {
 
     it('updates a film by id', () => {
         return request(app)
-            .put(`/api/films/${createdFilms[1]._id}`)
+            .put(`/api/films/${createdFilms[0]._id}`)
             .send({
                 title: 'BladeRunner',
                 studio: createdStudios[1]._id,
