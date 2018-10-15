@@ -124,7 +124,21 @@ describe('film pub/sub API', () => {
                     role: 'Cop',
                     actor: createdActors[0]._id
                 }]
+            })
+            .then(res => {
+                expect(res.body).toEqual({
+                    _id: expect.any(String),
+                    __v: expect.any(Number),
+                    title: 'Hot Pursuit',
+                    studio: createdStudios[0]._id,
+                    released: 2015,
+                    cast: [{
+                        role: 'cop',
+                        actor: createdActors[0]._id
+                    }] 
+                });
             });
+        
     });
 
 
