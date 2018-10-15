@@ -184,6 +184,14 @@ describe('film pub/sub API', () => {
             });
     });
 
+    it('deletes a film', () => {
+        return request(app)
+            .delete(`/api/films/${createdFilms[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ removed: true });
+            });
+    });
+
     
 
 
