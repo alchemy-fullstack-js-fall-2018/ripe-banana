@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const Chance = require('chance');
 const chance = new Chance();
+const { createActorsArr } = require('../util/helpers');
 
 describe('reviews pub/sub API', () => {
     let films = [
@@ -93,6 +94,14 @@ describe('reviews pub/sub API', () => {
     let createdFilms;
     let createdReviewers;
     let createdReviews;
+    let createdActors;
+
+    beforeEach(() => {
+        createdActors = createActorsArr();
+        createdActors.forEach((actor, index) => {
+            films[index].cast[0].actor = actor._id;
+        });
+    });
 
     beforeEach(() => {
         return Promise.all(films.map(createFilm))

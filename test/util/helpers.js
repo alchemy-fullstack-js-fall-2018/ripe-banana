@@ -43,8 +43,11 @@ const createActorsArr = () => {
     Promise.all(actors.map(createActor))
         .then(actorRes => createdActors = actorRes);
 
+    return createdActors;
+
 };
 
 module.exports = {
-    getErrors
+    getErrors,
+    createActorsArr
 };
