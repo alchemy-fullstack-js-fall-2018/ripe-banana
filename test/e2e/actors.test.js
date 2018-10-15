@@ -20,7 +20,6 @@ describe('validates a vertical slice of the Actor route', () => {
         dob: new Date(),
         pob: 'Mexico'
     }];
-
     
     let createdActors;
         
