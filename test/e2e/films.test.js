@@ -150,37 +150,40 @@ describe('validates a vertical slice of the Films route', () => {
 
     });
 
-    // it('deletes a studio by id', () => {
-    //     return request(app)
-    //         .delete(`/api/studios/${createdStudios[1]._id}`)
-    //         .then(modifiedList => {
-    //             expect(modifiedList.body).toEqual({ removed: true });
-    //         });
-    // });
+    it('deletes a film by id', () => {
+        return request(app)
+            .delete(`/api/films/${createdFilms[1]._id}`)
+            .then(modifiedList => {
+                expect(modifiedList.body).toEqual({ removed: true });
+            });
+    });
 
-    // it('updates a studio by id', () => {
-    //     return request(app)
-    //         .put(`/api/studios/${createdStudios[1]._id}`)
-    //         .send({
-    //             name: 'Compost Cinema5', 
-    //             address: {
-    //                 city: 'Portland5',
-    //                 state: 'OR',
-    //                 country: 'United States'
-    //             }
-    //         })
-    //         .then(res => {
-    //             expect(res.body).toEqual({
-    //                 _id: expect.any(String),
-    //                 __v: expect.any(Number),
-    //                 name: 'Compost Cinema5', 
-    //                 address: {
-    //                     city: 'Portland5',
-    //                     state: 'OR',
-    //                     country: 'United States'
-    //                 }
-    //             });
-    //         });
-    // });
+    it('updates a film by id', () => {
+        return request(app)
+            .put(`/api/films/${createdFilms[1]._id}`)
+            .send({
+                title: 'BladeRunner',
+                studio: createdStudios[1]._id,
+                released: 1998,
+                cast: [{
+                    role: 'Joi',
+                    actor: createdActors[1]._id
+                }]
+            })
+            .then(res => {
+                expect(res.body).toEqual({
+                    _id: expect.any(String),
+                    __v: expect.any(Number),
+                    title: 'BladeRunner',
+                    studio: createdStudios[1]._id,
+                    released: 1998,
+                    cast: [{
+                        _id: expect.any(String),
+                        role: 'Joi',
+                        actor: createdActors[1]._id
+                    }]
+                });            
+            });
+    });
 
 });
