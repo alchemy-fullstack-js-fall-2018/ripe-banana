@@ -4,7 +4,15 @@ const app = require('../../lib/app');
 
 
 describe('validates a vertical slice of the Studio route', () => {
-    
+    beforeEach(() => {
+        return dropCollection('studios');
+        return dropCollection('actors');
+        return dropCollection('films');
+    });
+
+    let createdActors;
+    let createdStudios;
+    let createdFilms;
     // Creating actors for tests
 
     let actors =  [{
@@ -16,32 +24,8 @@ describe('validates a vertical slice of the Studio route', () => {
         name: 'Lud Orange',
         dob: new Date(),
         pob: 'Florida'
-    },
-    {
-        name: 'Ocado Pitt', 
-        dob: new Date(),
-        pob: 'Mexico'
     }];
     
-    let createdActors;
-        
-    const createActor = actor => {
-        return request(app)
-            .post('/api/actors')
-            .send(actor)
-            .then(res => res.body);
-    };
-        
-    beforeEach(() => {
-        return dropCollection('actors');
-    });
-        
-    beforeEach(() => {
-        return Promise.all(actors.map(createActor)).then(actorsRes => {
-            createdActors = actorsRes;
-        });
-    });
-
     let studios =  [{
         name: 'Compost Cinema', 
         address: {
@@ -57,19 +41,39 @@ describe('validates a vertical slice of the Studio route', () => {
             state: 'OR',
             country: 'United States'
         }
+    }];
+
+    let films =  [{
+        title: 'Bladecrawler',
+            released: 1991,
+            cast: [{
+                role: 'lead',
+            }]
     },
     {
-        name: 'Compost Cinema3', 
-        address: {
-            city: 'Portland3',
-            state: 'OR',
-            country: 'United States'
-        }
-    },
-    ];
-    
-    let createdStudios;
+        title: 'Bladewalker',
+        released: 1992,
+        cast: [{
+            role: 'Deckard',
+        }]
+    }];
         
+    const createActor = actor => {
+        return request(app)
+            .post('/api/actors')
+            .send(actor)
+            .then(res => res.body);
+    };
+        
+    beforeEach(() => {
+        return Promise.all(actors.map(createActor)).then(actorsRes => {
+            createdActors = actorsRes;
+            films[0].cast[0].actor = createdActors[0]._id;
+            films[1].cast[0].actor = createdActors[1]._id;
+        });
+    });
+
+
     const createStudio = studio => {
         return request(app)
             .post('/api/studios')
@@ -78,94 +82,68 @@ describe('validates a vertical slice of the Studio route', () => {
     };
         
     beforeEach(() => {
-        return dropCollection('studios');
+        return Promise.all(studios.map(createStudio)).then(studiosRes => {
+            createdStudios = studiosRes;
+            films[0].studio = createdStudios[0]._id;
+            films[1].studio = createdStudios[1]._id;
+        });
+    });
+        
+    const createFilm = film => {
+        return request(app)
+            .post('/api/films')
+            .send(film)
+            .then(res => res.body);
+    };
+        
+    beforeEach(() => {
+        return dropCollection('films');
     });
         
     beforeEach(() => {
-        return Promise.all(studios.map(createStudio)).then(studiosRes => {
-            createdStudios = studiosRes;
+        return Promise.all(films.map(createFilm)).then(filmsRes => {
+            createdFilms = filmsRes;
         });
     });
 
-    if(createdStudios && createdActors){
-        let films =  [{
-            title: 'Bladecrawler',
-                studio: createdStudios[0]._id,
-                released: 1991,
-                cast: [{
-                    role: 'lead',
-                    actor: createdActors[0]._id
-                }]
-        },
-        {
-            title: 'Bladewalker',
-            studio: createdStudios[1]._id,
-            released: 1992,
-            cast: [{
-                role: 'Deckard',
-                actor: createdActors[1]._id
-            }]
-        }];
-        
-        let createdFilms;
-            
-        const createFilm = film => {
+        it('Posts to Films', () => {
             return request(app)
                 .post('/api/films')
-                .send(film)
-                .then(res => res.body);
-        };
-            
-        beforeEach(() => {
-            return dropCollection('films');
-        });
-            
-        beforeEach(() => {
-            return Promise.all(films.map(createFilm)).then(filmsRes => {
-                createdFilms = filmsRes;
-            });
-        });
-    }
-
-
-    it('Posts to Films', () => {
-        return request(app)
-            .post('/api/films')
-            .send({
-                title: 'Bladewalker',
-                studio: createdStudios[0]._id,
-                released: 1991,
-                cast: [{
-                    role: 'Pris',
-                    actor: createdActors[0]._id
-                }]
-            })
-            .then(res => {
-                console.log('@@response', res.body)
-                expect(res.body).toEqual({
-                    _id: expect.any(String),
-                    __v: expect.any(Number),
+                .send({
                     title: 'Bladewalker',
                     studio: createdStudios[0]._id,
                     released: 1991,
                     cast: [{
-                        _id: expect.any(String),
                         role: 'Pris',
                         actor: createdActors[0]._id
                     }]
-                });            
-            });
-    });
+                })
+                .then(res => {
+                    console.log('@@response', res.body)
+                    expect(res.body).toEqual({
+                        _id: expect.any(String),
+                        __v: expect.any(Number),
+                        title: 'Bladewalker',
+                        studio: createdStudios[0]._id,
+                        released: 1991,
+                        cast: [{
+                            _id: expect.any(String),
+                            role: 'Pris',
+                            actor: createdActors[0]._id
+                        }]
+                    });            
+                });
+        });
+    
+        it('gets all Films', () => {
+            return request(app)
+                .get('/api/films')
+                .then(res => {
+                    expect(res.body).toContainEqual(createdFilms[0]);
+                    expect(res.body).toContainEqual(createdFilms[1]);
+                });
+        });
 
-    // it('gets all Studios', () => {
-    //     return request(app)
-    //         .get('/api/studios')
-    //         .then(res => {
-    //             expect(res.body).toContainEqual(createdStudios[0]);
-    //             expect(res.body).toContainEqual(createdStudios[1]);
-    //             expect(res.body).toContainEqual(createdStudios[2]);
-    //         });
-    // });
 
     // it('gets a studio by id', () => {
     //     return request(app)
