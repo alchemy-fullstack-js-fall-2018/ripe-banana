@@ -5,7 +5,7 @@ const { getErrors } = require('./helpers');
 
 describe('Film model', () => {
 
-    it.only('validates a good model', () => {
+    it('validates a good model', () => {
 
         const studioData = {
             name: 'Willamette Pictures',
@@ -55,4 +55,20 @@ describe('Film model', () => {
             ]
         });
     });
+
+    it.only('requires a title', () => {
+        const film = new Film({
+            title: '',
+            studio: null,
+            released: null,
+            cast: [{ role: 'Dog Catcher', actor: null }]
+        });
+
+        const errors = getErrors(film.validateSync(), 4);
+        console.log(errors);
+        expect(errors.title.properties.message).toEqual('Path `title` is required.');
+        expect(errors.studio.properties.message).toEqual('Path `studio` is required.');
+        expect(errors.released.properties.message).toEqual('Path `released` is required.');
+        expect(errors['cast.0.actor'].properties.message).toEqual('Path `actor` is required.');
+    }); 
 });
