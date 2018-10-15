@@ -77,9 +77,15 @@ describe('film routes', () => {
             .send(newFilm)
             .then(result => {
                 expect(result.body).toEqual({
-                    ...newFilm,
-                    __v: expect.any(Number),
-                    _id: expect.any(String)
+                    title: 'Revenge of the Programmers',
+                    studio: createdStudio._id,
+                    released: 1985,
+                    cast: [
+                        { _id: expect.any(String), role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
+                        { _id: expect.any(String), role: 'Sidekick', actor: createdActors[1]._id }
+                    ],
+                    _id: expect.any(String),
+                    __v: expect.any(Number)
                 });
             });
     });
