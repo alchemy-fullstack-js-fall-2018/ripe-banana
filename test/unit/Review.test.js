@@ -1,8 +1,5 @@
 const { getErrors } = require('./helpers');
-const { dropCollection } = require('../e2e/db');
 const Review = require('../../lib/models/Review');
-const request = require('supertest');
-const app = require('../../lib/app');
 const { Types } = require('mongoose');
 
 describe('Review Model', () => {
@@ -19,17 +16,15 @@ describe('Review Model', () => {
 
         const review = new Review(data);
         const jsonReview = review.toJSON();
-        // getErrors(review.validateSync(), 0);
-            
         expect(jsonReview).toEqual({ ...data, _id: expect.any(Object) });
     });
 
-    // it('validates that a name has been passed', () => {
-    //     const film = new Film({
-    //         released: 1991
-    //     });
+    it('validates that a properties have been passed', () => {
+        const review = new Review({
+            createdAt: 1991
+        });
 
-        // const errors = getErrors(film.validateSync(), 1);
-        // expect(errors.title.properties.message).toEqual('Path `title` is required.');
-    // });
+        const errors = getErrors(review.validateSync(), 3);
+        expect(errors.rating.properties.message).toEqual('Path `rating` is required.');
+    });
 });

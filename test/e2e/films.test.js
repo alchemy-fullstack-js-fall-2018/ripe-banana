@@ -4,7 +4,6 @@ const app = require('../../lib/app');
 
 
 describe('validates a vertical slice of the Films route', () => {
-    
     beforeEach(() => {
         return dropCollection('studios');
     });
@@ -146,7 +145,7 @@ describe('validates a vertical slice of the Films route', () => {
         return request(app)
             .get(`/api/films/${createdFilms[1]._id}`)
             .then(res => {
-                expect(res.body).toEqual(createdFilms[1]);
+                expect(res.body).toEqual({ title: createdFilms[1].title, released: createdFilms[1].released, studio: { _id: createdFilms[1].studio, name: createdStudios[1].name } });
             });
 
     });
