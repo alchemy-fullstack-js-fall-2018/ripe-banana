@@ -126,6 +126,25 @@ describe('film routes', () => {
             });
     });
 
-    
+    it('gets all films', () => {
+        return request(app)
+            .get('/films')
+            .then(retrievedFilms => {
+                createdFilms.forEach(createdFilm => {
+                    expect(retrievedFilms.body).toContainEqual(
+                        {
+                            title: createdFilm.title,
+                            released: createdFilm.released,
+                            studio: { 
+                                _id: createdStudio._id,
+                                name: createdStudio.name
+                            },
+                            _id: expect.any(String)
+
+                        } 
+                    );
+                });
+            });
+    });
 
 });
