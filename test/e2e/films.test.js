@@ -157,8 +157,29 @@ describe('film pub/sub API', () => {
                         title: createdFilms[0].title,
                         studio: { _id: createdFilms[0].studio, name: createdStudios[0].name },
                         released: createdFilms[0].released,
-                        _id: expect.any(String),
+                        _id: expect.any(String)
                     });
+                });
+            });
+    });
+
+    it('gets a film by id', () => {
+        return request(app)
+            .get(`/api/films/${createdFilms[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({
+                    _id: createdFilms[0]._id,
+                    title: createdFilms[0].title,
+                    released: createdFilms[0].released,
+                    studio: { _id: createdFilms[0].studio, name: createdStudios[0].name },
+                    cast: [{
+                        _id: createdFilms[0].cast[0]._id,
+                        role: createdFilms[0].cast[0].role,
+                        actor: {
+                            _id: createdActors[0]._id,
+                            name: createdActors[0].name
+                        }
+                    }]  
                 });
             });
     });
