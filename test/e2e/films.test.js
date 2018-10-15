@@ -135,8 +135,6 @@ describe('film pub/sub API', () => {
             .then(filmRes => createdFilms = filmRes);
     });
 
-
-
     it('creates a film', () => {
         return request(app)
             .post('/api/films')
@@ -148,6 +146,21 @@ describe('film pub/sub API', () => {
                     ...films[0]
                 });
             }); 
+    });
+
+    it('gets all films', () => {
+        return request(app)
+            .get('/api/films')
+            .then(retrievedFilms => {
+                createdFilms.forEach(() => {
+                    expect(retrievedFilms.body).toContainEqual({
+                        title: createdFilms[0].title,
+                        studio: { _id: createdFilms[0].studio, name: createdStudios[0].name },
+                        released: createdFilms[0].released,
+                        _id: expect.any(String),
+                    });
+                });
+            });
     });
 
     
