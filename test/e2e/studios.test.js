@@ -1,4 +1,4 @@
-const { dropCollection, createdStudios } = require('./db');
+const { dropCollection } = require('./db');
 const request = require('supertest');
 const app = require('../../lib/app');
 

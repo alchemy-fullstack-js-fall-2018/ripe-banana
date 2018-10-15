@@ -98,8 +98,8 @@ describe('validates a vertical slice of the Studio route', () => {
                 studio: createdStudios[0]._id,
                 released: new Date(1991),
                 cast: [{
-                  role: 'Pris',
-                  actor: createdActors[0]._id
+                    role: 'Pris',
+                    actor: createdActors[0]._id
                 }]
             })
             .then(res => {
@@ -110,8 +110,8 @@ describe('validates a vertical slice of the Studio route', () => {
                     studio: createdStudios[0]._id,
                     released: expect.any(String),
                     cast: [{
-                      role: 'Pris',
-                      actor: createdActors[0]._id
+                        role: 'Pris',
+                        actor: createdActors[0]._id
                     }]
                 });            
             });
