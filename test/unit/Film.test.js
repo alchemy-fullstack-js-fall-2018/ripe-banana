@@ -5,7 +5,7 @@ const { getErrors } = require('./helpers');
 
 describe('Film model', () => {
 
-    it('validates a good model', () => {
+    it.only('validates a good model', () => {
 
         const studioData = {
             name: 'Willamette Pictures',
@@ -41,6 +41,11 @@ describe('Film model', () => {
                 { role: 'Product Manager', actor: actor2._id }
             ]
         };
+
+        const film = new Film(filmData);
+        const jsonFilm = film.toJSON();
+        console.log(jsonFilm);
+        expect(jsonFilm).toEqual({ ...filmData, _id: expect.any(Object) });
         
 
 

@@ -3,7 +3,7 @@ const app = require('../../lib/app');
 
 const { dropCollection } = require('./db');
 
-describe('reviewers', () => {
+xdescribe('reviewers', () => {
 
     let reviewers = [
         { name: 'George Watchington', company: 'Patriot Films' },

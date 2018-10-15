@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
 
-describe('actors', () => {
+xdescribe('actors', () => {
 
     let actors = [
         {

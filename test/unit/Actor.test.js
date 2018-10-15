@@ -1,7 +1,7 @@
 const Actor = require('../../lib/models/Actor');
 const { getErrors } = require('./helpers');
 
-describe ('Actor model', () => {
+xdescribe ('Actor model', () => {
     it('validates a good model', () => {
         const data = {
             name: 'Wanda Wanderson',
