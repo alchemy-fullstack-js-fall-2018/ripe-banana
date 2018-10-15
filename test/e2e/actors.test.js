@@ -5,20 +5,20 @@ const app = require('../../lib/app');
 
 describe('validates a vertical slice of the Actor route', () => {
    
-    let studios =  [{
+    let actors =  [{
         name: 'Anna Peel',
         dob: new Date(),
-        pob: Brazil
+        pob: 'Brazil'
     },
     {
         name: 'Lud Orange',
         dob: new Date(),
-        pob: Florida
+        pob: 'Florida'
     },
     {
         name: 'Ocado Pitt', 
         dob: new Date(),
-        pob: Mexico
+        pob: 'Mexico'
     }];
 
     
@@ -48,15 +48,15 @@ describe('validates a vertical slice of the Actor route', () => {
             .send({
                 name: 'Anna Peel',
                 dob: new Date(),
-                pob: Brazil
+                pob: 'Brazil'
             })
             .then(res => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
                     __v: expect.any(Number),
                     name: 'Anna Peel',
-                    dob: expect.any(Date),
-                    pob: Brazil
+                    dob: expect.any(String),
+                    pob: 'Brazil'
                 });            
             });
     });
@@ -94,15 +94,15 @@ describe('validates a vertical slice of the Actor route', () => {
             .send({
                 name: 'Ananna Peel',
                 dob: new Date(),
-                pob: Brazil
+                pob: 'Brazil'
             })
             .then(res => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
                     __v: expect.any(Number),
                     name: 'Ananna Peel',
-                    dob: expect.any(Date),
-                    pob: Brazil
+                    dob: expect.any(String),
+                    pob: 'Brazil'
                 });            
             });
     });
