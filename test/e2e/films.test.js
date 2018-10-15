@@ -145,7 +145,24 @@ describe('validates a vertical slice of the Films route', () => {
         return request(app)
             .get(`/api/films/${createdFilms[1]._id}`)
             .then(res => {
-                expect(res.body).toEqual({ title: createdFilms[1].title, released: createdFilms[1].released, studio: { _id: createdFilms[1].studio, name: createdStudios[1].name } });
+                expect(res.body).toEqual(
+                    { 
+                        title: createdFilms[1].title, 
+                        released: createdFilms[1].released, 
+                        studio: 
+                        { 
+                            _id: createdFilms[1].studio, 
+                            name: createdStudios[1].name 
+                        }, 
+                        cast: [{
+                            _id: createdFilms[1].cast[0]._id, 
+                            role: createdFilms[1].cast[0].role, 
+                            actor: {
+                                _id: createdActors[1]._id, 
+                                name: createdActors[1].name 
+                            }
+                        }] 
+                    });
             });
 
     });
