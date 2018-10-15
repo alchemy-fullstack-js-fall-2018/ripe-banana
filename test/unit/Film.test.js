@@ -1,6 +1,6 @@
 const { getErrors } = require('./helpers');
 const Film = require('../../lib/models/Film');
-const Actor = require('../../lib/models/Actor');
+const { Types } = require('mongoose');
 
 describe('film model', () => {
     const data = {
@@ -9,7 +9,7 @@ describe('film model', () => {
         released: 2004,
         cast: [{
             role: 'Benjamin Gates',
-            actor: actors.find({actors._id: {} })
+            actor: Types.ObjectId()
         }]
-    }
+    };
 });
