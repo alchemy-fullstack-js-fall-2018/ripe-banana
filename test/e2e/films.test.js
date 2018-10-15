@@ -140,7 +140,6 @@ describe('film routes', () => {
                                 name: createdStudio.name
                             },
                             _id: expect.any(String)
-
                         } 
                     );
                 });
