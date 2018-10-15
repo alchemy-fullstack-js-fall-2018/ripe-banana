@@ -65,7 +65,6 @@ describe('Film model', () => {
         });
 
         const errors = getErrors(film.validateSync(), 4);
-        console.log(errors);
         expect(errors.title.properties.message).toEqual('Path `title` is required.');
         expect(errors.studio.properties.message).toEqual('Path `studio` is required.');
         expect(errors.released.properties.message).toEqual('Path `released` is required.');
