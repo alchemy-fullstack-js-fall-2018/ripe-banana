@@ -56,7 +56,7 @@ describe('Film model', () => {
         });
     });
 
-    it.only('requires a title', () => {
+    it('requires a title', () => {
         const film = new Film({
             title: '',
             studio: null,
