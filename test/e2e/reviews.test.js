@@ -119,4 +119,16 @@ describe('reviews pub/sub API', () => {
             .then(reviewRes => createdReviews = reviewRes);
     });
     
+    it('creates a review', () => {
+        return request(app)
+            .post('/api/reviews')
+            .send(reviews[0])
+            .then(res => {
+                expect(res.body).toEqual({
+                    _id: expect.any(String),
+                    __v: expect.any(Number),
+                    ...reviews[0]
+                });
+            });
+    });
 });
