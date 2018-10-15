@@ -6,7 +6,7 @@ describe('film model', () => {
     it('validates a good model', () => {
         const data = {
             title: 'National Treasure',
-            studio: Types.ObjectId(),
+            studio: Types.ObjectId().toString(),
             released: 2004,
             cast: [{
                 role: 'Benjamin Gates',
@@ -15,7 +15,14 @@ describe('film model', () => {
         };
         const film = new Film(data);
         const jsonFilm = film.toJSON();
-        expect(jsonFilm).toEqual({ ...data, cast: [{ _id: expect.any(Object), role: 'Benjamin Gates', actor: expect.any(Object) }], _id: expect.any(Object) });
+
+        expect(jsonFilm._id).toBeTruthy();
+        expect(jsonFilm.cast[0]._id).toBeTruthy();
+        
+        data._id = jsonFilm._id;
+        data.cast[0]._id = jsonFilm.cast[0]._id;
+        
+        expect(jsonFilm).toEqual(data);
     });
 
     it('requires a title and release year', () => {
