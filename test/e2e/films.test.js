@@ -6,7 +6,7 @@ const app = require('../../lib/app');
 describe('validates a vertical slice of the Studio route', () => {
     
     // Creating actors for tests
-    
+
     let actors =  [{
         name: 'Anna Peel',
         dob: new Date(),
@@ -67,8 +67,6 @@ describe('validates a vertical slice of the Studio route', () => {
         }
     },
     ];
-
-    // Creating Studios for tests
     
     let createdStudios;
         
@@ -89,6 +87,46 @@ describe('validates a vertical slice of the Studio route', () => {
         });
     });
 
+    if(createdStudios && createdActors){
+        let films =  [{
+            title: 'Bladecrawler',
+                studio: createdStudios[0]._id,
+                released: 1991,
+                cast: [{
+                    role: 'lead',
+                    actor: createdActors[0]._id
+                }]
+        },
+        {
+            title: 'Bladewalker',
+            studio: createdStudios[1]._id,
+            released: 1992,
+            cast: [{
+                role: 'Deckard',
+                actor: createdActors[1]._id
+            }]
+        }];
+        
+        let createdFilms;
+            
+        const createFilm = film => {
+            return request(app)
+                .post('/api/films')
+                .send(film)
+                .then(res => res.body);
+        };
+            
+        beforeEach(() => {
+            return dropCollection('films');
+        });
+            
+        beforeEach(() => {
+            return Promise.all(films.map(createFilm)).then(filmsRes => {
+                createdFilms = filmsRes;
+            });
+        });
+    }
+
 
     it('Posts to Films', () => {
         return request(app)
@@ -96,20 +134,22 @@ describe('validates a vertical slice of the Studio route', () => {
             .send({
                 title: 'Bladewalker',
                 studio: createdStudios[0]._id,
-                released: new Date(1991),
+                released: 1991,
                 cast: [{
                     role: 'Pris',
                     actor: createdActors[0]._id
                 }]
             })
             .then(res => {
+                console.log('@@response', res.body)
                 expect(res.body).toEqual({
                     _id: expect.any(String),
                     __v: expect.any(Number),
                     title: 'Bladewalker',
                     studio: createdStudios[0]._id,
-                    released: expect.any(String),
+                    released: 1991,
                     cast: [{
+                        _id: expect.any(String),
                         role: 'Pris',
                         actor: createdActors[0]._id
                     }]
