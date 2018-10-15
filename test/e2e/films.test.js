@@ -4,7 +4,51 @@ const mongoose = require('mongoose');
 const { Types } = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
-const Film  = require('../../lib/models/Film');
+const Actor = require('../../lib/models/Actor');
+// const Film  = require('../../lib/models/Film');
+
+let actors = [
+    {
+        name: 'Nicolas Cage',
+        dob: 'January 7, 1964',
+        pob: 'Long Beach, CA'
+    },
+    {
+        name: 'Bradley Cooper',
+        dob: 'January 5, 1975',
+        pob: 'Philadelphia, PA'
+    },
+    {
+        name: 'Fran Drescher',
+        dob: 'September 30, 1957',
+        pob: 'New York, NY'
+    }
+];
+
+let createdActors;
+
+const createActor = actor => {
+    return request(app)
+        .post('/api/actors/')
+        .send(actor)
+        .then(res => res.body);
+};
+
+beforeEach(() => {
+    return Actor.deleteMany();
+});
+
+beforeEach(() => {
+    return Promise.all(actors.map(createActor))
+        .then(actorsRes => {
+            createdActors = actorsRes;
+        });
+});
+
+afterAll(() => {
+    mongoose.disconnect();
+});
+
 
 describe('film routes', () => {
     it('creates a film on POST', () => {
@@ -16,11 +60,11 @@ describe('film routes', () => {
                 cast: [
                     {
                         role: 'Austin Powers',
-                        actor: Types.ObjectId()
+                        actor: createdActors[0]._id
                     },
                     {
                         role: 'Scott Evil',
-                        actor: Types.ObjectId()
+                        actor: createdActors[1]._id
                     }
                 ]
             })
@@ -33,10 +77,12 @@ describe('film routes', () => {
                     released: 1999,
                     cast: [
                         {
+                            _id: expect.any(Object),
                             role: 'Austin Powers',
                             actor: expect.any(Object)
                         },
                         {
+                            _id: expect.any(Object),
                             role: 'Scott Evil',
                             actor: expect.any(Object)
                         }
