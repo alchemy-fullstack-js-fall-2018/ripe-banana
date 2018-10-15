@@ -69,4 +69,11 @@ describe('reviewers route', () => {
                 });
             });
     });
+
+    it('gets reviewer by id', () => {
+        return request(app).get(`/api/reviewers/${createdReviewers[0]._id}`)
+            .then(res => {
+                expect(res.body).toEqual({ ...createdReviewers[0], __v: expect.any(Number) });
+            });
+    });
 });

@@ -22,4 +22,5 @@ describe('reviewer model', () => {
         const errors = getErrors(reviewer.validateSync(), 1);
         expect(errors.name.kind).toEqual('required');
     });
+    
 });
