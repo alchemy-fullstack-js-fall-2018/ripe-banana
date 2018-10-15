@@ -13,7 +13,6 @@ describe('validates a vertical slice of the Studio route', () => {
     let createdActors;
     let createdStudios;
     let createdFilms;
-    // Creating actors for tests
 
     let actors =  [{
         name: 'Anna Peel',
