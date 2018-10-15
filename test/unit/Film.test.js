@@ -3,13 +3,18 @@ const Film = require('../../lib/models/Film');
 const { Types } = require('mongoose');
 
 describe('film model', () => {
-    const data = {
-        title: 'National Treasure',
-        studio: 'Walt Disney Pictures',
-        released: 2004,
-        cast: [{
-            role: 'Benjamin Gates',
-            actor: Types.ObjectId()
-        }]
-    };
+    it('validates a good model', () => {
+        const data = {
+            title: 'National Treasure',
+            studio: Types.ObjectId(),
+            released: 2004,
+            cast: [{
+                role: 'Benjamin Gates',
+                actor: Types.ObjectId()
+            }]
+        };
+        const film = new Film(data);
+        const jsonFilm = film.toJSON();
+        expect(jsonFilm).toEqual({ ...data, _id: expect.any(Object) });
+    });
 });
