@@ -44,11 +44,15 @@ describe('Film model', () => {
 
         const film = new Film(filmData);
         const jsonFilm = film.toJSON();
-        console.log(jsonFilm);
-        expect(jsonFilm).toEqual({ ...filmData, _id: expect.any(Object) });
-        
-
-
+        expect(jsonFilm).toEqual({
+            _id: expect.any(Object),
+            title: 'Code Storm',
+            studio: studio._id,
+            released: 1945,
+            cast: [ 
+                { _id: expect.any(Object), role: 'Lead Programmer', actor: actor1._id }, 
+                { _id: expect.any(Object), role: 'Product Manager', actor: actor2._id }
+            ]
+        });
     });
-    
 });
