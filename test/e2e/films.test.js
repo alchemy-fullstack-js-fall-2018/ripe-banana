@@ -133,12 +133,11 @@ describe('film pub/sub API', () => {
                     studio: createdStudios[0]._id,
                     released: 2015,
                     cast: [{
-                        role: 'cop',
+                        role: 'Cop',
                         actor: createdActors[0]._id
                     }] 
                 });
-            });
-        
+            }); 
     });
 
 
