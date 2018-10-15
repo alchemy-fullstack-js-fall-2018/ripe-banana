@@ -40,13 +40,22 @@ describe('film routes', () => {
             .then(res => res.body);
     };
 
+    const createFilm = film => {
+        return request(app)
+            .post('/films')
+            .send(film)
+            .then(res => res.body);
+    };
+
     let createdActors;
     let createdStudio;
+    let createdFilms;
 
     beforeEach(() => {
         return Promise.all([
             dropCollection('studios'),
-            dropCollection('actors')
+            dropCollection('actors'),
+            dropCollection('films')
         ]);
     });
     
@@ -60,6 +69,33 @@ describe('film routes', () => {
     beforeEach(() => {
         return Promise.all(actors.map(createActor))
             .then(actorsRes => { createdActors = actorsRes;});
+    });
+
+    
+    beforeEach(() => {
+        let films = [
+            {
+                title: 'The Programinator',
+                studio: createdStudio._id,
+                released: 1984,
+                cast: [
+                    { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
+                    { role: 'Sidekick', actor: createdActors[1]._id }
+                ]
+            },
+            {
+                title: 'Thelma and Luigi',
+                studio: createdStudio._id,
+                released: 1972,
+                cast: [
+                    { role: 'Thelma', actor: createdActors[1]._id }, 
+                    { role: 'Luigi', actor: createdActors[0]._id }
+                ]
+            }
+        ];
+    
+        return Promise.all(films.map(createFilm))
+            .then(filmsRes => { createdFilms = filmsRes;});
     });
     
     it('creates a film', () => {
@@ -89,5 +125,7 @@ describe('film routes', () => {
                 });
             });
     });
+
+    
 
 });
