@@ -125,8 +125,20 @@ describe('reviews', () => {
     });
 
     it('Gets all recent reviews with a max of 100', () => {
-
         return request(app)
-            .post();
+            .get('/reviews')
+            .then(retrievedReviews => {
+                createdReviews.forEach(createdReview => {
+                    expect(retrievedReviews.body).toContainEqual({
+                        _id: createdReview._id,
+                        rating: createdReview.rating,
+                        text: createdReview.text,
+                        film: {
+                            _id: createdReview.film,
+                            title: expect.any(String)
+                        }                        
+                    });
+                });
+            });
     });
 });

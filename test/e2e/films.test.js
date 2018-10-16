@@ -1,13 +1,15 @@
 const app = require('../../lib/app');
 const request = require('supertest');
 const { dropCollection } = require('./db');
-const { createActors, createStudios } = require('./helpers');
+const { createActors, createStudios, createReviewers } = require('./helpers');
 
 describe('film routes', () => {
 
     let createdFilms;
     let createdStudios;
     let createdActors;
+    let createdFilms;
+    let createdReviewers;
     
     const createFilm = film => {
         return request(app)
@@ -16,6 +18,12 @@ describe('film routes', () => {
             .then(res => res.body);
     };
 
+    const createReview = review => {
+        return request(app)
+            .post('/reviews')
+            .send(review)
+            .then(res => res.body);
+    };
 
     beforeEach(() => {
         return Promise.all([
@@ -37,6 +45,34 @@ describe('film routes', () => {
             .then(studiosRes => { 
                 createdStudios = studiosRes;
             });
+    });
+
+    beforeEach(() => {
+        return createReviewers()
+            .then(reviewersRes => { 
+                createdReviewers = reviewersRes;
+            });
+    });
+
+    beforeEach(() => {
+        let reviews = [
+            {
+                rating: 5,
+                reviewer: createdReviewers[0]._id,
+                text: 'Amazeballs!',
+                film: createdFilms[0]._id 
+            },
+            {
+                rating: 1,
+                reviewer: createdReviewers[1]._id,
+                text: 'I want the last 1.5 hours of my life back.',
+                film: createdFilms[1]._id 
+            }
+        ];
+
+        return Promise.all(reviews.map(createReview))
+            .then(reviewsRes => { createdReviews = reviewsRes;});
+
     });
     
     beforeEach(() => {
