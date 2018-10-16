@@ -73,6 +73,24 @@ describe('reviews', () => {
     });
 
     it('creates a review', () => {
-
+        const reviewData = {
+            rating: 3,
+            reviewer: createdReviewers[0]._id,
+            text: 'Meh...I\'ve seen better',
+            film: createdFilms[0]._id
+        };
+        return request(app)
+            .post('/reviews')
+            .send(reviewData)
+            .then(result => {
+                expect(result.body).toEqual({
+                    __v: expect.any(Number),
+                    _id: expect.any(String),
+                    createdAt: expect.any(String),
+                    updatedAt: expect.any(String),
+                    ...reviewData
+                });
+            })
+        
     });
 });

@@ -54,7 +54,7 @@ describe('Review model', () => {
         const reviewData = {
             rating: 5,
             reviewer: reviewer._id,
-            review: 'Wow!  You should totally see this movie!!',
+            text: 'Wow!  You should totally see this movie!!',
             film: film._id
         };
         const review = new Review(reviewData);
@@ -69,14 +69,14 @@ describe('Review model', () => {
     
     it('requires a review text, rating, reviewer, and film', () => {
         const review = new Review({
-            review: '',
+            text: '',
             rating: null,
             reviewer: null,
             film: null
         });
 
         const errors = getErrors(review.validateSync(), 4);
-        expect(errors.review.properties.message).toEqual('Path `review` is required.');
+        expect(errors.text.properties.message).toEqual('Path `text` is required.');
         expect(errors.rating.properties.message).toEqual('Path `rating` is required.');
         expect(errors.reviewer.properties.message).toEqual('Path `reviewer` is required.');
         expect(errors.film.properties.message).toEqual('Path `film` is required.');

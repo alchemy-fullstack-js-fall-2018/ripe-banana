@@ -70,7 +70,7 @@ const createStudios = () => {
 };
 
 const createReviewers = () => {
-    return Promise.all(reviewers.map(createReviewer))
+    return Promise.all(reviewers.map(createReviewer));
 };
 
 
