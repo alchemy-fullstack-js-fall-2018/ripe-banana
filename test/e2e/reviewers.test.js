@@ -63,9 +63,22 @@ describe('validates a vertical slice of the Reviewer route', () => {
         return request(app)
             .get('/api/reviewers')
             .then(res => {
-                expect(res.body).toContainEqual(createdReviewers[0]);
-                expect(res.body).toContainEqual(createdReviewers[1]);
-                expect(res.body).toContainEqual(createdReviewers[2]);
+                expect(res.body).toContainEqual({
+                    _id: createdReviewers[0]._id,
+                    name: createdReviewers[0].name,
+                    company: createdReviewers[0].company
+                });
+                expect(res.body).toContainEqual({
+                    _id: createdReviewers[1]._id,
+                    name: createdReviewers[1].name,
+                    company: createdReviewers[1].company
+                });
+                expect(res.body).toContainEqual({
+                    _id: createdReviewers[2]._id,
+                    name: createdReviewers[2].name,
+                    company: createdReviewers[2].company
+                });
+              
             });
     });
 

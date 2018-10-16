@@ -143,8 +143,18 @@ describe('validates a vertical slice of the Studio route', () => {
         return request(app)
             .get('/api/studios')
             .then(res => {
-                expect(res.body).toContainEqual(createdStudios[0]);
-                expect(res.body).toContainEqual(createdStudios[1]);
+                expect(res.body).toContainEqual({
+                    _id: createdStudios[0]._id,
+                    name: createdStudios[0].name
+                });
+                expect(res.body).toContainEqual({
+                    _id: createdStudios[1]._id,
+                    name: createdStudios[1].name
+                });
+                expect(res.body).toContainEqual({
+                    _id: createdStudios[2]._id,
+                    name: createdStudios[2].name
+                });
             });
     });
 

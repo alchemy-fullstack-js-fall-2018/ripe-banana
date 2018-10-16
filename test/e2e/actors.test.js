@@ -101,6 +101,7 @@ describe('validates a vertical slice of the Actor route', () => {
             .then(res => {
                 expect(res.body).toContainEqual({ _id: createdActors[0]._id, name: createdActors[0].name });
                 expect(res.body).toContainEqual({ _id: createdActors[1]._id, name: createdActors[1].name });
+                expect(res.body).toContainEqual({ _id: createdActors[2]._id, name: createdActors[2].name });
             });
     });
 
