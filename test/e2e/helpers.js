@@ -15,20 +15,30 @@ let actors = [
     }
 ];
 
-let studio = {
-    name: 'Portland Studios',
-    address: {
-        city: 'Portland',
-        state: 'Oregon',
-        country: 'USA'
+let studios = [
+    {
+        name: 'YuraqYana Studios',
+        address: {
+            city: 'Lima',
+            state: 'Lima',
+            country: 'Peru'
+        }
+    },
+    {
+        name: 'Pixar',
+        address: {
+            city: 'Palo Alto',
+            state: 'CA',
+            country: 'USA'
+        }
     }
-};
+];
 
-const createActors = () => {
-    // let createdActors;
-    return Promise.all(actors.map(createActor))
-        // .then(actorsRes => { createdActors = actorsRes; });
-};
+let reviewers = [
+    { name: 'George Watchington', company: 'Patriot Films' },
+    { name: 'Abraham Linkoln', company: 'Great Confilict Productions' }
+];
+
 
 const createActor = actor => {
     return request(app)
@@ -44,8 +54,28 @@ const createStudio = studio => {
         .then(res => res.body);
 };
 
+const createReviewer = reviewer => {
+    return request(app)
+        .post('/reviewers')
+        .send(reviewer)
+        .then(res => res.body);
+};
+
+const createActors = () => {
+    return Promise.all(actors.map(createActor));
+};
+
+const createStudios = () => {
+    return Promise.all(studios.map(createStudio));
+};
+
+const createReviewers = () => {
+    return Promise.all(reviewers.map(createReviewer))
+};
+
+
 module.exports = {
-    createActor,
-    createStudio, 
-    createActors
+    createStudios, 
+    createActors,
+    createReviewers
 };

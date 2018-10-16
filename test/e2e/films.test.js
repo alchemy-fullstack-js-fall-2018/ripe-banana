@@ -1,45 +1,14 @@
 const app = require('../../lib/app');
 const request = require('supertest');
 const { dropCollection } = require('./db');
+const { createActors, createStudios } = require('./helpers');
 
 describe('film routes', () => {
 
-    let actors = [
-        {
-            name: 'Matt Diamond',
-            dob: new Date('11-11-1911'),
-            pob: 'Sweden'
-        },
-        {
-            name: 'Susan Surandin',
-            dob: new Date('04-14-1985'),
-            pob: 'Miami'
-        }
-    ];
-
-    let studio = {
-        name: 'Portland Studios',
-        address: {
-            city: 'Portland',
-            state: 'Oregon',
-            country: 'USA'
-        }
-    };
-
-    const createActor = actor => {
-        return request(app)
-            .post('/actors')
-            .send(actor)
-            .then(res => res.body);
-    };
-
-    const createStudio = studio => {
-        return request(app)
-            .post('/studios')
-            .send(studio)
-            .then(res => res.body);
-    };
-
+    let createdFilms;
+    let createdStudios;
+    let createdActors;
+    
     const createFilm = film => {
         return request(app)
             .post('/films')
@@ -47,9 +16,6 @@ describe('film routes', () => {
             .then(res => res.body);
     };
 
-    let createdActors;
-    let createdStudio;
-    let createdFilms;
 
     beforeEach(() => {
         return Promise.all([
@@ -60,23 +26,24 @@ describe('film routes', () => {
     });
     
     beforeEach(() => {
-        return createStudio(studio)
-            .then(result => {
-                createdStudio = result;
+        return createActors()
+            .then(actorsRes => { 
+                createdActors = actorsRes;
             });
     });
 
     beforeEach(() => {
-        return Promise.all(actors.map(createActor))
-            .then(actorsRes => { createdActors = actorsRes;});
+        return createStudios()
+            .then(studiosRes => { 
+                createdStudios = studiosRes;
+            });
     });
-
     
     beforeEach(() => {
         let films = [
             {
                 title: 'The Programinator',
-                studio: createdStudio._id,
+                studio: createdStudios[0]._id,
                 released: 1984,
                 cast: [
                     { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
@@ -85,7 +52,7 @@ describe('film routes', () => {
             },
             {
                 title: 'Thelma and Luigi',
-                studio: createdStudio._id,
+                studio: createdStudios[0]._id,
                 released: 1972,
                 cast: [
                     { role: 'Thelma', actor: createdActors[1]._id }, 
@@ -101,7 +68,7 @@ describe('film routes', () => {
     it('creates a film', () => {
         const newFilm = {
             title: 'Revenge of the Programmers',
-            studio: createdStudio._id,
+            studio: createdStudios[0]._id,
             released: 1985,
             cast: [
                 { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
@@ -114,7 +81,7 @@ describe('film routes', () => {
             .then(result => {
                 expect(result.body).toEqual({
                     title: 'Revenge of the Programmers',
-                    studio: createdStudio._id,
+                    studio: createdStudios[0]._id,
                     released: 1985,
                     cast: [
                         { _id: expect.any(String), role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
@@ -136,8 +103,8 @@ describe('film routes', () => {
                             title: createdFilm.title,
                             released: createdFilm.released,
                             studio: { 
-                                _id: createdStudio._id,
-                                name: createdStudio.name
+                                _id: createdStudios[0]._id,
+                                name: createdStudios[0].name
                             },
                             _id: expect.any(String)
                         } 
@@ -155,8 +122,8 @@ describe('film routes', () => {
                     title: createdFilms[0].title,
                     released: createdFilms[0].released,
                     studio: {
-                        _id: createdStudio._id,
-                        name: createdStudio.name
+                        _id: createdStudios[0]._id,
+                        name: createdStudios[0].name
                     },
                     cast: [
                         { 

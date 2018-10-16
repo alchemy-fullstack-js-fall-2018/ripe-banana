@@ -1,43 +1,14 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
+const { createStudios, createActors, createReviewers } = require('./helpers');
 
 describe('reviews', () => {
-    let actors = [
-        {
-            name: 'Matt Diamond',
-            dob: new Date('11-11-1911'),
-            pob: 'Sweden'
-        },
-        {
-            name: 'Susan Surandin',
-            dob: new Date('04-14-1985'),
-            pob: 'Miami'
-        }
-    ];
 
-    let studio = {
-        name: 'Portland Studios',
-        address: {
-            city: 'Portland',
-            state: 'Oregon',
-            country: 'USA'
-        }
-    };
-
-    const createActor = actor => {
-        return request(app)
-            .post('/actors')
-            .send(actor)
-            .then(res => res.body);
-    };
-
-    const createStudio = studio => {
-        return request(app)
-            .post('/studios')
-            .send(studio)
-            .then(res => res.body);
-    };
+    let createdStudios;
+    let createdActors;
+    let createdReviewers;
+    let createdFilms;
 
     const createFilm = film => {
         return request(app)
@@ -46,8 +17,62 @@ describe('reviews', () => {
             .then(res => res.body);
     };
 
-    let createdActors;
-    let createdStudio;
-    let createdFilms;
+    beforeEach(() => {
+        return Promise.all([
+            dropCollection('reviewers'),
+            dropCollection('studios'),
+            dropCollection('actors')
+        ]);
+    });
 
-})
+    beforeEach(() => {
+        return createStudios()
+            .then(studiosRes => { 
+                createdStudios = studiosRes;
+            });
+    });
+       
+    beforeEach(() => {
+        return createActors()
+            .then(actorsRes => { 
+                createdActors = actorsRes;
+            });
+    });
+    
+    beforeEach(() => {
+        return createReviewers()
+            .then(reviewersRes => { 
+                createdReviewers = reviewersRes;
+            });
+    });
+
+    beforeEach(() => {
+        let films = [
+            {
+                title: 'The Programinator',
+                studio: createdStudios[0]._id,
+                released: 1984,
+                cast: [
+                    { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
+                    { role: 'Sidekick', actor: createdActors[1]._id }
+                ]
+            },
+            {
+                title: 'Thelma and Luigi',
+                studio: createdStudios[0]._id,
+                released: 1972,
+                cast: [
+                    { role: 'Thelma', actor: createdActors[1]._id }, 
+                    { role: 'Luigi', actor: createdActors[0]._id }
+                ]
+            }
+        ];
+    
+        return Promise.all(films.map(createFilm))
+            .then(filmsRes => { createdFilms = filmsRes;});
+    });
+
+    it('creates a review', () => {
+
+    });
+});

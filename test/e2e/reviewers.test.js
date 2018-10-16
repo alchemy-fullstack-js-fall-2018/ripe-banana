@@ -1,33 +1,24 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
+const { createReviewers } = require('./helpers');
 
-xdescribe('reviewers', () => {
-
-    let reviewers = [
-        { name: 'George Watchington', company: 'Patriot Films' },
-        { name: 'Abraham Linkoln', company: 'Great Confilict Productions' }
-    ];
+describe('reviewers', () => {
 
     let createdReviewers;
-
-    const createReviewer = reviewer => {
-        return request(app)
-            .post('/reviewers')
-            .send(reviewer)
-            .then(res => res.body);
-    };
-
+    
     beforeEach(() => {
         return dropCollection('reviewers');
     });
-
+    
     beforeEach(() => {
-        return Promise.all(reviewers.map(createReviewer))
-            .then(reviewerRes => { createdReviewers = reviewerRes; });
+        return createReviewers()
+            .then(reviewersRes => { 
+                createdReviewers = reviewersRes;
+            });
     });
 
-    it('creates an reviewer', () => {
+    it('creates a reviewer', () => {
         const newReviewer = {
             name: 'Roger Siskel',
             company: 'At the Movies'

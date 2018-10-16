@@ -1,38 +1,21 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
+const { createActors } = require('./helpers');
 
-xdescribe('actors', () => {
-
-    let actors = [
-        {
-            name: 'Matt Diamond',
-            dob: new Date('11-11-1911'),
-            pob: 'Sweden'
-        },
-        {
-            name: 'Susan Surandin',
-            dob: new Date('04-14-1985'),
-            pob: 'Miami'
-        }
-    ];
-
-    let createdActors;
+describe('actors', () => {
     
-    const createActor = actor => {
-        return request(app)
-            .post('/actors')
-            .send(actor)
-            .then(res => res.body);
-    };
+    let createdActors;
 
     beforeEach(() => {
         return dropCollection('actors');
     });
 
     beforeEach(() => {
-        return Promise.all(actors.map(createActor))
-            .then(actorsRes => { createdActors = actorsRes;});
+        return createActors()
+            .then(actorsRes => { 
+                createdActors = actorsRes;
+            });
     });
 
 
@@ -65,8 +48,9 @@ xdescribe('actors', () => {
     });
 
     it('retrieves one actor by id', () => {
+        const id = createdActors[0]._id;
         return request(app)
-            .get(`/actors/${createdActors[0]._id}`)
+            .get(`/actors/${id}`)
             .then(retrievedActor => {
                 expect(retrievedActor.body).toEqual(createdActors[0]);
             });
@@ -74,8 +58,9 @@ xdescribe('actors', () => {
     });
 
     it('deleted one actor by id', () => {
+        const id = createdActors[0]._id;
         return request(app)
-            .delete(`/actors/${createdActors[0]._id}`)
+            .delete(`/actors/${id}`)
             .then(deletedStatus => {
                 expect(deletedStatus.body).toEqual({ removed: true });
             });
