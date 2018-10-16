@@ -25,9 +25,7 @@ let studio = {
 };
 
 const createActors = () => {
-    // let createdActors;
-    return Promise.all(actors.map(createActor))
-        // .then(actorsRes => { createdActors = actorsRes; });
+    return Promise.all(actors.map(createActor));
 };
 
 const createActor = actor => {

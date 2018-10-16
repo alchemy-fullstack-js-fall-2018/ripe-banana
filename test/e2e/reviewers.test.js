@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
 
-xdescribe('reviewers', () => {
+describe.skip('reviewers', () => {
 
     let reviewers = [
         { name: 'George Watchington', company: 'Patriot Films' },
@@ -27,7 +27,7 @@ xdescribe('reviewers', () => {
             .then(reviewerRes => { createdReviewers = reviewerRes; });
     });
 
-    it('creates an reviewer', () => {
+    it.skip('creates an reviewer', () => {
         const newReviewer = {
             name: 'Roger Siskel',
             company: 'At the Movies'
@@ -44,7 +44,7 @@ xdescribe('reviewers', () => {
             });
     });
 
-    it('gets all reviewers', () => {
+    it.skip('gets all reviewers', () => {
         return request(app)
             .get('/reviewers')
             .then(retrievedReviewers => {
@@ -54,7 +54,7 @@ xdescribe('reviewers', () => {
             });
     });
 
-    it('gets a specific reviewer when passed an id', () => {
+    it.skip('gets a specific reviewer when passed an id', () => {
         const id = createdReviewers[0]._id;
         return request(app)
             .get(`/reviewers/${id}`)
@@ -63,7 +63,7 @@ xdescribe('reviewers', () => {
             });
     });
 
-    it('updates a reviewers info', () => {
+    it.skip('updates a reviewers info', () => {
         const id = createdReviewers[0]._id;
         const newData = createdReviewers[0];
         newData.company = 'Founder\'s films';
