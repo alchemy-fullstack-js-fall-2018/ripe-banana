@@ -139,20 +139,20 @@ describe('validates a vertical slice of the Films route', () => {
                 expect(res.body).toContainEqual({
                     _id: createdFilms[0]._id,
                     title: createdFilms[0].title, 
-                        released: createdFilms[0].released, 
-                        studio: { 
-                            _id: createdFilms[0].studio, 
-                            name: createdStudios[0].name 
-                        }
+                    released: createdFilms[0].released, 
+                    studio: { 
+                        _id: createdFilms[0].studio, 
+                        name: createdStudios[0].name 
+                    }
                 });
                 expect(res.body).toContainEqual({
                     _id: createdFilms[1]._id,
                     title: createdFilms[1].title, 
-                        released: createdFilms[1].released, 
-                        studio: { 
-                            _id: createdFilms[1].studio, 
-                            name: createdStudios[1].name 
-                        }
+                    released: createdFilms[1].released, 
+                    studio: { 
+                        _id: createdFilms[1].studio, 
+                        name: createdStudios[1].name 
+                    }
                 });
             });
     });
