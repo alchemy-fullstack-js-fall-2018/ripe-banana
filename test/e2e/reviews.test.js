@@ -8,6 +8,7 @@ describe('reviews', () => {
     let createdStudios;
     let createdActors;
     let createdReviewers;
+    let createdFilms;
 
     const createFilm = film => {
         return request(app)
