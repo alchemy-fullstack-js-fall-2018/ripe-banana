@@ -1,6 +1,8 @@
 const { dropCollection } = require('./db');
 const request = require('supertest');
 const app = require('../../lib/app');
+const { Types } = require('mongoose');
+
 
 
 describe('end to end test of reviews', () => {
@@ -32,12 +34,14 @@ describe('end to end test of reviews', () => {
             rating: 5,
             review: {
                 text: 'This is a badass review of of film 0',
+                film: Types.ObjectId()
             }
         },
         {
             rating: 2,
             review: {
                 text: 'This is mediocre review of of film 1',
+                film: Types.ObjectId()
             }
         }
 
