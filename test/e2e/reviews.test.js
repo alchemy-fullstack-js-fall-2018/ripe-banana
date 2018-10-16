@@ -29,8 +29,7 @@ describe('end to end test of reviews', () => {
     let createdReviewers;
     let createdReviews;
 
-    let reviews = [
-        {
+    let reviews = [{
             rating: 5,
             review: 'This is a badass review of of film 0',
             reviewer: Types.ObjectId(),
@@ -43,9 +42,7 @@ describe('end to end test of reviews', () => {
             reviewer: Types.ObjectId(),
             film: Types.ObjectId()
             
-        }
-
-    ];
+        }];
 
     let actors =  [{
         name: 'Anna Peel',
@@ -97,8 +94,7 @@ describe('end to end test of reviews', () => {
     {
         name: 'CreatedReviewer2', 
         company: 'CreatedCompany2'
-    }
-    ];
+    }];
         
     const createActor = actor => {
         return request(app)
@@ -227,5 +223,4 @@ describe('end to end test of reviews', () => {
              
             });
     });
-
 });

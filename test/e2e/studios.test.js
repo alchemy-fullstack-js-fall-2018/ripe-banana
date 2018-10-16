@@ -113,7 +113,6 @@ describe('validates a vertical slice of the Studio route', () => {
     });
 
 
-
     it('Posts to Studio', () => {
         return request(app)
             .post('/api/studios')
@@ -217,7 +216,3 @@ describe('validates a vertical slice of the Studio route', () => {
     });
 
 });
-
-
-
-

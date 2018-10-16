@@ -8,7 +8,7 @@ describe('Actor Model', () => {
             dob: new Date(),
             pob: 'Cambridge'
         };
-
+        
         const actor = new Actor(data);
         const jsonActor = actor.toJSON();
         expect(jsonActor).toEqual({ ...data, _id: expect.any(Object) });

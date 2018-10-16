@@ -29,8 +29,7 @@ describe('validates a vertical slice of the Actor route', () => {
         name: 'Ocado Pitt',
         dob: new Date(),
         pob: 'Mexico'
-    }
-    ];
+    }];
 
     let films =  [{
         title: 'Bladecrawler',
@@ -121,7 +120,6 @@ describe('validates a vertical slice of the Actor route', () => {
                         }]
                     });
             });
-
     });
 
     it('deletes a actor that is not in any film casts', () => {
@@ -158,5 +156,4 @@ describe('validates a vertical slice of the Actor route', () => {
                 });            
             });
     });
-
 });

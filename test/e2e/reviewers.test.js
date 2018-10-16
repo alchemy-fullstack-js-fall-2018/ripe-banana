@@ -28,8 +28,7 @@ describe('validates a vertical slice of the Reviewer route', () => {
     let createdReviewers;
     let createdReviews;
 
-    let reviews = [
-        {
+    let reviews = [{
             rating: 5,
             review: 'This is a badass review of of film 0',
             reviewer: Types.ObjectId(),
@@ -42,9 +41,7 @@ describe('validates a vertical slice of the Reviewer route', () => {
             reviewer: Types.ObjectId(),
             film: Types.ObjectId()
             
-        }
-
-    ];
+        }];
 
     let actors =  [{
         name: 'Anna Peel',
@@ -96,8 +93,7 @@ describe('validates a vertical slice of the Reviewer route', () => {
     {
         name: 'CreatedReviewer2', 
         company: 'CreatedCompany2'
-    }
-    ];
+    }];
         
     const createActor = actor => {
         return request(app)
@@ -172,7 +168,7 @@ describe('validates a vertical slice of the Reviewer route', () => {
         });
     });
 
-
+    
     it('Posts to Reviewer', () => {
         return request(app)
             .post('/api/reviewers')
@@ -227,7 +223,6 @@ describe('validates a vertical slice of the Reviewer route', () => {
                     }]
                 });
             });
-
     });
 
     it('deletes a Reviewer by id', () => {
@@ -254,9 +249,4 @@ describe('validates a vertical slice of the Reviewer route', () => {
                 });            
             });
     });
-
 });
-
-
-
-
