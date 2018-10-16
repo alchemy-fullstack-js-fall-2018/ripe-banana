@@ -4,44 +4,19 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
 const Actor = require('../../lib/models/Actor');
+const { createActors } = require('./helpers');
 
-let actors = [
-    {
-        name: 'Nicolas Cage',
-        dob: 'January 7, 1964',
-        pob: 'Long Beach, CA'
-    },
-    {
-        name: 'Bradley Cooper',
-        dob: 'January 5, 1975',
-        pob: 'Philadelphia, PA'
-    },
-    {
-        name: 'Fran Drescher',
-        dob: 'September 30, 1957',
-        pob: 'New York, NY'
-    }
-];
 
 let createdActors;
 
-const createActor = actor => {
-    return request(app)
-        .post('/api/actors/')
-        .send(actor)
-        .then(res => res.body);
-};
-
 beforeEach(() => {
+    createdActors = [];
     return Actor.deleteMany();
 });
 
 beforeEach(() => {
-    return Promise.all(actors.map(createActor))
-        .then(actorsRes => {
-            createdActors = actorsRes;
-        });
-});
+    return createActors(3, createdActors);
+}); 
 
 afterAll(() => {
     mongoose.disconnect();
@@ -71,9 +46,11 @@ describe('actors route', () => {
             .then(retrievedActors => {
                 createdActors.forEach(createdActor => {
                     expect(retrievedActors.body).toContainEqual(createdActor);
-                });
+                });                
+                expect(retrievedActors.body).toHaveLength(createdActors.length);
             });
     });
+  
 
     it('gets actor by id', () => {
         return request(app).get(`/api/actors/${createdActors[0]._id}`)
@@ -81,7 +58,4 @@ describe('actors route', () => {
                 expect(res.body).toEqual({ ...createdActors[0], __v: expect.any(Number) });
             });
     });
-
-    
 });
-

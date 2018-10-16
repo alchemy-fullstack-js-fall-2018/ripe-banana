@@ -6,43 +6,17 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const Actor = require('../../lib/models/Actor');
 // const Film  = require('../../lib/models/Film');
+const { createActors } = require('./helpers');
 
-let actors = [
-    {
-        name: 'Nicolas Cage',
-        dob: 'January 7, 1964',
-        pob: 'Long Beach, CA'
-    },
-    {
-        name: 'Bradley Cooper',
-        dob: 'January 5, 1975',
-        pob: 'Philadelphia, PA'
-    },
-    {
-        name: 'Fran Drescher',
-        dob: 'September 30, 1957',
-        pob: 'New York, NY'
-    }
-];
 
-let createdActors;
-
-const createActor = actor => {
-    return request(app)
-        .post('/api/actors/')
-        .send(actor)
-        .then(res => res.body);
-};
+let createdActors = [];
 
 beforeEach(() => {
     return Actor.deleteMany();
 });
 
 beforeEach(() => {
-    return Promise.all(actors.map(createActor))
-        .then(actorsRes => {
-            createdActors = actorsRes;
-        });
+    return createActors(3, createdActors);
 });
 
 afterAll(() => {
@@ -77,14 +51,14 @@ describe('film routes', () => {
                     released: 1999,
                     cast: [
                         {
-                            _id: expect.any(Object),
+                            _id: expect.any(String),
                             role: 'Austin Powers',
-                            actor: expect.any(Object)
+                            actor: expect.any(String)
                         },
                         {
-                            _id: expect.any(Object),
+                            _id: expect.any(String),
                             role: 'Scott Evil',
-                            actor: expect.any(Object)
+                            actor: expect.any(String)
                         }
                     ]
                 });
