@@ -15,17 +15,32 @@ let actors = [
     }
 ];
 
-let studio = {
-    name: 'Portland Studios',
-    address: {
-        city: 'Portland',
-        state: 'Oregon',
-        country: 'USA'
+let studios = [
+    {
+        name: 'YuraqYana Studios',
+        address: {
+            city: 'Lima',
+            state: 'Lima',
+            country: 'Peru'
+        }
+    },
+    {
+        name: 'Pixar',
+        address: {
+            city: 'Palo Alto',
+            state: 'CA',
+            country: 'USA'
+        }
     }
-};
+];
+
 
 const createActors = () => {
     return Promise.all(actors.map(createActor));
+};
+
+const createStudios = () => {
+    return Promise.all(studios.map(createStudio));
 };
 
 const createActor = actor => {
@@ -43,7 +58,6 @@ const createStudio = studio => {
 };
 
 module.exports = {
-    createActor,
-    createStudio, 
+    createStudios, 
     createActors
 };

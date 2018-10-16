@@ -1,48 +1,22 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
+const { createStudios } = require('./helpers');
 
-describe.skip('studio', () => {
-
-    let studios = [
-        {
-            name: 'YuraqYana Studios',
-            address: {
-                city: 'Lima',
-                state: 'Lima',
-                country: 'Peru'
-            }
-        },
-        {
-            name: 'Pixar',
-            address: {
-                city: 'Palo Alto',
-                state: 'CA',
-                country: 'USA'
-            }
-        }
-    ];
-
-    let createdStudios;
-    
-    const createStudio = studio => {
-        return request(app)
-            .post('/studios')
-            .send(studio)
-            .then(res => res.body);
-    };
+describe('studio', () => {
 
     beforeEach(() => {
         return dropCollection('studios');
     });
 
+    let createdStudios;
     beforeEach(() => {
-        return Promise.all(studios.map(createStudio))
+        return createStudios()
             .then(studiosRes => { 
-                createdStudios = studiosRes; 
+                createdStudios = studiosRes;
             });
     });
-
+   
     it('creates a studio', () => {
         const newStudio = {
             name: 'Laika',
