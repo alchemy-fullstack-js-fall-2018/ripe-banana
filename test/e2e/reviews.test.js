@@ -2,8 +2,6 @@ require('dotenv').config();
 const { dropCollection } = require('../util/db');
 const request = require('supertest');
 const app = require('../../lib/app');
-const Chance = require('chance');
-const chance = new Chance();
 const { createReviews } = require('../util/helpers');
 
 describe('reviews pub/sub API', () => {

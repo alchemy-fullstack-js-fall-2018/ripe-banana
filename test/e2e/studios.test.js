@@ -1,56 +1,28 @@
 require('dotenv').config();
 const { dropCollection } = require('../util/db');
 const app = require('../../lib/app');
-const Chance = require('chance');
-const chance = new Chance();
 const request = require('supertest');
+const { createFilms, createStudios } = require('../util/helpers');
 
 describe('studios pub/sub API', () => {
-
-    let studios = [
-        {
-            name: chance.animal(),
-            address:{
-                city: chance.string(),
-                state: chance.string(),
-                country: chance.string()
-            }
-        },
-        {
-            name: chance.animal(),
-            address:{
-                city: chance.string(),
-                state: chance.string(),
-                country: chance.string()
-            }
-        },
-        {
-            name: chance.animal(),
-            address:{
-                city: chance.string(),
-                state: chance.string(),
-                country: chance.string()
-            }
-        }
-    ];
-
-    let createdStudios;
-
-    const createStudio = studio => {
-        return request(app)
-            .post('/api/studios')
-            .send(studio)
-            .then(res => res.body);
-    };
-
+    
     beforeEach(() => {
         return dropCollection('studios');
     });
 
+    let createdFilms;
+
     beforeEach(() => {
-        return Promise.all(studios.map(createStudio))
-            .then(studioRes => createdStudios = studioRes);
+        createdFilms = [];
+        return createFilms(1, createdFilms);
     });
+    let createdStudios;
+    beforeEach(() => {
+        createdStudios = [];
+        return createStudios(3, createdStudios);
+    });
+
+    
 
     it('creates a studio on post', () => {
         return request(app)
@@ -91,7 +63,15 @@ describe('studios pub/sub API', () => {
         return request(app)
             .get(`/api/studios/${createdStudios[0]._id}`)
             .then(res => {
-                expect(res.body).toEqual({ ...createdStudios[0], __v: expect.any(Number) });
+                expect(res.body).toEqual({ ...createdStudios[0], __v: expect.any(Number), films: [] });
+            });
+    });
+
+    it('get a studio by id with film', () => {
+        return request(app)
+            .get(`/api/studios/${createdFilms[0].studio}`)
+            .then(res => {
+                expect(res.body.films).toEqual(createdFilms);
             });
     });
 

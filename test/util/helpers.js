@@ -46,6 +46,8 @@ const createStudios = (count, arr) => {
     });
 };
 
+
+
 const createReviewers = (count, arr) => {
     const reviewerPromise = Array.apply(null, { length: count }).map(() => {
         return Reviewer.create({
@@ -93,7 +95,6 @@ const createReviews = (count, arr) => {
             });
             return Promise.all(filmPromise).then(reviews => {
                 arr.push.apply(arr, jsonify(reviews));
-                console.log('reviews:', reviews);
                 return reviews;
             });
         });
