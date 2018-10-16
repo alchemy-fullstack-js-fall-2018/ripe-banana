@@ -30,7 +30,7 @@ describe('validates a vertical slice of the Actor route', () => {
         dob: new Date(),
         pob: 'Mexico'
     }
-];
+    ];
 
     let films =  [{
         title: 'Bladecrawler',
@@ -64,7 +64,6 @@ describe('validates a vertical slice of the Actor route', () => {
     beforeEach(() => {
         return Promise.all(actors.map(createActor)).then(actorsRes => {
             createdActors = actorsRes;
-            console.log('actors', createdActors);
             films[0].cast[0].actor = createdActors[0]._id;
             films[1].cast[0].actor = createdActors[1]._id;
         });

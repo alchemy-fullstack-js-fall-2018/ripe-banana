@@ -44,6 +44,14 @@ describe('validates a vertical slice of the Studio route', () => {
             state: 'OR',
             country: 'United States'
         }
+    },
+    {
+        name: 'Compost Budget Cinema', 
+        address: {
+            city: 'Portland2',
+            state: 'OR',
+            country: 'United States'
+        }
     }];
 
     let films =  [{
@@ -159,9 +167,17 @@ describe('validates a vertical slice of the Studio route', () => {
 
     it('deletes a studio by id', () => {
         return request(app)
-            .delete(`/api/studios/${createdStudios[1]._id}`)
+            .delete(`/api/studios/${createdStudios[2]._id}`)
             .then(modifiedList => {
                 expect(modifiedList.body).toEqual({ removed: true });
+            });
+    });
+
+    it('responds with an error when asked to delete a studio referenced in a film', () => {
+        return request(app)
+            .delete(`/api/studios/${createdStudios[1]._id}`)
+            .then(modifiedList => {
+                expect(modifiedList.body).toEqual({ Error: 'Cannot remove a studio referenced in a film' });
             });
     });
 
