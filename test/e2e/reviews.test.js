@@ -29,7 +29,7 @@ describe('reviews pub/sub API', () => {
     
     beforeEach(() => {
         createdReviews = [];
-        return createReviews(5, createdReviews);
+        return createReviews(102, createdReviews);
     });
     
     it('creates a review', () => {
@@ -57,6 +57,7 @@ describe('reviews pub/sub API', () => {
         return request(app)
             .get('/api/reviews')
             .then(retrievedReviews => {
+
                 createdReviews.forEach(() => {
                     expect(retrievedReviews.body).toContainEqual({
                         _id: expect.any(String),
@@ -65,6 +66,8 @@ describe('reviews pub/sub API', () => {
                         film: { _id: createdReviews[0].film, title: 'Hot Pursuit' }
                     });
                 });
+
+                expect(retrievedReviews.body).toHaveLength(100);
             });
     });
 });
