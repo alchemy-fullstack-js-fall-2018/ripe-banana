@@ -14,7 +14,7 @@ const getErrors = (validation, numberExpected) => {
     return errors;
 };
 
-const jsonify = data => JSON.parse(JSON.stringify(data))
+const jsonify = data => JSON.parse(JSON.stringify(data));
 
 const createActors = (count, arr) => {
     const actorPromises = Array.apply(null, { length: count }).map(() => {

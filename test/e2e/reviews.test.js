@@ -29,7 +29,6 @@ describe('reviews pub/sub API', () => {
     
     beforeEach(() => {
         createdReviews = [];
-        console.log(createdReviews);
         return createReviews(2, createdReviews);
     });
     
