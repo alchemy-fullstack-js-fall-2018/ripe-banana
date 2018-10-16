@@ -202,4 +202,29 @@ describe('end to end test of reviews', () => {
             });
     });
 
+    it('gets all reviews', () => {
+        return request(app)
+            .get('/api/reviews')
+            .then(res => {
+                expect(res.body).toContainEqual({
+                    _id: createdReviews[0]._id,
+                    rating: createdReviews[0].rating,
+                    review: createdReviews[0].review,
+                    film: {
+                        _id: createdFilms[0]._id,
+                        title: createdFilms[0].title
+                    }
+                });
+                expect(res.body).toContainEqual({
+                    _id: createdReviews[1]._id,
+                    rating: createdReviews[1].rating,
+                    review: createdReviews[1].review,
+                    film: {
+                        _id: createdFilms[1]._id,
+                        title: createdFilms[1].title
+                    }
+                });
+            });
+    });
+
 });
