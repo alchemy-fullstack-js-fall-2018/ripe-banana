@@ -24,7 +24,13 @@ describe('validates a vertical slice of the Actor route', () => {
         name: 'Lud Orange',
         dob: new Date(),
         pob: 'Florida'
-    }];
+    },
+    {
+        name: 'Ocado Pitt',
+        dob: new Date(),
+        pob: 'Mexico'
+    }
+];
 
     let films =  [{
         title: 'Bladecrawler',
@@ -58,6 +64,7 @@ describe('validates a vertical slice of the Actor route', () => {
     beforeEach(() => {
         return Promise.all(actors.map(createActor)).then(actorsRes => {
             createdActors = actorsRes;
+            console.log('actors', createdActors);
             films[0].cast[0].actor = createdActors[0]._id;
             films[1].cast[0].actor = createdActors[1]._id;
         });
@@ -117,11 +124,19 @@ describe('validates a vertical slice of the Actor route', () => {
 
     });
 
-    it('deletes a actor by id', () => {
+    it('deletes a actor that is not in any film casts', () => {
+        return request(app)
+            .delete(`/api/actors/${createdActors[2]._id}`)
+            .then(modifiedList => {
+                expect(modifiedList.body).toEqual({ removed: true });
+            });
+    });
+
+    it('responds with an error when asked to delete an actor referenced in a film', () => {
         return request(app)
             .delete(`/api/actors/${createdActors[1]._id}`)
             .then(modifiedList => {
-                expect(modifiedList.body).toEqual({ removed: true });
+                expect(modifiedList.body).toEqual({ Error: 'Cannot remove an actor referenced in a film' });
             });
     });
 
