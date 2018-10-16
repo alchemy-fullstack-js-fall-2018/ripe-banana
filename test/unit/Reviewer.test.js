@@ -1,7 +1,7 @@
 const { getErrors } = require('./helpers');
 const Reviewer = require('../../lib/models/Reviewer');
 
-describe('reviewer model', () => {
+describe.skip('reviewer model', () => {
     it('validates a good model', () => {
         const data = {
             name: 'Bob Miller',

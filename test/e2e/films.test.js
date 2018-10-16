@@ -8,32 +8,7 @@ const Actor = require('../../lib/models/Actor');
 // const Film  = require('../../lib/models/Film');
 const { createActors } = require('./helpers');
 
-let createdStudio;
-let createdActors;
 
-beforeEach(() => {
-    createdActors = [];
-    return Actor.deleteMany();
-});
-
-beforeEach(() => {
-    return createActors(3, createdActors);
-});
-
-beforeEach(() => {
-    return request(app).post('/api/studios')
-        .send({
-            name: 'A24',
-            address: {
-                city: 'New York',
-                state: 'NY',
-                country: 'USA'
-            }           
-        })
-        .then(studio => {
-            createdStudio = studio.body;
-        });
-});
 
 afterAll(() => {
     mongoose.disconnect();
@@ -41,6 +16,31 @@ afterAll(() => {
 
 
 describe('film routes', () => {
+    let createdStudio;
+    let createdActors;
+    beforeEach(() => {
+        createdActors = [];
+        return Actor.deleteMany();
+    });
+    
+    beforeEach(() => {
+        return createActors(3, createdActors);
+    });
+    
+    beforeEach(() => {
+        return request(app).post('/api/studios')
+            .send({
+                name: 'A24',
+                address: {
+                    city: 'New York',
+                    state: 'NY',
+                    country: 'USA'
+                }           
+            })
+            .then(studio => {
+                createdStudio = studio.body;
+            });
+    });
     it('creates a film on POST', () => {
         return request(app).post('/api/films')
             .send({

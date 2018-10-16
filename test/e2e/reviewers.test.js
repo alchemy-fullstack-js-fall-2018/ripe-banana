@@ -44,7 +44,7 @@ afterAll(() => {
     mongoose.disconnect();
 });
 
-describe('reviewers route', () => {
+describe.skip('reviewers route', () => {
     it('creates a reviewer', () => {
         return request(app).post('/api/reviewers')
             .send({

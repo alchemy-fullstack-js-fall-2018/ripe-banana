@@ -6,7 +6,7 @@ describe('film model', () => {
     it('validates a good model', () => {
         const data = {
             title: 'National Treasure',
-            studio: Types.ObjectId().toString(),
+            studio: Types.ObjectId(),
             released: 2004,
             cast: [{
                 role: 'Benjamin Gates',

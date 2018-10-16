@@ -7,22 +7,22 @@ const Actor = require('../../lib/models/Actor');
 const { createActors } = require('./helpers');
 
 
-let createdActors;
-
-beforeEach(() => {
-    createdActors = [];
-    return Actor.deleteMany();
-});
-
-beforeEach(() => {
-    return createActors(3, createdActors);
-}); 
-
 afterAll(() => {
     mongoose.disconnect();
 });
 
 describe('actors route', () => {
+    let createdActors;
+    beforeEach(() => {
+        createdActors = [];
+        return Actor.deleteMany();
+    });
+    
+    beforeEach(() => {
+        return createActors(3, createdActors);
+    });
+    
+
     it('creates an actor', () => {
         return request(app).post('/api/actors')
             .send({
