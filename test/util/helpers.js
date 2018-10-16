@@ -60,7 +60,7 @@ const createReviewers = (count, arr) => {
 };
 
 const createFilms = (count, arr) => {
-    return Promise.all([createActors(count, [], createStudios(count, []))])
+    return Promise.all([createActors(count, []), createStudios(count, [])])
         .then(([actors, studios]) => {
             const filmPromise = Array.apply(null, { length: count }).map((item, index) => {
                 return Film.create({
@@ -81,7 +81,7 @@ const createFilms = (count, arr) => {
 };
 
 const createReviews = (count, arr) => {
-    return Promise.all([createFilms(count, [], createReviewers(count, []))])
+    return Promise.all([createFilms(count, []), createReviewers(count, [])])
         .then(([films, reviewers]) => {
             const filmPromise = Array.apply(null, { length: count }).map((item, index) => {
                 return Review.create({
@@ -91,9 +91,9 @@ const createReviews = (count, arr) => {
                     film: films[index]._id
                 });
             });
-            return Promise.all(filmPromise).then(films => {
-                arr.push.apply(arr, jsonify(films));
-                return films;
+            return Promise.all(filmPromise).then(reviews => {
+                arr.push.apply(arr, jsonify(reviews));
+                return reviews;
             });
         });
 };
