@@ -196,32 +196,30 @@ describe('end to end test of reviews', () => {
             });
     });
 
-    // it('gets all reviews', () => {
-    //     return request(app)
-    //         .get('/api/reviews')
-    //         .then(res => {
-    //             expect(res.body).toContainEqual({
-    //                 _id: createdReviews[0]._id,
-    //                 rating: createdReviews[0].rating,
-    //                 review: expect.any(Object)
-    //             });
-    //             expect(res.body[0].review).toEqual({
-    //                 text: createdReviews[0].review.text,
-    //                 film: createdReviews[0].review.film,
-    //                 title: createdFilms[0].title  
-    //             });
-    //             expect(res.body).toContainEqual({
-    //                 _id: createdReviews[1]._id,
-    //                 rating: createdReviews[1].rating,
-    //                 review: {
-    //                     text: createdReviews[1].review.text,
-    //                     film: {
-    //                         _id: createdReviews[1].review.film,
-    //                         title: createdFilms[1].title
-    //                     }    
-    //                 }
-    //             });
-    //         });
-    // });
+    it('gets all reviews', () => {
+        return request(app)
+            .get('/api/reviews')
+            .then(res => {
+                expect(res.body).toContainEqual({
+                    _id: createdReviews[0]._id,
+                    rating: createdReviews[0].rating,
+                    review: createdReviews[0].review,
+                    film: {
+                        _id: createdReviews[0].film,
+                        title: createdFilms[0].title
+                    }
+                });
+                expect(res.body).toContainEqual({
+                    _id: createdReviews[1]._id,
+                    rating: createdReviews[1].rating,
+                    review: createdReviews[1].review,
+                    film: {
+                        _id: createdReviews[1].film,
+                        title: createdFilms[1].title
+                    }
+                });
+             
+            });
+    });
 
 });
