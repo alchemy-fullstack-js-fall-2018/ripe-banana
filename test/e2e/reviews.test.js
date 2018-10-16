@@ -25,7 +25,7 @@ describe('end to end test of reviews', () => {
     let createdStudios;
     let createdFilms;
     let createdReviewers;
-    let createdReview;
+    let createdReviews;
 
     let reviews = [
         {
