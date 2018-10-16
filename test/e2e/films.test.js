@@ -8,8 +8,8 @@ describe('film routes', () => {
     let createdFilms;
     let createdStudios;
     let createdActors;
-    let createdFilms;
     let createdReviewers;
+    let createdReviews;
     
     const createFilm = film => {
         return request(app)
@@ -178,8 +178,16 @@ describe('film routes', () => {
                                 name: createdActors[1].name 
                             }
                         }
-
-                    ]                 
+                    ],
+                    reviews: [{
+                        _id: createdReviews[0]._id,
+                        rating: createdReviews[0].rating,
+                        text: createdReviews[0].text, 
+                        reviewer: {
+                            _id: createdReviewers[0]._id,
+                            name: createdReviewers[0].name
+                        }
+                    }]                 
                 });
             });
         
