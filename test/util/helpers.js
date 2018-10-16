@@ -93,6 +93,7 @@ const createReviews = (count, arr) => {
             });
             return Promise.all(filmPromise).then(reviews => {
                 arr.push.apply(arr, jsonify(reviews));
+                console.log('reviews:', reviews);
                 return reviews;
             });
         });

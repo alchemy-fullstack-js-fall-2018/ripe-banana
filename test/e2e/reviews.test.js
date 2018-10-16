@@ -29,7 +29,7 @@ describe('reviews pub/sub API', () => {
     
     beforeEach(() => {
         createdReviews = [];
-        return createReviews(2, createdReviews);
+        return createReviews(5, createdReviews);
     });
     
     it('creates a review', () => {
@@ -49,6 +49,21 @@ describe('reviews pub/sub API', () => {
                     reviewer: expect.any(String),
                     review: 'Horrible Movie',
                     film: expect.any(String)
+                });
+            });
+    });
+
+    it('gets 100 reviews', () => {
+        return request(app)
+            .get('/api/reviews')
+            .then(retrievedReviews => {
+                createdReviews.forEach(() => {
+                    expect(retrievedReviews.body).toContainEqual({
+                        _id: expect.any(String),
+                        rating: createdReviews[0].rating,
+                        review: createdReviews[0].review,
+                        film: { _id: createdReviews[0].film, title: 'Hot Pursuit' }
+                    });
                 });
             });
     });
