@@ -190,7 +190,9 @@ describe('end to end test of reviews', () => {
                     rating: 1,
                     reviewer: createdReviewers[0]._id,
                     review: 'This is a terrible review of of film 0',
-                    film: createdFilms[0]._id
+                    film: createdFilms[0]._id, 
+                    created_at: expect.any(String),
+                    updated_at: expect.any(String)
                 });
             
             });
@@ -207,7 +209,9 @@ describe('end to end test of reviews', () => {
                     film: {
                         _id: createdReviews[0].film,
                         title: createdFilms[0].title
-                    }
+                    },
+                    created_at: expect.any(String),
+                    updated_at: expect.any(String)
                 });
                 expect(res.body).toContainEqual({
                     _id: createdReviews[1]._id,
@@ -216,7 +220,9 @@ describe('end to end test of reviews', () => {
                     film: {
                         _id: createdReviews[1].film,
                         title: createdFilms[1].title
-                    }
+                    },
+                    created_at: expect.any(String),
+                    updated_at: expect.any(String)
                 });
              
             });
