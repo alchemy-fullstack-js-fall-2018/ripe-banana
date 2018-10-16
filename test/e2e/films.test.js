@@ -64,4 +64,10 @@ describe('film routes', () => {
                 });
             });
     });
+    it('gets all films', () => {
+        return request(app).get('/')
+            .then(retrievedFilms => {
+                
+            })
+    })
 });
