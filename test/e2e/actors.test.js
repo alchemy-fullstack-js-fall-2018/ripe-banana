@@ -4,7 +4,17 @@ const app = require('../../lib/app');
 
 
 describe('validates a vertical slice of the Actor route', () => {
-   
+
+    beforeEach(() => {
+        return dropCollection('actors');
+    });
+    beforeEach(() => {
+        return dropCollection('films');
+    });
+
+    let createdActors;
+    let createdFilms;
+
     let actors =  [{
         name: 'Anna Peel',
         dob: new Date(),
@@ -14,14 +24,22 @@ describe('validates a vertical slice of the Actor route', () => {
         name: 'Lud Orange',
         dob: new Date(),
         pob: 'Florida'
+    }];
+
+    let films =  [{
+        title: 'Bladecrawler',
+        released: 1991,
+        cast: [{
+            role: 'lead',
+        }]
     },
     {
-        name: 'Ocado Pitt', 
-        dob: new Date(),
-        pob: 'Mexico'
+        title: 'Bladewalker',
+        released: 1992,
+        cast: [{
+            role: 'Deckard',
+        }]
     }];
-    
-    let createdActors;
         
     const createActor = actor => {
         return request(app)
@@ -29,14 +47,25 @@ describe('validates a vertical slice of the Actor route', () => {
             .send(actor)
             .then(res => res.body);
     };
-        
-    beforeEach(() => {
-        return dropCollection('actors');
-    });
-        
+
+    const createFilm = film => {
+        return request(app)
+            .post('/api/films')
+            .send(film)
+            .then(res => res.body);
+    };
+
     beforeEach(() => {
         return Promise.all(actors.map(createActor)).then(actorsRes => {
             createdActors = actorsRes;
+            films[0].cast[0].actor = createdActors[0]._id;
+            films[1].cast[0].actor = createdActors[1]._id;
+        });
+    });
+        
+    beforeEach(() => {
+        return Promise.all(films.map(createFilm)).then(filmsRes => {
+            createdFilms = filmsRes;
         });
     });
 
@@ -66,7 +95,6 @@ describe('validates a vertical slice of the Actor route', () => {
             .then(res => {
                 expect(res.body).toContainEqual({ _id: createdActors[0]._id, name: createdActors[0].name });
                 expect(res.body).toContainEqual({ _id: createdActors[1]._id, name: createdActors[1].name });
-                expect(res.body).toContainEqual({ _id: createdActors[2]._id, name: createdActors[2].name });
             });
     });
 
@@ -74,7 +102,17 @@ describe('validates a vertical slice of the Actor route', () => {
         return request(app)
             .get(`/api/actors/${createdActors[1]._id}`)
             .then(res => {
-                expect(res.body).toEqual(createdActors[1]);
+                expect(res.body).toEqual(
+                    {
+                        name: createdActors[1].name,
+                        dob: createdActors[1].dob,
+                        pob: createdActors[1].pob,
+                        films: [{
+                            _id: createdFilms[1]._id,
+                            title: createdFilms[1].title,
+                            released: createdFilms[1].released
+                        }]
+                    });
             });
 
     });
