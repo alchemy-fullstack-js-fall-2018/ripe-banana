@@ -8,15 +8,31 @@ const Actor = require('../../lib/models/Actor');
 // const Film  = require('../../lib/models/Film');
 const { createActors } = require('./helpers');
 
-
-let createdActors = [];
+let createdStudio;
+let createdActors;
 
 beforeEach(() => {
+    createdActors = [];
     return Actor.deleteMany();
 });
 
 beforeEach(() => {
     return createActors(3, createdActors);
+});
+
+beforeEach(() => {
+    return request(app).post('/api/studios')
+        .send({
+            name: 'A24',
+            address: {
+                city: 'New York',
+                state: 'NY',
+                country: 'USA'
+            }           
+        })
+        .then(studio => {
+            createdStudio = studio.body;
+        });
 });
 
 afterAll(() => {
@@ -29,7 +45,7 @@ describe('film routes', () => {
         return request(app).post('/api/films')
             .send({
                 title: 'Austin Powers: International Man of Mystery',
-                studio: 'New Line Cinema',
+                studio: createdStudio._id,
                 released: 1999,
                 cast: [
                     {
@@ -47,7 +63,7 @@ describe('film routes', () => {
                     _id: expect.any(String),
                     __v: expect.any(Number),
                     title: 'Austin Powers: International Man of Mystery',
-                    studio: 'New Line Cinema',
+                    studio: expect.any(String),
                     released: 1999,
                     cast: [
                         {
@@ -65,9 +81,9 @@ describe('film routes', () => {
             });
     });
     it('gets all films', () => {
-        return request(app).get('/')
-            .then(retrievedFilms => {
+        // return request(app).get('/')
+        //     .then(retrievedFilms => {
                 
-            })
-    })
+        //     })
+    });
 });
