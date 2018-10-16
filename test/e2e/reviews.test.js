@@ -20,7 +20,7 @@ describe('end to end test of reviews', () => {
         return dropCollection('reviewers');
     });
     beforeEach(() => {
-        return dropCollection('review');
+        return dropCollection('reviews');
     });
 
     let createdActors;
@@ -32,17 +32,15 @@ describe('end to end test of reviews', () => {
     let reviews = [
         {
             rating: 5,
-            review: {
-                text: 'This is a badass review of of film 0',
-                film: Types.ObjectId()
-            }
+            review: 'This is a badass review of of film 0',
+            film: Types.ObjectId()
+            
         },
         {
             rating: 2,
-            review: {
-                text: 'This is mediocre review of of film 1',
-                film: Types.ObjectId()
-            }
+            review: 'This is mediocre review of of film 1',
+            film: Types.ObjectId()
+            
         }
 
     ];
@@ -99,8 +97,6 @@ describe('end to end test of reviews', () => {
         company: 'CreatedCompany2'
     }
     ];
-
-
         
     const createActor = actor => {
         return request(app)
@@ -156,8 +152,8 @@ describe('end to end test of reviews', () => {
     beforeEach(() => {
         return Promise.all(films.map(createFilm)).then(filmsRes => {
             createdFilms = filmsRes;
-            reviews[0].film = createdFilms[0]._id;
-            reviews[1].film = createdFilms[1]._id;
+            reviews[0].review.film = createdFilms[0]._id;
+            reviews[1].review.film = createdFilms[1]._id;
         });
     });
 
@@ -182,21 +178,16 @@ describe('end to end test of reviews', () => {
             .send({
                 rating: 1,
                 reviewer: createdReviewers[0]._id,
-                review: {
-                    text: 'This is a terrible review of of film 0',
-                    film: createdFilms[0]._id
-                }
+                review: 'This is a terrible review of of film 0',
+                film: createdFilms[0]._id
             })
             .then(res => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
-                    __v: expect.any(Number),
                     rating: 1,
                     reviewer: createdReviewers[0]._id,
-                    review: {
-                        text: 'This is a terrible review of of film 0',
-                        film: createdFilms[0]._id
-                    }
+                    review: 'This is a terrible review of of film 0',
+                    film: createdFilms[0]._id
                 });
             
             });
@@ -209,19 +200,22 @@ describe('end to end test of reviews', () => {
                 expect(res.body).toContainEqual({
                     _id: createdReviews[0]._id,
                     rating: createdReviews[0].rating,
-                    review: createdReviews[0].review,
-                    film: {
-                        _id: createdFilms[0]._id,
-                        title: createdFilms[0].title
-                    }
+                    review: expect.any(Object)
+                });
+                expect(res.body[0].review).toEqual({
+                    text: createdReviews[0].review.text,
+                    film: createdReviews[0].review.film,
+                    title: createdFilms[0].title  
                 });
                 expect(res.body).toContainEqual({
                     _id: createdReviews[1]._id,
                     rating: createdReviews[1].rating,
-                    review: createdReviews[1].review,
-                    film: {
-                        _id: createdFilms[1]._id,
-                        title: createdFilms[1].title
+                    review: {
+                        text: createdReviews[1].review.text,
+                        film: {
+                            _id: createdReviews[1].review.film,
+                            title: createdFilms[1].title
+                        }    
                     }
                 });
             });

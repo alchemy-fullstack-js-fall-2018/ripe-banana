@@ -8,10 +8,8 @@ describe('Review Model', () => {
         const data = {
             rating: 2,
             reviewer: Types.ObjectId(),
-            review: {
-                text: 'This is a review of our movie',
-                film: Types.ObjectId()
-            }
+            review: 'This is a review of our movie',
+            film: Types.ObjectId()
         };
 
         const review = new Review(data);
@@ -24,7 +22,7 @@ describe('Review Model', () => {
             createdAt: 1991
         });
 
-        const errors = getErrors(review.validateSync(), 3);
+        const errors = getErrors(review.validateSync(), 4);
         expect(errors.rating.properties.message).toEqual('Path `rating` is required.');
     });
 });
