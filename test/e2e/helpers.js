@@ -25,11 +25,10 @@ let studio = {
 };
 
 const createActors = () => {
+    // let createdActors;
     return Promise.all(actors.map(createActor))
-        .then(actorsRes => { createdActors = actorsRes; });
+        // .then(actorsRes => { createdActors = actorsRes; });
 };
-
-
 
 const createActor = actor => {
     return request(app)
@@ -47,5 +46,6 @@ const createStudio = studio => {
 
 module.exports = {
     createActor,
-    createStudio
+    createStudio, 
+    createActors
 };
