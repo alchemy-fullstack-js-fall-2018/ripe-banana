@@ -4,12 +4,13 @@ const { dropCollection } = require('./db');
 const { createActors } = require('./helpers');
 
 describe('actors', () => {
+    
+    let createdActors;
 
     beforeEach(() => {
         return dropCollection('actors');
     });
 
-    let createdActors;
     beforeEach(() => {
         return createActors()
             .then(actorsRes => { 

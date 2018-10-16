@@ -5,11 +5,12 @@ const { createStudios } = require('./helpers');
 
 describe('studio', () => {
 
+    let createdStudios;
+    
     beforeEach(() => {
         return dropCollection('studios');
     });
 
-    let createdStudios;
     beforeEach(() => {
         return createStudios()
             .then(studiosRes => { 

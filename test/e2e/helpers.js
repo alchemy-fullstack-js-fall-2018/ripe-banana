@@ -34,14 +34,11 @@ let studios = [
     }
 ];
 
+let reviewers = [
+    { name: 'George Watchington', company: 'Patriot Films' },
+    { name: 'Abraham Linkoln', company: 'Great Confilict Productions' }
+];
 
-const createActors = () => {
-    return Promise.all(actors.map(createActor));
-};
-
-const createStudios = () => {
-    return Promise.all(studios.map(createStudio));
-};
 
 const createActor = actor => {
     return request(app)
@@ -57,7 +54,28 @@ const createStudio = studio => {
         .then(res => res.body);
 };
 
+const createReviewer = reviewer => {
+    return request(app)
+        .post('/reviewers')
+        .send(reviewer)
+        .then(res => res.body);
+};
+
+const createActors = () => {
+    return Promise.all(actors.map(createActor));
+};
+
+const createStudios = () => {
+    return Promise.all(studios.map(createStudio));
+};
+
+const createReviewers = () => {
+    return Promise.all(reviewers.map(createReviewer))
+};
+
+
 module.exports = {
     createStudios, 
-    createActors
+    createActors,
+    createReviewers
 };

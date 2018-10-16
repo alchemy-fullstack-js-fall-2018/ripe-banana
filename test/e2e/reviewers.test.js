@@ -1,33 +1,24 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
+const { createReviewers } = require('./helpers');
 
-describe.skip('reviewers', () => {
-
-    let reviewers = [
-        { name: 'George Watchington', company: 'Patriot Films' },
-        { name: 'Abraham Linkoln', company: 'Great Confilict Productions' }
-    ];
+describe('reviewers', () => {
 
     let createdReviewers;
-
-    const createReviewer = reviewer => {
-        return request(app)
-            .post('/reviewers')
-            .send(reviewer)
-            .then(res => res.body);
-    };
-
+    
     beforeEach(() => {
         return dropCollection('reviewers');
     });
-
+    
     beforeEach(() => {
-        return Promise.all(reviewers.map(createReviewer))
-            .then(reviewerRes => { createdReviewers = reviewerRes; });
+        return createReviewers()
+            .then(reviewersRes => { 
+                createdReviewers = reviewersRes;
+            });
     });
 
-    it.skip('creates an reviewer', () => {
+    it('creates a reviewer', () => {
         const newReviewer = {
             name: 'Roger Siskel',
             company: 'At the Movies'
@@ -44,7 +35,7 @@ describe.skip('reviewers', () => {
             });
     });
 
-    it.skip('gets all reviewers', () => {
+    it('gets all reviewers', () => {
         return request(app)
             .get('/reviewers')
             .then(retrievedReviewers => {
@@ -54,7 +45,7 @@ describe.skip('reviewers', () => {
             });
     });
 
-    it.skip('gets a specific reviewer when passed an id', () => {
+    it('gets a specific reviewer when passed an id', () => {
         const id = createdReviewers[0]._id;
         return request(app)
             .get(`/reviewers/${id}`)
@@ -63,7 +54,7 @@ describe.skip('reviewers', () => {
             });
     });
 
-    it.skip('updates a reviewers info', () => {
+    it('updates a reviewers info', () => {
         const id = createdReviewers[0]._id;
         const newData = createdReviewers[0];
         newData.company = 'Founder\'s films';
