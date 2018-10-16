@@ -6,9 +6,9 @@
   "scripts": {
     "lint": "eslint .",
     "coverage": "jest --coverage --detectOpenHandles",
-    "jest": "jest --verbose",
+    "jest": "jest --verbose --runInBand",
     "test": "npm run jest",
-    "test:watch": "npm run jest -- --runInBand --watch",
+    "test:watch": "npm run jest -- --watch",
     "start": "nodemon index.js"
   },
   "repository": {

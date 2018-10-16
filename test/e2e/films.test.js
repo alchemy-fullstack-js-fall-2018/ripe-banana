@@ -54,26 +54,6 @@ describe('film routes', () => {
             });
     });
 
-    beforeEach(() => {
-        let reviews = [
-            {
-                rating: 5,
-                reviewer: createdReviewers[0]._id,
-                text: 'Amazeballs!',
-                film: createdFilms[0]._id 
-            },
-            {
-                rating: 1,
-                reviewer: createdReviewers[1]._id,
-                text: 'I want the last 1.5 hours of my life back.',
-                film: createdFilms[1]._id 
-            }
-        ];
-
-        return Promise.all(reviews.map(createReview))
-            .then(reviewsRes => { createdReviews = reviewsRes;});
-
-    });
     
     beforeEach(() => {
         let films = [
@@ -96,9 +76,30 @@ describe('film routes', () => {
                 ]
             }
         ];
-    
+        
         return Promise.all(films.map(createFilm))
             .then(filmsRes => { createdFilms = filmsRes;});
+    });
+    
+    beforeEach(() => {
+        let reviews = [
+            {
+                rating: 5,
+                reviewer: createdReviewers[0]._id,
+                text: 'Amazeballs!',
+                film: createdFilms[0]._id 
+            },
+            {
+                rating: 1,
+                reviewer: createdReviewers[1]._id,
+                text: 'I want the last 1.5 hours of my life back.',
+                film: createdFilms[1]._id 
+            }
+        ];
+
+        return Promise.all(reviews.map(createReview))
+            .then(reviewsRes => { createdReviews = reviewsRes;});
+
     });
     
     it('creates a film', () => {
