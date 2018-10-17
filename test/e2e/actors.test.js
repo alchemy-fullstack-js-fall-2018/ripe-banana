@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
 const Actor = require('../../lib/models/Actor');
+const { dropCollection } = require('./db');
 const { createActors } = require('./helpers');
 
 
@@ -14,12 +15,14 @@ afterAll(() => {
 describe('actors route', () => {
     let createdActors;
     beforeEach(() => {
-        createdActors = [];
-        return Actor.deleteMany();
+        return dropCollection('actors');
     });
     
     beforeEach(() => {
-        return createActors(3, createdActors);
+        return createActors()
+            .then(res => {
+                createdActors = res;
+            });
     });
     
 

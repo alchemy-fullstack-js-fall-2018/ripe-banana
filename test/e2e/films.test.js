@@ -5,26 +5,26 @@ const { Types } = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
 const Actor = require('../../lib/models/Actor');
+const { dropCollection } = require('./db');
 // const Film  = require('../../lib/models/Film');
 const { createActors } = require('./helpers');
-
-
 
 afterAll(() => {
     mongoose.disconnect();
 });
 
-
 describe('film routes', () => {
-    let createdStudio;
+    
     let createdActors;
     beforeEach(() => {
-        createdActors = [];
-        return Actor.deleteMany();
+        return dropCollection('actors');
     });
     
     beforeEach(() => {
-        return createActors(3, createdActors);
+        return createActors()
+            .then(res => {
+                createdActors = res;
+            });
     });
     
     beforeEach(() => {
