@@ -48,8 +48,18 @@ let studios = [
 ];
 
 let reviewers = [
-    { name: 'George Watchington', company: 'Patriot Films' },
-    { name: 'Abraham Linkoln', company: 'Great Confilict Productions' }
+    { 
+        name: 'George Watchington', 
+        company: 'Patriot Films',
+        // email: 'georgieHotStuff@hotmail.com',
+        // roles: ['admin'] 
+    },
+    { 
+        name: 'Abraham Linkoln', 
+        company: 'Great Confilict Productions',
+        // email: 'Abe1809@askjeeves.com',
+        // roles: ['editor']
+    }
 ];
 
 
