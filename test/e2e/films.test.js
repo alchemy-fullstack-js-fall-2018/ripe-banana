@@ -22,7 +22,7 @@ describe('film routes', () => {
         return request(app).post('/api/films')
             .send(film)
             .then(res => {
-                res.body;
+                return res.body;
             });
     }; 
 
@@ -36,6 +36,10 @@ describe('film routes', () => {
 
     beforeEach(() => {
         return dropCollection('studios');
+    });
+
+    beforeEach(() => {
+        return dropCollection('films');
     });
     
     beforeEach(() => {
@@ -129,7 +133,7 @@ describe('film routes', () => {
     });
     it('gets all films', () => {
         console.log(createdFilms);
-        return request(app).get('/')
+        return request(app).get('/api/films')
             .then(retrievedFilms => {
                 createdFilms.forEach(createdFilm => {
                     expect(retrievedFilms.body).toContainEqual(createdFilm);
