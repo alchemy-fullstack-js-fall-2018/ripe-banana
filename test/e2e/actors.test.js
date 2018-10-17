@@ -14,6 +14,7 @@ afterAll(() => {
 
 describe('actors route', () => {
     let createdActors;
+
     beforeEach(() => {
         return dropCollection('actors');
     });
@@ -24,7 +25,6 @@ describe('actors route', () => {
                 createdActors = res;
             });
     });
-    
 
     it('creates an actor', () => {
         return request(app).post('/api/actors')
@@ -53,7 +53,6 @@ describe('actors route', () => {
                 expect(retrievedActors.body).toHaveLength(createdActors.length);
             });
     });
-  
 
     it('gets actor by id', () => {
         return request(app).get(`/api/actors/${createdActors[0]._id}`)

@@ -3,48 +3,27 @@ require('../../lib/util/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
-const Reviewer = require('../../lib/models/Reviewer');
-
-let reviewers = [
-    {
-        name: 'Owen Gleiberman',
-        company: 'Entertainment Weekly'
-    },
-    {
-        name: 'Sheila',
-        company: 'popqueens.com/thatssosheila'
-    },
-    {
-        name: 'Bobby Jones',
-        company: 'welovemovies.net'
-    }
-];
-
-let createdReviewers;
-
-const createReviewer = reviewer => {
-    return request(app)
-        .post('/api/reviewers/')
-        .send(reviewer)
-        .then(res => res.body);
-};
-
-beforeEach(() => {
-    return Reviewer.deleteMany();
-});
-
-beforeEach(() => {
-    return Promise.all(reviewers.map(createReviewer))
-        .then(reviewersRes => {
-            createdReviewers = reviewersRes;
-        });
-});
+const { createReviewers } = require('./helpers');
+const { dropCollection } = require('./db');
 
 afterAll(() => {
     mongoose.disconnect();
 });
 
 describe.skip('reviewers route', () => {
+    let createdReviewers;
+
+    beforeEach(() => {
+        return dropCollection('reviewers');
+    });
+
+    beforeEach(() => {
+        return createReviewers()
+            .then(res => {
+                createdReviewers = res;
+            });
+    });
+
     it('creates a reviewer', () => {
         return request(app).post('/api/reviewers')
             .send({
