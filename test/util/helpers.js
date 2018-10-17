@@ -46,8 +46,6 @@ const createStudios = (count, arr) => {
     });
 };
 
-
-
 const createReviewers = (count, arr) => {
     const reviewerPromise = Array.apply(null, { length: count }).map(() => {
         return Reviewer.create({

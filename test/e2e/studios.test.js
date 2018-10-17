@@ -11,18 +11,17 @@ describe('studios pub/sub API', () => {
     });
 
     let createdFilms;
-
     beforeEach(() => {
         createdFilms = [];
         return createFilms(1, createdFilms);
     });
+
     let createdStudios;
     beforeEach(() => {
         createdStudios = [];
         return createStudios(3, createdStudios);
     });
 
-    
 
     it('creates a studio on post', () => {
         return request(app)

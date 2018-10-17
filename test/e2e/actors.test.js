@@ -1,46 +1,25 @@
 require('dotenv').config();
 const { dropCollection } = require('../util/db');
 const app = require('../../lib/app');
-const Chance = require('chance');
-const chance = new Chance();
 const request = require('supertest');
+const { createActors, createFilms } = require('../util/helpers');
 
 describe('actors pub/sub API', () => {
-    let actors = [
-        {
-            name: chance.name({ suffix: true }),
-            dob: chance.date(),
-            pob: chance.word()
-        },
-        {
-            name: chance.name({ suffix: true }),
-            dob: chance.date(),
-            pob: chance.word()
-        },
-        {
-            name: chance.name({ prefix: true }),
-            dob: chance.date(),
-            pob: chance.word()
-        },
-
-    ];
-
-    let createdActors;
-
-    const createActor = actor => {
-        return request(app)
-            .post('/api/actors')
-            .send(actor)
-            .then(res => res.body);
-    };
-
+    
     beforeEach(() => {
         return dropCollection('actors');
     });
 
+    let createdActors;
     beforeEach(() => {
-        return Promise.all(actors.map(createActor))
-            .then(actorRes => createdActors = actorRes);
+        createdActors = [];
+        return createActors(2, createdActors);
+    });
+
+    let createdFilms;
+    beforeEach(() => {
+        createdFilms = [];
+        return createFilms(2, createdFilms);
     });
 
     it('creates an actor on post', () => {
@@ -76,8 +55,16 @@ describe('actors pub/sub API', () => {
         return request(app)
             .get(`/api/actors/${createdActors[0]._id}`)
             .then(res => {
-                expect(res.body).toEqual({ ...createdActors[0], __v: expect.any(Number) });
+                expect(res.body).toEqual({ ...createdActors[0], __v: expect.any(Number), films: [] });
             });     
+    });
+
+    it('gets an actor by id with films', () => {
+        return request(app)
+            .get(`/api/actors/${createdFilms[0].cast[0].actor}`)
+            .then(res => {
+                expect(res.body.films).toEqual([{ _id: createdFilms[0]._id, title: createdFilms[0].title, released: createdFilms[0].released }]);
+            });
     });
 
     it('updates an actor by id', () => {
