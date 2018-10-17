@@ -1,7 +1,7 @@
 const Studio = require('../../lib/models/Studio');
 const { getErrors } = require('./helpers');
 
-xdescribe ('Studio model', () => {
+describe ('Studio model', () => {
     it('validates a good model', () => {
         const data = {
             name: 'Willamette Pictures',

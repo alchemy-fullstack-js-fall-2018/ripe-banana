@@ -1,7 +1,7 @@
 const Reviewer = require('../../lib/models/Reviewer');
 const { getErrors } = require('./helpers');
 
-xdescribe ('Reviewer model', () => {
+describe ('Reviewer model', () => {
     it('validates a good model', () => {
         const data = {
             name: 'Gene Ebert',
