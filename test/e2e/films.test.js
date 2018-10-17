@@ -4,10 +4,8 @@ const mongoose = require('mongoose');
 const { Types } = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
-const Actor = require('../../lib/models/Actor');
 const { dropCollection } = require('./db');
-// const Film  = require('../../lib/models/Film');
-const { createActors } = require('./helpers');
+const { createActors, createReviewers, createStudios } = require('./helpers');
 
 afterAll(() => {
     mongoose.disconnect();
@@ -16,8 +14,28 @@ afterAll(() => {
 describe('film routes', () => {
     
     let createdActors;
+    let createdReviewers;
+    let createdStudios;
+    let createdFilms;
+
+    const createFilm = film => {
+        return request(app).post('/api/films')
+            .send(film)
+            .then(res => {
+                res.body;
+            });
+    }; 
+
     beforeEach(() => {
         return dropCollection('actors');
+    });
+
+    beforeEach(() => {
+        return dropCollection('reviewers');
+    });
+
+    beforeEach(() => {
+        return dropCollection('studios');
     });
     
     beforeEach(() => {
@@ -26,26 +44,55 @@ describe('film routes', () => {
                 createdActors = res;
             });
     });
-    
+
     beforeEach(() => {
-        return request(app).post('/api/studios')
-            .send({
-                name: 'A24',
-                address: {
-                    city: 'New York',
-                    state: 'NY',
-                    country: 'USA'
-                }           
-            })
-            .then(studio => {
-                createdStudio = studio.body;
+        return createReviewers()
+            .then(res => {
+                createdReviewers = res;
+            });        
+    });
+
+    beforeEach(() => {
+        return createStudios()
+            .then(res => {
+                createdStudios = res;
             });
     });
+
+    beforeEach(() => {
+        let films = [
+            {
+                title: 'Goodfellas',
+                studio: createdStudios[1]._id,
+                released: 1990,
+                cast: [
+                    { role: 'Henry Hill', actor: createdActors[0]._id },
+                    { role: 'Jimmy Conway', actor: createdActors[1]._id }
+    
+                ]
+            },
+            {
+                title: 'Run Lola Run',
+                studio: createdStudios[0]._id,
+                released: 1999,
+                cast: [
+                    { role: 'Lola', actor: createdActors[1]._id },
+                    { role: 'Manni', actor: createdActors[0]._id }
+                ]
+            }
+        ];
+        return Promise.all(films.map(createFilm))
+            .then(res => {
+                createdFilms = res;
+                console.log(createdFilms);
+            });
+    });
+    
     it('creates a film on POST', () => {
         return request(app).post('/api/films')
             .send({
                 title: 'Austin Powers: International Man of Mystery',
-                studio: createdStudio._id,
+                studio: createdStudios[0]._id,
                 released: 1999,
                 cast: [
                     {
@@ -81,9 +128,13 @@ describe('film routes', () => {
             });
     });
     it('gets all films', () => {
-        // return request(app).get('/')
-        //     .then(retrievedFilms => {
-                
-        //     })
+        console.log(createdFilms);
+        return request(app).get('/')
+            .then(retrievedFilms => {
+                createdFilms.forEach(createdFilm => {
+                    expect(retrievedFilms.body).toContainEqual(createdFilm);
+                });                
+                expect(retrievedFilms.body).toHaveLength(createdFilms.length);
+            });
     });
 });
