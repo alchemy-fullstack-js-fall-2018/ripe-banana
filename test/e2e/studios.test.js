@@ -82,10 +82,12 @@ describe('studios pub/sub API', () => {
             });
     });
 
-
-
-
-
-
+    it('does not delete studio if there are films associated with it', () => {
+        return request(app)
+            .delete(`/api/studios/${createdFilms[0].studio}`)
+            .then(res => {
+                expect(res.body).toEqual({ removed: false });
+            });
+    });
 
 });
