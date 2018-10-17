@@ -6,8 +6,7 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const Actor = require('../../lib/models/Actor');
 const { dropCollection } = require('./db');
-// const Film  = require('../../lib/models/Film');
-const { createActors } = require('./helpers');
+const { createActors, createReviewers, createStudios } = require('./helpers');
 
 afterAll(() => {
     mongoose.disconnect();
@@ -16,9 +15,19 @@ afterAll(() => {
 describe('film routes', () => {
     
     let createdActors;
+    let createdReviewers;
+    let createdStudios;
+
     beforeEach(() => {
         return dropCollection('actors');
     });
+    beforeEach(() => {
+        return dropCollection('reviewers');
+    });
+    beforeEach(() => {
+        return dropCollection('studios');
+    });
+
     
     beforeEach(() => {
         return createActors()
@@ -26,26 +35,27 @@ describe('film routes', () => {
                 createdActors = res;
             });
     });
-    
+
     beforeEach(() => {
-        return request(app).post('/api/studios')
-            .send({
-                name: 'A24',
-                address: {
-                    city: 'New York',
-                    state: 'NY',
-                    country: 'USA'
-                }           
-            })
-            .then(studio => {
-                createdStudio = studio.body;
-            });
+        return createReviewers()
+            .then(res => {
+                createdReviewers = res;
+            });        
     });
+
+    beforeEach(() => {
+        return createStudios()
+            .then(res => {
+                createdStudios = res;
+            });
+        
+    });
+    
     it('creates a film on POST', () => {
         return request(app).post('/api/films')
             .send({
                 title: 'Austin Powers: International Man of Mystery',
-                studio: createdStudio._id,
+                studio: createdStudios[0]._id,
                 released: 1999,
                 cast: [
                     {
