@@ -3,59 +3,25 @@ require('../../lib/util/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
-const Studio = require('../../lib/models/Studio');
+const { createStudios } = require('./helpers');
+const { dropCollection } = require('./db');
+
+afterAll(() => {
+    mongoose.disconnect();
+});
 
 describe('studio route', () => {
-
-    let studios = [
-        {
-            name: 'A24',
-            address: {
-                city: 'New York',
-                state: 'NY',
-                country: 'USA'
-            }            
-        },
-        {
-            name: 'Universal',
-            address: {
-                city: 'Los Angeles',
-                state: 'CA',
-                country: 'USA'
-            }            
-        },
-        {
-            name: 'Pixar',
-            address: {
-                city: 'Emeryville',
-                state: 'CA',
-                country: 'USA'
-            }            
-        }
-    ];
-
     let createdStudios;
 
-    const createStudio = studio => {
-        return request(app)
-            .post('/api/studios/')
-            .send(studio)
-            .then(res => res.body);
-    };
-
     beforeEach(() => {
-        return Studio.deleteMany();
+        return dropCollection('studios');
     });
 
     beforeEach(() => {
-        return Promise.all(studios.map(createStudio))
-            .then(studiosRes => {
-                createdStudios = studiosRes;
+        return createStudios()
+            .then(res => {
+                createdStudios = res;
             });
-    });
-
-    afterAll(() => {
-        mongoose.disconnect();
     });
 
     it('creates a studio on POST', () => {

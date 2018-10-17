@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
 const Actor = require('../../lib/models/Actor');
+const { dropCollection } = require('./db');
 const { createActors } = require('./helpers');
 
 
@@ -13,15 +14,17 @@ afterAll(() => {
 
 describe('actors route', () => {
     let createdActors;
+
     beforeEach(() => {
-        createdActors = [];
-        return Actor.deleteMany();
+        return dropCollection('actors');
     });
     
     beforeEach(() => {
-        return createActors(3, createdActors);
+        return createActors()
+            .then(res => {
+                createdActors = res;
+            });
     });
-    
 
     it('creates an actor', () => {
         return request(app).post('/api/actors')
@@ -50,7 +53,6 @@ describe('actors route', () => {
                 expect(retrievedActors.body).toHaveLength(createdActors.length);
             });
     });
-  
 
     it('gets actor by id', () => {
         return request(app).get(`/api/actors/${createdActors[0]._id}`)
