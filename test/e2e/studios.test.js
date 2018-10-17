@@ -19,7 +19,8 @@ describe('studio', () => {
     beforeEach(() => {
         return Promise.all([
             dropCollection('studios'),
-            dropCollection('films')
+            dropCollection('films'),
+            dropCollection('actors')
         ]);
     });
 

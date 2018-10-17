@@ -1,14 +1,27 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
-const { createActors } = require('./helpers');
+const { createActors, createStudios } = require('./helpers');
 
 describe('actors', () => {
     
     let createdActors;
+    let createdFilms;
+    let createdStudios;
+
+    const createFilm = film => {
+        return request(app)
+            .post('/films')
+            .send(film)
+            .then(res => res.body);
+    };
 
     beforeEach(() => {
-        return dropCollection('actors');
+        return Promise.all([
+            dropCollection('actors'),
+            dropCollection('films'),
+            dropCollection('studios')
+        ]);
     });
 
     beforeEach(() => {
@@ -16,6 +29,39 @@ describe('actors', () => {
             .then(actorsRes => { 
                 createdActors = actorsRes;
             });
+    });
+
+    beforeEach(() => {
+        return createStudios()
+            .then(studiosRes => { 
+                createdStudios = studiosRes;
+            });
+    });
+
+    beforeEach(() => {
+        let films = [
+            {
+                title: 'The Programinator',
+                studio: createdStudios[0]._id,
+                released: 1984,
+                cast: [
+                    { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
+                    { role: 'Sidekick', actor: createdActors[1]._id }
+                ]
+            },
+            {
+                title: 'Thelma and Luigi',
+                studio: createdStudios[0]._id,
+                released: 1972,
+                cast: [
+                    { role: 'Thelma', actor: createdActors[1]._id }, 
+                    { role: 'Luigi', actor: createdActors[0]._id }
+                ]
+            }
+        ];
+        
+        return Promise.all(films.map(createFilm))
+            .then(filmsRes => { createdFilms = filmsRes;});
     });
 
 
@@ -52,9 +98,24 @@ describe('actors', () => {
         return request(app)
             .get(`/actors/${id}`)
             .then(retrievedActor => {
-                expect(retrievedActor.body).toEqual(createdActors[0]);
+                expect(retrievedActor.body).toEqual({
+                    name: createdActors[0].name,
+                    dob: createdActors[0].dob,
+                    pob: createdActors[0].pob,
+                    films: [
+                        {
+                            _id: createdFilms[0]._id,
+                            title: createdFilms[0].title,
+                            released: createdFilms[0].released
+                        },
+                        {
+                            _id: createdFilms[1]._id,
+                            title: createdFilms[1].title,
+                            released: createdFilms[1].released
+                        }
+                    ]
+                });
             });
-
     });
 
     it('deleted one actor by id', () => {
