@@ -112,11 +112,19 @@ describe('studio', () => {
 
     });
 
-    it('deleted one studio by id', () => {
+    it('deletes one studio by id if no films', () => {
+        return request(app)
+            .delete(`/studios/${createdStudios[2]._id}`)
+            .then(deletedStatus => {
+                expect(deletedStatus.body).toEqual({ removed: true });
+            });
+    });
+
+    it('does not delete one studio by id if has films', () => {
         return request(app)
             .delete(`/studios/${createdStudios[0]._id}`)
             .then(deletedStatus => {
-                expect(deletedStatus.body).toEqual({ removed: true });
+                expect(deletedStatus.body).toEqual({ removed: false });
             });
     });
 

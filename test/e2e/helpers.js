@@ -36,6 +36,14 @@ let studios = [
             state: 'CA',
             country: 'USA'
         }
+    },
+    {
+        name: 'Defunct Studio',
+        address: {
+            city: 'Pasadena',
+            state: 'CA',
+            country: 'USA'
+        }
     }
 ];
 

@@ -194,4 +194,13 @@ describe('film routes', () => {
         
     });
 
+    it('deletes a film by id', () => {
+        const id = createdFilms[0]._id;
+        return request(app)
+            .delete(`/films/${id}`)
+            .then(deletedStatus => {
+                expect(deletedStatus.body).toEqual({ removed: true });
+            });
+    });
+
 });
