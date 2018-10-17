@@ -88,7 +88,6 @@ describe('film routes', () => {
         return Promise.all(films.map(createFilm))
             .then(res => {
                 createdFilms = res;
-                console.log(createdFilms);
             });
     });
     
@@ -132,7 +131,6 @@ describe('film routes', () => {
             });
     });
     it('gets all films', () => {
-        console.log(createdFilms);
         return request(app).get('/api/films')
             .then(retrievedFilms => {
                 createdFilms.forEach(createdFilm => {
@@ -140,5 +138,15 @@ describe('film routes', () => {
                 });                
                 expect(retrievedFilms.body).toHaveLength(createdFilms.length);
             });
+    });
+
+    it('gets a film by id', () => {
+        const id = createdFilms[1]._id;
+        return request(app).get(`/api/films/${id}`)
+            .then(retrievedFilm => {
+                expect(retrievedFilm.body)
+                    .toEqual({ ...createdFilms[1], __v: expect.any(Number) });
+            });
+
     });
 });
