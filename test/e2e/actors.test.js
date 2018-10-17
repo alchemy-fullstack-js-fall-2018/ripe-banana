@@ -63,7 +63,11 @@ describe('actors pub/sub API', () => {
         return request(app)
             .get(`/api/actors/${createdFilms[0].cast[0].actor}`)
             .then(res => {
-                expect(res.body.films).toEqual([{ _id: createdFilms[0]._id, title: createdFilms[0].title, released: createdFilms[0].released }]);
+                expect(res.body.films).toEqual([{ 
+                    _id: createdFilms[0]._id, 
+                    title: createdFilms[0].title, 
+                    released: createdFilms[0].released 
+                }]);
             });
     });
 
