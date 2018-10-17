@@ -88,4 +88,12 @@ describe('actors pub/sub API', () => {
             });
     });
 
+    it('does not delete actor if there are films associated with them', () => {
+        return request(app)
+            .delete(`/api/actors/${createdFilms[0].cast[0].actor}`)
+            .then(res => {
+                expect(res.body).toEqual({ removed: false });
+            });
+    });
+
 });
