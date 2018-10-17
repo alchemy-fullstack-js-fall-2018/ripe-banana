@@ -118,12 +118,21 @@ describe('actors', () => {
             });
     });
 
-    it('deleted one actor by id', () => {
-        const id = createdActors[0]._id;
+    it('deletes one actor by id who is not in any films', () => {
+        const id = createdActors[2]._id;
         return request(app)
             .delete(`/actors/${id}`)
             .then(deletedStatus => {
                 expect(deletedStatus.body).toEqual({ removed: true });
+            });
+    });
+
+    it('does not delete one actor by id who has films', () => {
+        const id = createdActors[0]._id;
+        return request(app)
+            .delete(`/actors/${id}`)
+            .then(deletedStatus => {
+                expect(deletedStatus.body).toEqual({ removed: false });
             });
     });
 

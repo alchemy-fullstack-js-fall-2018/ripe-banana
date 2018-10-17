@@ -12,6 +12,11 @@ let actors = [
         name: 'Susan Surandin',
         dob: new Date('04-14-1985'),
         pob: 'Miami'
+    },
+    {
+        name: 'Perpetually Unemployed',
+        dob: new Date('12-12-1912'),
+        pob: 'Canada'
     }
 ];
 
