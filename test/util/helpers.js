@@ -49,8 +49,8 @@ const createStudios = (count, arr) => {
 const createReviewers = (count, arr) => {
     const reviewerPromise = Array.apply(null, { length: count }).map(() => {
         return Reviewer.create({
-            name: chance.name({ suffix: true }),
-            company: chance.company()
+            name: 'Steve',
+            company: 'A Company'
         });
     });
     return Promise.all(reviewerPromise).then(reviewers => {
