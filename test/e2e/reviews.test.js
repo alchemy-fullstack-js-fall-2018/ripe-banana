@@ -25,12 +25,21 @@ describe('reviews routes', () => {
                 return res.body;
             });
     };
+
+    const createReview = review => {
+        return request(app).post('/api/reviews')
+            .send(review)
+            .then(res => {
+                return res.body;
+            });
+    };
     beforeEach(() => {
         return Promise.all([
             dropCollection('actors'),
             dropCollection('reviewers'),
             dropCollection('studios'),
-            dropCollection('films')
+            dropCollection('films'),
+            dropCollection('reviews')
         ]);
     });
 
@@ -83,6 +92,29 @@ describe('reviews routes', () => {
                 createdFilms = res;
             });
     });
+
+    beforeEach(() => {
+        let reviews = [
+            {
+                rating: 4,
+                reviewer: createdReviewers[1]._id,
+                review: 'if you like Germans and aerobics, this film is for you!',
+                film: createdFilms[0]._id  
+            },
+            {
+                rating: 5,
+                reviewer: createdReviewers[0]._id,
+                review: 'greatest mob movie EVER',
+                film: createdFilms[1]._id
+            }
+        ];
+        
+        return Promise.all(reviews.map(createReview))
+            .then(res => {
+                createdReviews = res;
+            });
+    });
+
     it('creates a review on POST', () => {
         const data = { 
             rating: 5,
@@ -104,5 +136,14 @@ describe('reviews routes', () => {
             });
     });
 
+    it('gets all reviews', () => {
+        return request(app).get('/api/reviews')
+            .then(retrievedReviews => {
+                createdReviews.forEach((createdReview, i) => {
+                    expect(retrievedReviews.body).toContainEqual({ ...createdReview, film: { _id: createdFilms[i]._id, title: createdFilms[i].title } });
+                });
+                expect(retrievedReviews.body).toHaveLength(createdReviews.length);
 
+            });
+    });
 });
