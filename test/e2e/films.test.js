@@ -1,7 +1,6 @@
 require('dotenv').config();
 require('../../lib/util/connect')();
 const mongoose = require('mongoose');
-const { Types } = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
@@ -27,21 +26,14 @@ describe('film routes', () => {
     }; 
 
     beforeEach(() => {
-        return dropCollection('actors');
+        return Promise.all([
+            dropCollection('actors'),
+            dropCollection('reviewers'),
+            dropCollection('studios'),
+            dropCollection('films')
+        ]);
     });
 
-    beforeEach(() => {
-        return dropCollection('reviewers');
-    });
-
-    beforeEach(() => {
-        return dropCollection('studios');
-    });
-
-    beforeEach(() => {
-        return dropCollection('films');
-    });
-    
     beforeEach(() => {
         return createActors()
             .then(res => {
