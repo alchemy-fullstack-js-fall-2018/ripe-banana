@@ -90,13 +90,13 @@ describe('validates a vertical slice of the Films route', () => {
                             }
                         }],
                         reviews: [{
-                            _id: createdReviews[1].film,
+                            _id: createdReviews[1]._id,
                             rating: createdReviews[1].rating,
                             review: createdReviews[1].review,
-                            reviewer: [{
+                            reviewer: {
                                 _id: createdReviews[1].reviewer,
                                 name: createdReviewers[1].name
-                            }]
+                            }
                         }] 
                     });
             });
