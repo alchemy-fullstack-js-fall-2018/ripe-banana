@@ -145,7 +145,29 @@ describe('film routes', () => {
         return request(app).get(`/api/films/${id}`)
             .then(retrievedFilm => {
                 expect(retrievedFilm.body)
-                    .toEqual({ ...createdFilms[1], __v: expect.any(Number) });
+                    .toEqual({
+                        title: 'Run Lola Run',
+                        studio: { 
+                            _id: createdStudios[0]._id,
+                            name: createdStudios[0].name
+                        },
+                        released: 1999,
+                        cast: [
+
+                            { 
+                                _id: expect.any(String),
+                                role: 'Lola',
+                                actor: createdActors[1]._id 
+                            },
+
+                            { 
+                                _id: expect.any(String),
+                                role: 'Manni',
+                                actor: createdActors[0]._id 
+                            }
+                        ],
+                        _id: expect.any(String),
+                        __v: expect.any(Number) });
             });
 
     });
