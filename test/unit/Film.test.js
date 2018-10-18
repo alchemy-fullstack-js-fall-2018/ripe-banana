@@ -1,6 +1,6 @@
 const { getErrors } = require('./helpers');
-const Film = require('../../lib/models/Film');
 const { Types } = require('mongoose');
+const Film = require('../../lib/models/Film');
 
 describe('film model', () => {
     it('validates a good model', () => {
