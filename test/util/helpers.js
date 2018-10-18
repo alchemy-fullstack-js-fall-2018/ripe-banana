@@ -51,7 +51,7 @@ const createReviewers = (count, arr) => {
         return Reviewer.create({
             name: 'Steve',
             company: 'A Company',
-            email: 'test@test.com',
+            email: chance.email(),
             role: 'Admin'
         });
     });
