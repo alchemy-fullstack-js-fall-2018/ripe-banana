@@ -6,6 +6,10 @@ const app = require('../../lib/app');
 const { dropCollection } = require('./db');
 const { createActors, createReviewers, createStudios } = require('./helpers');
 
+afterAll(() => {
+    mongoose.disconnect();
+});
+
 describe('reviews routes', () => {
 
     let createdActors;
@@ -21,13 +25,83 @@ describe('reviews routes', () => {
                 return res.body;
             });
     };
+    beforeEach(() => {
+        return Promise.all([
+            dropCollection('actors'),
+            dropCollection('reviewers'),
+            dropCollection('studios'),
+            dropCollection('films')
+        ]);
+    });
+
     
+    beforeEach(() => {
+        return createActors()
+            .then(res => {
+                createdActors = res;
+            });
+    });
+
+    beforeEach(() => {
+        return createReviewers()
+            .then(res => {
+                createdReviewers = res;
+            });        
+    });
+
+    beforeEach(() => {
+        return createStudios()
+            .then(res => {
+                createdStudios = res;
+            });
+    });
+
+    beforeEach(() => {
+        let films = [            
+            {
+                title: 'Run Lola Run',
+                studio: createdStudios[0]._id,
+                released: 1999,
+                cast: [
+                    { role: 'Lola', actor: createdActors[1]._id },
+                    { role: 'Manni', actor: createdActors[0]._id }
+                ]
+            },
+            {
+                title: 'Goodfellas',
+                studio: createdStudios[1]._id,
+                released: 1990,
+                cast: [
+                    { role: 'Henry Hill', actor: createdActors[0]._id },
+                    { role: 'Jimmy Conway', actor: createdActors[1]._id }
+    
+                ]
+            }
+        ];
+        return Promise.all(films.map(createFilm))
+            .then(res => {
+                createdFilms = res;
+            });
+    });
     it('creates a review on POST', () => {
-        const data = {
-            
+        const data = { 
+            rating: 5,
+            reviewer: createdReviewers[0]._id,
+            review: 'greatest mob movie EVER',
+            film: createdFilms[1]._id
         };
         return request(app).post('/api/reviews')
-            .send()
+            .send(data)
+            .then(res => {
+                expect(res.body).toEqual({ 
+                    rating: 5,
+                    reviewer: createdReviewers[0]._id,
+                    review: 'greatest mob movie EVER',
+                    film: createdFilms[1]._id,
+                    _id: expect.any(String),
+                    __v: expect.any(Number) 
+                });
+            });
     });
 
 
