@@ -52,11 +52,13 @@ let reviewers = [
         name: 'George Watchington', 
         company: 'Patriot Films',
         email: 'georgieHotStuff@hotmail.com',
+        clearPassword: 'georgessecret',
         roles: ['admin'] 
     },
     { 
         name: 'Abraham Linkoln', 
         company: 'Great Conflict Productions',
+        clearPassword: 'fourScoreAndPasswordAgo',
         email: 'Abe1809@askjeeves.com',
         roles: ['editor']
     }

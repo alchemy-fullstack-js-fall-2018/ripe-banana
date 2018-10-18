@@ -110,16 +110,21 @@ describe('reviewers', () => {
         const newReviewer = {
             name: 'Roger Siskel',
             company: 'At the Movies',
-            email: 'mrrogers@siskel.com'
+            email: 'mrrogers@siskel.com',
+            clearPassword: 'movies123'
+
         };
         return request(app)
             .post('/reviewers')
             .send(newReviewer)
             .then(result => {
                 expect(result.body).toEqual({
-                    ...newReviewer,
+                    name: newReviewer.name,
+                    company: newReviewer.company,
+                    email: newReviewer.email,
                     __v: expect.any(Number),
                     _id: expect.any(String),
+                    hash: expect.any(String),
                     roles: []
                 });
             });
