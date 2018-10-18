@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../../lib/app');
-const { getActors, getFilms, getStudios } = require('./helpers');
+const { getReviewers, getReviews, getActors, getFilms, getStudios } = require('./helpers');
 
 describe('validates a vertical slice of the Films route', () => {
 
@@ -67,6 +67,8 @@ describe('validates a vertical slice of the Films route', () => {
         const createdFilms = getFilms();
         const createdStudios = getStudios();
         const createdActors = getActors();
+        const createdReviews = getReviews();
+        const createdReviewers = getReviewers();
 
         return request(app)
             .get(`/api/films/${createdFilms[1]._id}`)
@@ -86,6 +88,15 @@ describe('validates a vertical slice of the Films route', () => {
                                 _id: createdActors[1]._id, 
                                 name: createdActors[1].name 
                             }
+                        }],
+                        reviews: [{
+                            _id: createdReviews[1].film,
+                            rating: createdReviews[1].rating,
+                            review: createdReviews[1].review,
+                            reviewer: [{
+                                _id: createdReviews[1].reviewer,
+                                name: createdReviewers[1].name
+                            }]
                         }] 
                     });
             });
