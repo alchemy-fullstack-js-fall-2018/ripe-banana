@@ -5,7 +5,8 @@ describe ('Reviewer model', () => {
     it('validates a good model', () => {
         const data = {
             name: 'Gene Ebert',
-            company: 'At the Movies'
+            company: 'At the Movies',
+            roles: ['admin']
         };
         
         const reviewer = new Reviewer(data);
