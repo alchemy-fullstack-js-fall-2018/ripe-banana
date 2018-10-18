@@ -75,6 +75,14 @@ let studios =  [{
         state: 'OR',
         country: 'United States'
     }
+},
+{
+    name: 'Compost Budget Cinema', 
+    address: {
+        city: 'Portland2',
+        state: 'OR',
+        country: 'United States'
+    }
 }];
 
 let films =  [{

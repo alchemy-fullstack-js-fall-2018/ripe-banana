@@ -2,7 +2,7 @@ const { getErrors } = require('./helpers');
 const Review = require('../../lib/models/Review');
 const { Types } = require('mongoose');
 
-describe.skip('Review Model', () => {
+describe('Review Model', () => {
 
     it('creates a new Review when valid data is passed', () => {
         const data = {

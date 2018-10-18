@@ -2,9 +2,8 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const { getActors, getFilms } = require('./helpers');
 
-
 describe('validates a vertical slice of the Actor route', () => {
-
+    
     it('Posts to Actor', () => {
         return request(app)
             .post('/api/actors')

@@ -1,7 +1,7 @@
 const { getErrors } = require('./helpers');
 const Actor = require('../../lib/models/Actor');
 
-describe.skip('Actor Model', () => {
+describe('Actor Model', () => {
     it('returns the Actor Schema Model', () => {
         const data = {
             name: 'Anthony Hopkins',

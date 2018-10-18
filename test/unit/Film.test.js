@@ -2,9 +2,7 @@ const { getErrors } = require('./helpers');
 const Film = require('../../lib/models/Film');
 const { Types } = require('mongoose');
 
-
-
-describe.skip('Film Model', () => {
+describe('Film Model', () => {
 
     it('returns the Film Schema Model', () => {
         const data = {

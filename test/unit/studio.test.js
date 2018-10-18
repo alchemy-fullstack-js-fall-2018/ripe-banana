@@ -1,7 +1,7 @@
 const { getErrors } = require('./helpers');
 const Studio = require('../../lib/models/Studio');
 
-describe.skip('Studio Model', () => {
+describe('Studio Model', () => {
     it('validates the Studio Schema Model', () => {
         const data = {
             name: 'Compost Cinema',
@@ -25,6 +25,7 @@ describe.skip('Studio Model', () => {
                 country: 'Sarahstan'
             }
         });
+        
         const errors = getErrors(studio.validateSync(), 2);
         expect(errors.name.properties.message).toEqual('Path `name` is required.');
     });
