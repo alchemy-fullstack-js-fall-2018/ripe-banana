@@ -5,7 +5,7 @@ const app = require('../../lib/app');
 const Chance = require('chance');
 const chance = new Chance();
 
-describe('film pub/sub API', () => {
+describe.skip('film pub/sub API', () => {
     let actors = [
         {
             name: chance.name({ suffix: true }),

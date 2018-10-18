@@ -4,7 +4,7 @@ const app = require('../../lib/app');
 const request = require('supertest');
 const { createActors, createFilms } = require('../util/helpers');
 
-describe('actors pub/sub API', () => {
+describe.skip('actors pub/sub API', () => {
     
     beforeEach(() => {
         return dropCollection('actors');
