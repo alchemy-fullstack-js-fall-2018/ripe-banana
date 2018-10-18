@@ -8,7 +8,7 @@ describe('auth', () => {
             name: 'Roger Siskel',
             company: 'At the Movies',
             email: 'mrrogers@siskel.com',
-            roles: ['admin'],
+            //roles: ['admin'],
             clearPassword: 'movies123'
 
         };
