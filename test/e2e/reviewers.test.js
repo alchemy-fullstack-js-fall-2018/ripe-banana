@@ -115,7 +115,8 @@ describe('reviewers', () => {
                 expect(result.body).toEqual({
                     ...newReviewer,
                     __v: expect.any(Number),
-                    _id: expect.any(String)
+                    _id: expect.any(String),
+                    roles: []
                 });
             });
     });
