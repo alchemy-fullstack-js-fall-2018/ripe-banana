@@ -5,7 +5,7 @@ const { Types } = require('mongoose');
 
 
 
-describe('end to end test of reviews', () => {
+describe.skip('end to end test of reviews', () => {
 
     beforeEach(() => {
         return dropCollection('studios');

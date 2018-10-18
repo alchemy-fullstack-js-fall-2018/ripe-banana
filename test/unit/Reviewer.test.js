@@ -1,7 +1,7 @@
 const { getErrors } = require('./helpers');
 const Reviewer = require('../../lib/models/Reviewer');
 
-describe('Reviewer Model', () => {
+describe.skip('Reviewer Model', () => {
     it('returns the Reviewer Schema Model', () => {
         const data = {
             name: 'Roger Ebert',

@@ -4,7 +4,7 @@ const app = require('../../lib/app');
 const { Types } = require('mongoose');
 
 
-describe('validates a vertical slice of the Reviewer route', () => {
+describe.skip('validates a vertical slice of the Reviewer route', () => {
    
     beforeEach(() => {
         return dropCollection('studios');

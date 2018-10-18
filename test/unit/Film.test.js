@@ -4,7 +4,7 @@ const { Types } = require('mongoose');
 
 
 
-describe('Film Model', () => {
+describe.skip('Film Model', () => {
 
     it('returns the Film Schema Model', () => {
         const data = {

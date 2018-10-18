@@ -1,7 +1,7 @@
 const { getErrors } = require('./helpers');
 const Studio = require('../../lib/models/Studio');
 
-describe('Studio Model', () => {
+describe.skip('Studio Model', () => {
     it('validates the Studio Schema Model', () => {
         const data = {
             name: 'Compost Cinema',

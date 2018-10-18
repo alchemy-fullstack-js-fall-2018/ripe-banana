@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../../lib/app');
 
 
-describe('validates a vertical slice of the Studio route', () => {
+describe.skip('validates a vertical slice of the Studio route', () => {
     beforeEach(() => {
         return dropCollection('studios');
     });
