@@ -188,28 +188,24 @@ describe('reviewers', () => {
     });
 
     it('compares passwords', () => {
-        const newReviewer = {
+        const reviewerData = {
             name: 'Roger Siskel',
             company: 'At the Movies',
             email: 'mrrogers@siskel.com',
             clearPassword: 'movies123'
 
         };
-        return request(app)
-            .post('/reviewers')
-            .send(newReviewer)
-            .then(newGuy => {
-                console.log('ZZZZ', newGuy.body);
-                const validPassword = newReviewer.clearPassword;
+        Reviewer.create(reviewerData)
+            .then(newReviewer => {
+                const validPassword = reviewerData.clearPassword;
                 const invalidPassword = `${validPassword}extra`;
-
-                const validCompare = newGuy.body.compare(validPassword);
-                const invalidCompare = newGuy.body.compare(invalidPassword);
-
+        
+                const validCompare = newReviewer.compare(validPassword);
+                const invalidCompare = newReviewer.compare(invalidPassword);
+        
                 expect(validCompare).toBeTruthy();
                 expect(invalidCompare).toBeFalsy();
-            });
+            }); 
     });
-
 });
 
