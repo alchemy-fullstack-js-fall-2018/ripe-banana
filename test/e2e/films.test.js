@@ -64,7 +64,16 @@ describe('film routes', () => {
     });
 
     beforeEach(() => {
-        let films = [
+        let films = [            
+            {
+                title: 'Run Lola Run',
+                studio: createdStudios[0]._id,
+                released: 1999,
+                cast: [
+                    { role: 'Lola', actor: createdActors[1]._id },
+                    { role: 'Manni', actor: createdActors[0]._id }
+                ]
+            },
             {
                 title: 'Goodfellas',
                 studio: createdStudios[1]._id,
@@ -73,15 +82,6 @@ describe('film routes', () => {
                     { role: 'Henry Hill', actor: createdActors[0]._id },
                     { role: 'Jimmy Conway', actor: createdActors[1]._id }
     
-                ]
-            },
-            {
-                title: 'Run Lola Run',
-                studio: createdStudios[0]._id,
-                released: 1999,
-                cast: [
-                    { role: 'Lola', actor: createdActors[1]._id },
-                    { role: 'Manni', actor: createdActors[0]._id }
                 ]
             }
         ];
@@ -133,8 +133,8 @@ describe('film routes', () => {
     it('gets all films', () => {
         return request(app).get('/api/films')
             .then(retrievedFilms => {
-                createdFilms.forEach(createdFilm => {
-                    expect(retrievedFilms.body).toContainEqual(createdFilm);
+                createdFilms.forEach((createdFilm, i) => {
+                    expect(retrievedFilms.body).toContainEqual({ ...createdFilm, studio: { _id: createdStudios[i]._id, name: createdStudios[i].name } });
                 });                
                 expect(retrievedFilms.body).toHaveLength(createdFilms.length);
             });
@@ -146,29 +146,32 @@ describe('film routes', () => {
             .then(retrievedFilm => {
                 expect(retrievedFilm.body)
                     .toEqual({
-                        title: 'Run Lola Run',
+                        title: 'Goodfellas',
                         studio: { 
-                            _id: createdStudios[0]._id,
-                            name: createdStudios[0].name
+                            _id: createdStudios[1]._id,
+                            name: createdStudios[1].name
                         },
-                        released: 1999,
+                        released: 1990,
                         cast: [
-
                             { 
                                 _id: expect.any(String),
-                                role: 'Lola',
-                                actor: createdActors[1]._id 
+                                role: 'Henry Hill',
+                                actor: {
+                                    _id: createdActors[0]._id,
+                                    name: createdActors[0].name 
+                                } 
                             },
-
                             { 
                                 _id: expect.any(String),
-                                role: 'Manni',
-                                actor: createdActors[0]._id 
+                                role: 'Jimmy Conway',
+                                actor: {
+                                    _id: createdActors[1]._id,
+                                    name: createdActors[1].name
+                                } 
                             }
                         ],
                         _id: expect.any(String),
                         __v: expect.any(Number) });
             });
-
     });
 });
