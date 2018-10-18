@@ -123,9 +123,7 @@ describe('reviewers', () => {
                     name: newReviewer.name,
                     company: newReviewer.company,
                     email: newReviewer.email,
-                    __v: expect.any(Number),
                     _id: expect.any(String),
-                    hash: expect.any(String),
                     roles: []
                 });
             });
