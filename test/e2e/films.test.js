@@ -25,6 +25,13 @@ describe('film routes', () => {
             });
     }; 
 
+    const createReview = review => {
+        return request(app)
+            .post('/api/reviews/')
+            .send(review)
+            .then(res => res.body);
+    };
+    
     beforeEach(() => {
         return Promise.all([
             dropCollection('actors'),
@@ -55,7 +62,7 @@ describe('film routes', () => {
                 createdStudios = res;
             });
     });
-
+    
     beforeEach(() => {
         let films = [            
             {
@@ -74,7 +81,7 @@ describe('film routes', () => {
                 cast: [
                     { role: 'Henry Hill', actor: createdActors[0]._id },
                     { role: 'Jimmy Conway', actor: createdActors[1]._id }
-    
+                    
                 ]
             }
         ];
@@ -83,7 +90,17 @@ describe('film routes', () => {
                 createdFilms = res;
             });
     });
-    
+        
+    beforeEach(() => {
+        return createReview({ 
+            rating: 5,
+            reviewer: createdReviewers[0]._id,
+            review: 'greatest mob movie EVER',
+            film: createdFilms[1]._id
+        });
+        
+    });
+
     it('creates a film on POST', () => {
         return request(app).post('/api/films')
             .send({
@@ -163,6 +180,14 @@ describe('film routes', () => {
                                 } 
                             }
                         ],
+                        
+                        reviews: [{
+                            _id: expect.any(String),
+                            rating: 5,
+                            review: 'greatest mob movie EVER',
+                            reviewer: createdReviewers[0]._id
+                        }],
+
                         _id: expect.any(String),
                         __v: expect.any(Number) });
             });
