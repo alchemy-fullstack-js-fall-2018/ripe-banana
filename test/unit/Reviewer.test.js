@@ -1,5 +1,7 @@
 const Reviewer = require('../../lib/models/Reviewer');
 const { getErrors } = require('./helpers');
+const bcrypt = require('bcryptjs');
+
 
 describe ('Reviewer model', () => {
     it('validates a good model', () => {
@@ -28,6 +30,18 @@ describe ('Reviewer model', () => {
         expect(errors.email.properties.message).toEqual('Path `email` is required.');
 
     });   
+
+    it('hashes a reviewers password', () => {
+        return Reviewer.create({
+            name: 'Roger Siskel',
+            company: 'At the Movies',
+            email: 'mrrogers@siskel.com',
+            clearPassword: 'movies'
+        }).then(reviewer => {
+            expect(reviewer.clearPassword).not.toEqual('movies');
+            expect(bcrypt.compareSync('movies', reviewer.hash));
+        });
+    });
     
 
 });

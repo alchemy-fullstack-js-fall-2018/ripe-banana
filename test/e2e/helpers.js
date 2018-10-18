@@ -51,14 +51,14 @@ let reviewers = [
     { 
         name: 'George Watchington', 
         company: 'Patriot Films',
-        // email: 'georgieHotStuff@hotmail.com',
-        // roles: ['admin'] 
+        email: 'georgieHotStuff@hotmail.com',
+        roles: ['admin'] 
     },
     { 
         name: 'Abraham Linkoln', 
-        company: 'Great Confilict Productions',
-        // email: 'Abe1809@askjeeves.com',
-        // roles: ['editor']
+        company: 'Great Conflict Productions',
+        email: 'Abe1809@askjeeves.com',
+        roles: ['editor']
     }
 ];
 

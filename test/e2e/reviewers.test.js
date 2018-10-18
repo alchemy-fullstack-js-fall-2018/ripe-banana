@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../../lib/app');
+// const bcrypt = require('bcryptjs');
 const { dropCollection } = require('./db');
 const { createReviewers, createActors, createStudios } = require('./helpers');
 
@@ -102,6 +103,8 @@ describe('reviewers', () => {
             .then(reviewsRes => { createdReviews = reviewsRes;});
 
     });
+
+
 
     it('creates a reviewer', () => {
         const newReviewer = {
