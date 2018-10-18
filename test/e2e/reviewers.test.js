@@ -106,7 +106,8 @@ describe('reviewers', () => {
     it('creates a reviewer', () => {
         const newReviewer = {
             name: 'Roger Siskel',
-            company: 'At the Movies'
+            company: 'At the Movies',
+            email: 'mrrogers@siskel.com'
         };
         return request(app)
             .post('/reviewers')
