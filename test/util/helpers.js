@@ -52,6 +52,7 @@ const createReviewers = (count, arr) => {
             name: 'Steve',
             company: 'A Company',
             email: chance.email(),
+            clearPassword: chance.word(),
             role: 'Admin'
         });
     });

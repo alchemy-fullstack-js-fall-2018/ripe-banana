@@ -42,6 +42,7 @@ describe('reviewer pub/sub API', () => {
                 name: 'Ms. Reviewer',
                 company: 'Review People',
                 email: 'test1@test.com',
+                clearPassword: '1234',
                 role: 'Admin'
             })
             .then(res => {
