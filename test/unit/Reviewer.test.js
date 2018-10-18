@@ -31,17 +31,7 @@ describe ('Reviewer model', () => {
 
     });   
 
-    it('hashes a reviewers password', () => {
-        return Reviewer.create({
-            name: 'Roger Siskel',
-            company: 'At the Movies',
-            email: 'mrrogers@siskel.com',
-            clearPassword: 'movies'
-        }).then(reviewer => {
-            expect(reviewer.clearPassword).not.toEqual('movies');
-            expect(bcrypt.compareSync('movies', reviewer.hash));
-        });
-    });
+
     
 
 });

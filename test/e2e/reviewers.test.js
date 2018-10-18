@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../../lib/app');
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
+const Reviewer = require('../../lib/models/Reviewer');
 const { dropCollection } = require('./db');
 const { createReviewers, createActors, createStudios } = require('./helpers');
 
@@ -172,6 +173,18 @@ describe('reviewers', () => {
             .then(result => {
                 expect(result.body).toEqual(newData);
             });
+    });
+
+    it('hashes a reviewers password', () => {
+        return Reviewer.create({
+            name: 'Roger Siskel',
+            company: 'At the Movies',
+            email: 'mrrogers@siskel.com',
+            clearPassword: 'movies'
+        }).then(reviewer => {
+            expect(reviewer.clearPassword).not.toEqual('movies');
+            expect(bcrypt.compareSync('movies', reviewer.hash));
+        });
     });
 
 
