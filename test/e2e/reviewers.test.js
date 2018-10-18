@@ -40,14 +40,18 @@ describe('reviewer pub/sub API', () => {
             .post('/api/reviewers')
             .send({
                 name: 'Ms. Reviewer',
-                company: 'Review People'
+                company: 'Review People',
+                email: 'test1@test.com',
+                role: 'Admin'
             })
             .then(res => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
                     __v: expect.any(Number),
                     name: 'Ms. Reviewer',
-                    company: 'Review People'
+                    company: 'Review People',
+                    email: 'test1@test.com',
+                    role: 'Admin'
                 });  
             });
     });
@@ -79,6 +83,8 @@ describe('reviewer pub/sub API', () => {
                     _id: createdReviews[0].reviewer,
                     name: 'Steve',
                     company: 'A Company',
+                    email: 'test@test.com',
+                    role: 'Admin',
                     reviews: [{
                         _id: createdReviews[0]._id,
                         rating: createdReviews[0].rating,

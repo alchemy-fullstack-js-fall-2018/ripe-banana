@@ -50,7 +50,9 @@ const createReviewers = (count, arr) => {
     const reviewerPromise = Array.apply(null, { length: count }).map(() => {
         return Reviewer.create({
             name: 'Steve',
-            company: 'A Company'
+            company: 'A Company',
+            email: 'test@test.com',
+            role: 'Admin'
         });
     });
     return Promise.all(reviewerPromise).then(reviewers => {
