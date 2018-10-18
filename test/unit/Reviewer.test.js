@@ -5,7 +5,9 @@ describe('Reviewer Model', () => {
     it('returns the Reviewer Schema Model', () => {
         const data = {
             name: 'Roger Ebert',
-            company: 'Two Thumbs Up'
+            company: 'Two Thumbs Up',
+            email: 'rebert@two.com',
+            role: 'user'
         };
 
         const reviewer = new Reviewer(data);
@@ -18,7 +20,7 @@ describe('Reviewer Model', () => {
             company: 'Two Thumbs Up'
         });
 
-        const errors = getErrors(reviewer.validateSync(), 1);
+        const errors = getErrors(reviewer.validateSync(), 3);
         expect(errors.name.properties.message).toEqual('Path `name` is required.');
     });
 });
