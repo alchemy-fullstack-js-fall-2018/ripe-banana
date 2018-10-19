@@ -102,11 +102,17 @@ let films =  [{
 
 let reviewers =  [{
     name: 'CreatedReviewer1', 
-    company: 'CreatedCompany1'
+    company: 'CreatedCompany1',
+    email: 'email1@email.com',
+    role: 'admin',
+    password: '1234asdf'
 },
 {
     name: 'CreatedReviewer2', 
-    company: 'CreatedCompany2'
+    company: 'CreatedCompany2',
+    email: 'email2@email.com',
+    role: 'user',
+    password: '9876lkjh'
 }];
     
 const createActor = actor => {
