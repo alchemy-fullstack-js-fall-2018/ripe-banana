@@ -192,7 +192,7 @@ const getActors = () => createdActors;
 const getFilms = () => createdFilms;
 const getStudios = () => createdStudios;
 const getReviews = () => createdReviews;
-const getReviewers= () => createdReviewers;
+const getReviewers = () => createdReviewers;
 
 module.exports = {
     getActors,
