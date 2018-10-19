@@ -3,9 +3,8 @@ require('../../lib/util/connect')();
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
-const Actor = require('../../lib/models/Actor');
 const { dropCollection } = require('./db');
-const { createActors } = require('./helpers');
+const { createActors, createStudios } = require('./helpers');
 
 
 afterAll(() => {
@@ -14,6 +13,9 @@ afterAll(() => {
 
 describe('actors route', () => {
     let createdActors;
+    let createdStudios;
+    let createdFilm;
+
 
     beforeEach(() => {
         return dropCollection('actors');
@@ -23,6 +25,28 @@ describe('actors route', () => {
         return createActors()
             .then(res => {
                 createdActors = res;
+            });
+    });
+
+    beforeEach(() => {
+        return createStudios()
+            .then(res => {
+                createdStudios = res;
+            });
+    });
+
+    beforeEach(() => {
+        return request(app).post('/api/films')
+            .send({
+                title: 'Run Lola Run',
+                studio: createdStudios[0]._id,
+                released: 1999,
+                cast: [
+                    { role: 'Lola', actor: createdActors[0]._id }
+                ]
+            })
+            .then(res => {
+                createdFilm = res.body;
             });
     });
 
@@ -57,7 +81,14 @@ describe('actors route', () => {
     it('gets actor by id', () => {
         return request(app).get(`/api/actors/${createdActors[0]._id}`)
             .then(res => {
-                expect(res.body).toEqual({ ...createdActors[0], __v: expect.any(Number) });
+                expect(res.body).toEqual({ 
+                    ...createdActors[0], 
+                    __v: expect.any(Number),
+                    films: [createdFilm].map(film => {
+                        const { _id, title, released } = film;
+                        return { _id, title, released };
+                    })
+                });
             });
     });
 });
