@@ -31,7 +31,4 @@ describe ('Reviewer model', () => {
 
     });   
 
-
-    
-
 });
