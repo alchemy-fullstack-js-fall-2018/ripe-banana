@@ -16,4 +16,17 @@ describe('ensure auth middleware', () => {
 
         ensureAuth(req, null, next);
     });
+
+    it('checks a bad token and fails when it is bad', done => {
+        const req = {
+            token: 'fakeyfakerson'
+        };
+
+        const next = (err) => {
+            expect(err).toBeDefined();
+            done();
+        };
+
+        ensureAuth(req, null, next);
+    });
 });
