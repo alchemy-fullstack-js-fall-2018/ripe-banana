@@ -10,5 +10,5 @@ xdescribe('user model', () => {
         const user = new User(data);
         const jsonUser = user.toJSON();
         expect(jsonUser).toEqual({ ...data, _id: expect.any(Object) });
-    })
-})
+    });
+});
