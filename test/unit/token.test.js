@@ -5,4 +5,10 @@ describe('tokenizer', () => {
         const token = tokenize({ name: 'sophie' });
         expect(token).toEqual(expect.any(String));
     });
+
+    it('decodes a token', () => {
+        const token = tokenize({ name: 'al' });
+        const decodedToken = untokenize(token);
+        expect(decodedToken).toEqual({ name: 'al' });
+    });
 });
