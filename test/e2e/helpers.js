@@ -48,8 +48,8 @@ let studios = [
 ];
 
 let reviewers = [
-    { name: 'George Watchington', company: 'Patriot Films' },
-    { name: 'Abraham Linkoln', company: 'Great Confilict Productions' }
+    { name: 'George Watchington', company: 'Patriot Films', clearPassword: '1234' },
+    { name: 'Abraham Linkoln', company: 'Great Confilict Productions', clearPassword: 'mnop' }
 ];
 
 
@@ -67,9 +67,16 @@ const createStudio = studio => {
         .then(res => res.body);
 };
 
+// const createReviewer = reviewer => {
+//     return request(app)
+//         .post('/reviewers')
+//         .send(reviewer)
+//         .then(res => res.body);
+// };
+
 const createReviewer = reviewer => {
     return request(app)
-        .post('/reviewers')
+        .post('/auth/signup')
         .send(reviewer)
         .then(res => res.body);
 };
