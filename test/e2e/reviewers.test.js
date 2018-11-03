@@ -106,15 +106,16 @@ describe('reviewers', () => {
     it('creates a reviewer', () => {
         const newReviewer = {
             name: 'Roger Siskel',
-            company: 'At the Movies'
+            company: 'At the Movies',
+            clearPassword: 'abcd'
         };
         return request(app)
             .post('/reviewers')
             .send(newReviewer)
             .then(result => {
                 expect(result.body).toEqual({
-                    ...newReviewer,
-                    __v: expect.any(Number),
+                    name: 'Roger Siskel',
+                    company: 'At the Movies',
                     _id: expect.any(String)
                 });
             });
