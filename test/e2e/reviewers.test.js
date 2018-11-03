@@ -12,6 +12,10 @@ describe('reviewers', () => {
     let createdStudios;
     let createdFilms;
     let createdReviews;
+
+    const checkStatus = statusCode => res => {
+        expect(res.status).toEqual(statusCode);
+    };
     
     const createReview = review => {
         return request(app)
@@ -107,7 +111,7 @@ describe('reviewers', () => {
 
 
 
-    it('creates a reviewer', () => {
+    it('signs up a reviewer', () => {
         const newReviewer = {
             name: 'Roger Siskel',
             company: 'At the Movies',
@@ -116,7 +120,7 @@ describe('reviewers', () => {
 
         };
         return request(app)
-            .post('/reviewers')
+            .post('/reviewers/signup')
             .send(newReviewer)
             .then(result => {
                 expect(result.body).toEqual({
@@ -126,6 +130,16 @@ describe('reviewers', () => {
                     _id: expect.any(String),
                     roles: []
                 });
+            });
+    });
+
+    it('signs in a reviewer', () => {
+        return request(app)
+            .post('/reviewers/signin')
+            .send({ email: 'Abe1809@askjeeves.com', clearPassword: 'fourScoreAndPasswordAgo' })
+            .then(res => {
+                checkStatus(200)(res);
+                expect(res.body.token).toEqual(expect.any(String));
             });
     });
 

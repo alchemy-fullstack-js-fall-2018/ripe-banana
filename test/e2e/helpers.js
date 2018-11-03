@@ -81,7 +81,7 @@ const createStudio = studio => {
 
 const createReviewer = reviewer => {
     return request(app)
-        .post('/reviewers')
+        .post('/reviewers/signup')
         .send(reviewer)
         .then(res => res.body);
 };

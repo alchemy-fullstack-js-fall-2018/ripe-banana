@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 
 describe ('Reviewer model', () => {
+    
     it('validates a good model', () => {
         const data = {
             name: 'Gene Ebert',
