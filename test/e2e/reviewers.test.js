@@ -3,7 +3,7 @@ const app = require('../../lib/app');
 const bcrypt = require('bcryptjs');
 const Reviewer = require('../../lib/models/Reviewer');
 const { dropCollection } = require('./db');
-const { createReviewers, createActors, createStudios } = require('./helpers');
+const { createReviewers, createActors, createStudios, createReviewerTokens } = require('./helpers');
 
 describe('reviewers', () => {
 
@@ -12,6 +12,7 @@ describe('reviewers', () => {
     let createdStudios;
     let createdFilms;
     let createdReviews;
+    let createdReviewerTokens;
 
     const checkStatus = statusCode => res => {
         expect(res.status).toEqual(statusCode);
@@ -20,6 +21,7 @@ describe('reviewers', () => {
     const createReview = review => {
         return request(app)
             .post('/reviews')
+            .set('Authorization', `Bearer ${createdReviewerTokens[0]}`)
             .send(review)
             .then(res => res.body);
     };
@@ -45,6 +47,13 @@ describe('reviewers', () => {
         return createReviewers()
             .then(reviewersRes => { 
                 createdReviewers = reviewersRes;
+            });
+    });
+
+    beforeEach(() => {
+        return createReviewerTokens()
+            .then(tokensRes => { 
+                createdReviewerTokens = tokensRes;
             });
     });
 

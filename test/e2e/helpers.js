@@ -90,7 +90,7 @@ const createReviewerToken = reviewer => {
     return request(app)
         .post('/reviewers/signin')
         .send(reviewer)
-        .then(res => res.body);
+        .then(res => res.body.token);
 };
 
 const createActors = () => {
