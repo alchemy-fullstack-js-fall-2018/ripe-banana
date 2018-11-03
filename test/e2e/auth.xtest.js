@@ -1,6 +1,6 @@
 const app = require('../../lib/app');
 const request = require('supertest');
-const { dropCollection } = require('./db');
+require('./db');
 
 describe('auth', () => {
     it('creates a reviewer/user on signup', () => {

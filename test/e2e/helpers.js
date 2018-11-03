@@ -86,6 +86,13 @@ const createReviewer = reviewer => {
         .then(res => res.body);
 };
 
+const createReviewerToken = reviewer => {
+    return request(app)
+        .post('/reviewers/signin')
+        .send(reviewer)
+        .then(res => res.body);
+};
+
 const createActors = () => {
     return Promise.all(actors.map(createActor));
 };
@@ -98,9 +105,14 @@ const createReviewers = () => {
     return Promise.all(reviewers.map(createReviewer));
 };
 
+const createReviewerTokens = () => {
+    return Promise.all(reviewers.map(createReviewerToken));
+};
+
 
 module.exports = {
     createStudios, 
     createActors,
-    createReviewers
+    createReviewers,
+    createReviewerTokens
 };

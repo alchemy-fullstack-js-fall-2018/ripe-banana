@@ -1,19 +1,21 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
-const { createStudios, createActors, createReviewers } = require('./helpers');
+const { createStudios, createActors, createReviewers, createReviewerTokens } = require('./helpers');
 
 describe('reviews', () => {
 
     let createdStudios;
     let createdActors;
     let createdReviewers;
+    let createdReviewerTokens;
     let createdFilms;
     let createdReviews;
 
     const createReview = review => {
         return request(app)
             .post('/reviews')
+            .set('Authorization', `Bearer ${createdReviewerTokens[0].token}`)
             .send(review)
             .then(res => res.body);
     };
@@ -57,6 +59,13 @@ describe('reviews', () => {
     });
 
     beforeEach(() => {
+        return createReviewerTokens()
+            .then(tokensRes => { 
+                createdReviewerTokens = tokensRes;
+            });
+    });
+
+    beforeEach(() => {
         let films = [
             {
                 title: 'The Programinator',
@@ -92,7 +101,7 @@ describe('reviews', () => {
             },
             {
                 rating: 1,
-                reviewer: createdReviewers[1]._id,
+                reviewer: createdReviewers[0]._id,
                 text: 'I want the last 1.5 hours of my life back.',
                 film: createdFilms[1]._id 
             }
@@ -103,15 +112,21 @@ describe('reviews', () => {
 
     });
 
-    it('creates a review', () => {
+    it.skip('creates a review if you are signed in', () => {
+
+        console.log('Reviewer0', createdReviewers[0]);
+        console.log('Token for Reviewer0', createdReviewerTokens[0]);
+
         const reviewData = {
             rating: 3,
             reviewer: createdReviewers[0]._id,
             text: 'Meh...I\'ve seen better',
             film: createdFilms[0]._id
         };
+
         return request(app)
             .post('/reviews')
+            .set('Authorization', `Bearer ${createdReviewerTokens[0].token}`)
             .send(reviewData)
             .then(result => {
                 expect(result.body).toEqual({
@@ -122,9 +137,25 @@ describe('reviews', () => {
                     ...reviewData
                 });
             });
+   
     });
 
-    it('Gets all recent reviews with a max of 100', () => {
+    it('won\'t allow review creation if you are not signed in', () => {
+        const reviewData = {
+            rating: 3,
+            reviewer: createdReviewers[0]._id,
+            text: 'Meh...I\'ve seen better',
+            film: createdFilms[0]._id
+        };
+        return request(app)
+            .post('/reviews')
+            .send(reviewData)
+            .then(result => {
+                expect(result.body).toEqual({ error: 'Sign-in required' });
+            });
+    });
+
+    it.skip('Gets all recent reviews with a max of 100', () => {
         return request(app)
             .get('/reviews')
             .then(retrievedReviews => {

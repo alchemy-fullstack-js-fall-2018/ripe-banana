@@ -109,8 +109,6 @@ describe('reviewers', () => {
 
     });
 
-
-
     it('signs up a reviewer', () => {
         const newReviewer = {
             name: 'Roger Siskel',
