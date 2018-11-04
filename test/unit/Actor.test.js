@@ -1,5 +1,5 @@
 const Actor = require('../../lib/models/Actor');
-const { getErrors } = require('./helpers');
+const { getErrors } = require('./getErrors');
 
 describe ('Actor model', () => {
     it('validates a good model', () => {

@@ -3,8 +3,7 @@ const Studio = require('../../lib/models/Studio');
 const Film = require('../../lib/models/Film');
 const Actor = require('../../lib/models/Actor');
 const Review = require('../../lib/models/Review');
-
-const { getErrors } = require('./helpers');
+const { getErrors } = require('./getErrors');
 
 describe('Review model', () => {
     

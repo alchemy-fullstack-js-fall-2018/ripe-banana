@@ -1,128 +1,36 @@
 const app = require('../../lib/app');
 const request = require('supertest');
-const { dropCollection } = require('./db');
-const { createActors, createStudios, createReviewers } = require('./helpers');
+require('./db');
+const { getReviewers, getReviewerTokens, getActors, getStudios, getFilms, getReviews } = require('./created');
 
 describe('film routes', () => {
-
-    let createdFilms;
-    let createdStudios;
-    let createdActors;
-    let createdReviewers;
-    let createdReviews;
     
-    const createFilm = film => {
-        return request(app)
-            .post('/films')
-            .send(film)
-            .then(res => res.body);
-    };
+    it('creates a film if you are an admin', () => {
+        const reviewerTokens = getReviewerTokens();
+        const studios = getStudios();
+        const actors = getActors();
 
-    const createReview = review => {
-        return request(app)
-            .post('/reviews')
-            .send(review)
-            .then(res => res.body);
-    };
-
-    beforeEach(() => {
-        return Promise.all([
-            dropCollection('studios'),
-            dropCollection('actors'),
-            dropCollection('films')
-        ]);
-    });
-    
-    beforeEach(() => {
-        return createActors()
-            .then(actorsRes => { 
-                createdActors = actorsRes;
-            });
-    });
-
-    beforeEach(() => {
-        return createStudios()
-            .then(studiosRes => { 
-                createdStudios = studiosRes;
-            });
-    });
-
-    beforeEach(() => {
-        return createReviewers()
-            .then(reviewersRes => { 
-                createdReviewers = reviewersRes;
-            });
-    });
-
-    
-    beforeEach(() => {
-        let films = [
-            {
-                title: 'The Programinator',
-                studio: createdStudios[0]._id,
-                released: 1984,
-                cast: [
-                    { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
-                    { role: 'Sidekick', actor: createdActors[1]._id }
-                ]
-            },
-            {
-                title: 'Thelma and Luigi',
-                studio: createdStudios[0]._id,
-                released: 1972,
-                cast: [
-                    { role: 'Thelma', actor: createdActors[1]._id }, 
-                    { role: 'Luigi', actor: createdActors[0]._id }
-                ]
-            }
-        ];
-        
-        return Promise.all(films.map(createFilm))
-            .then(filmsRes => { createdFilms = filmsRes;});
-    });
-    
-    beforeEach(() => {
-        let reviews = [
-            {
-                rating: 5,
-                reviewer: createdReviewers[0]._id,
-                text: 'Amazeballs!',
-                film: createdFilms[0]._id 
-            },
-            {
-                rating: 1,
-                reviewer: createdReviewers[1]._id,
-                text: 'I want the last 1.5 hours of my life back.',
-                film: createdFilms[1]._id 
-            }
-        ];
-
-        return Promise.all(reviews.map(createReview))
-            .then(reviewsRes => { createdReviews = reviewsRes;});
-
-    });
-    
-    it('creates a film', () => {
         const newFilm = {
             title: 'Revenge of the Programmers',
-            studio: createdStudios[0]._id,
+            studio: studios[0]._id,
             released: 1985,
             cast: [
-                { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
-                { role: 'Sidekick', actor: createdActors[1]._id }
+                { role: 'Chief Troublemaker', actor: actors[0]._id }, 
+                { role: 'Sidekick', actor: actors[1]._id }
             ]
         };
         return request(app)
             .post('/films')
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .send(newFilm)
             .then(result => {
                 expect(result.body).toEqual({
                     title: 'Revenge of the Programmers',
-                    studio: createdStudios[0]._id,
+                    studio: studios[0]._id,
                     released: 1985,
                     cast: [
-                        { _id: expect.any(String), role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
-                        { _id: expect.any(String), role: 'Sidekick', actor: createdActors[1]._id }
+                        { _id: expect.any(String), role: 'Chief Troublemaker', actor: actors[0]._id }, 
+                        { _id: expect.any(String), role: 'Sidekick', actor: actors[1]._id }
                     ],
                     _id: expect.any(String),
                     __v: expect.any(Number)
@@ -130,18 +38,44 @@ describe('film routes', () => {
             });
     });
 
+    it('won\'t create a film if you are not an admin', () => {
+        const reviewerTokens = getReviewerTokens();
+        const studios = getStudios();
+        const actors = getActors();
+
+        const newFilm = {
+            title: 'Revenge of the Programmers',
+            studio: studios[0]._id,
+            released: 1985,
+            cast: [
+                { role: 'Chief Troublemaker', actor: actors[0]._id }, 
+                { role: 'Sidekick', actor: actors[1]._id }
+            ]
+        };
+        return request(app)
+            .post('/films')
+            .set('Authorization', `Bearer ${reviewerTokens[1]}`)
+            .send(newFilm)
+            .then(result => {
+                expect(result.body).toEqual({});
+            });
+    });
+
     it('gets all films', () => {
+        const films = getFilms();
+        const studios = getStudios();
+
         return request(app)
             .get('/films')
             .then(retrievedFilms => {
-                createdFilms.forEach(createdFilm => {
+                films.forEach(film => {
                     expect(retrievedFilms.body).toContainEqual(
                         {
-                            title: createdFilm.title,
-                            released: createdFilm.released,
+                            title: film.title,
+                            released: film.released,
                             studio: { 
-                                _id: createdStudios[0]._id,
-                                name: createdStudios[0].name
+                                _id: studios[0]._id,
+                                name: studios[0].name
                             },
                             _id: expect.any(String)
                         } 
@@ -151,55 +85,75 @@ describe('film routes', () => {
     });
 
     it('gets a film when supplied film id', () =>{
-        const id = createdFilms[0]._id;
+        const films = getFilms();
+        const studios = getStudios();
+        const actors = getActors();
+        const reviews = getReviews();
+        const reviewers = getReviewers();
+
+        const id = films[0]._id;
         return request(app)
             .get(`/films/${id}`)
             .then(returnedFilm => {
                 expect(returnedFilm.body).toEqual({
-                    title: createdFilms[0].title,
-                    released: createdFilms[0].released,
+                    title: films[0].title,
+                    released: films[0].released,
                     studio: {
-                        _id: createdStudios[0]._id,
-                        name: createdStudios[0].name
+                        _id: studios[0]._id,
+                        name: studios[0].name
                     },
                     cast: [
                         { 
                             _id: expect.any(String), 
                             role: 'Chief Troublemaker', 
                             actor: {
-                                _id: createdActors[0]._id,
-                                name: createdActors[0].name 
+                                _id: actors[0]._id,
+                                name: actors[0].name 
                             }
                         },
                         { 
                             _id: expect.any(String), 
                             role: 'Sidekick', 
                             actor: {
-                                _id: createdActors[1]._id,
-                                name: createdActors[1].name 
+                                _id: actors[1]._id,
+                                name: actors[1].name 
                             }
                         }
                     ],
                     reviews: [{
-                        _id: createdReviews[0]._id,
-                        rating: createdReviews[0].rating,
-                        text: createdReviews[0].text, 
+                        _id: reviews[0]._id,
+                        rating: reviews[0].rating,
+                        text: reviews[0].text, 
                         reviewer: {
-                            _id: createdReviewers[0]._id,
-                            name: createdReviewers[0].name
+                            _id: reviewers[0]._id,
+                            name: reviewers[0].name
                         }
                     }]                 
                 });
-            });
-        
+            }); 
     });
 
-    it('deletes a film by id', () => {
-        const id = createdFilms[0]._id;
+    it('deletes a film by id if you are an admin', () => {
+        const reviewerTokens = getReviewerTokens();
+        const films = getFilms();
+        const id = films[0]._id;
         return request(app)
             .delete(`/films/${id}`)
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .then(deletedStatus => {
                 expect(deletedStatus.body).toEqual({ removed: true });
+            });
+    });
+
+    it('won\'t delete a film by id if you are not an admin', () => {
+        const films = getFilms();
+        const reviewerTokens = getReviewerTokens();
+        const id = films[0]._id;
+        return request(app)
+            .delete(`/films/${id}`)
+            .set('Authorization', `Bearer ${reviewerTokens[1]}`)
+            .then(deletedStatus => {
+                expect(deletedStatus.body).toEqual({});
             });
     });
 

@@ -1,5 +1,5 @@
 const Studio = require('../../lib/models/Studio');
-const { getErrors } = require('./helpers');
+const { getErrors } = require('./getErrors');
 
 describe ('Studio model', () => {
     it('validates a good model', () => {
@@ -28,8 +28,6 @@ describe ('Studio model', () => {
 
         const errors = getErrors(studio.validateSync(), 1);
         expect(errors.name.properties.message).toEqual('Path `name` is required.');
-
-
     });
 
 

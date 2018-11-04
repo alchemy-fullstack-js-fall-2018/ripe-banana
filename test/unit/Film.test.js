@@ -1,7 +1,7 @@
 const Film = require('../../lib/models/Film');
 const Actor = require('../../lib/models/Actor');
 const Studio = require('../../lib/models/Studio');
-const { getErrors } = require('./helpers');
+const { getErrors } = require('./getErrors');
 
 describe('Film model', () => {
 

@@ -1,70 +1,13 @@
 const request = require('supertest');
 const app = require('../../lib/app');
-const { dropCollection } = require('./db');
-const { createStudios, createActors } = require('./helpers');
+require('./db');
+const { getReviewerTokens, getStudios, getFilms } = require('./created');
 
-describe('studio', () => {
-
-    let createdStudios;
-    let createdFilms;
-    let createdActors;
-
-    const createFilm = film => {
-        return request(app)
-            .post('/films')
-            .send(film)
-            .then(res => res.body);
-    };
-    
-    beforeEach(() => {
-        return Promise.all([
-            dropCollection('studios'),
-            dropCollection('films'),
-            dropCollection('actors')
-        ]);
-    });
-
-    beforeEach(() => {
-        return createStudios()
-            .then(studiosRes => { 
-                createdStudios = studiosRes;
-            });
-    });
-
-    beforeEach(() => {
-        return createActors()
-            .then(actorsRes => { 
-                createdActors = actorsRes;
-            });
-    });
-
-    beforeEach(() => {
-        let films = [
-            {
-                title: 'The Programinator',
-                studio: createdStudios[0]._id,
-                released: 1984,
-                cast: [
-                    { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
-                    { role: 'Sidekick', actor: createdActors[1]._id }
-                ]
-            },
-            {
-                title: 'Thelma and Luigi',
-                studio: createdStudios[0]._id,
-                released: 1972,
-                cast: [
-                    { role: 'Thelma', actor: createdActors[1]._id }, 
-                    { role: 'Luigi', actor: createdActors[0]._id }
-                ]
-            }
-        ];
-        
-        return Promise.all(films.map(createFilm))
-            .then(filmsRes => { createdFilms = filmsRes;});
-    });
+describe('studios', () => {
    
-    it('creates a studio', () => {
+    it('creates a studio if user is an admin', () => {
+        const reviewerTokens = getReviewerTokens();
+
         const newStudio = {
             name: 'Laika',
             address: {
@@ -75,6 +18,7 @@ describe('studio', () => {
         };
         return request(app)
             .post('/studios')
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .send(newStudio)
             .then(result => {
                 expect(result.body).toEqual({
@@ -85,27 +29,52 @@ describe('studio', () => {
             });
     });
 
-    it('retrieve all studios on get request', () => {
+    it('won\'t create a studio if user is not an admin', () => {
+        const reviewerTokens = getReviewerTokens();
+
+        const newStudio = {
+            name: 'Laika',
+            address: {
+                city: 'Hillsboro',
+                state: 'OR',
+                country: 'USA'
+            }
+        };
+        return request(app)
+            .post('/studios')
+            .set('Authorization', `Bearer ${reviewerTokens[1]}`)
+            .send(newStudio)
+            .then(result => {
+                expect(result.body).toEqual({});
+            });
+    });
+
+    it('retrieves all studios on get request', () => {
+        const studios = getStudios();
+
         return request(app)
             .get('/studios')
             .then(retrievedStudios => {
-                createdStudios.forEach(createdStudio => {
-                    expect(retrievedStudios.body).toContainEqual(createdStudio);
+                studios.forEach(studio => {
+                    expect(retrievedStudios.body).toContainEqual(studio);
                 });
             });
     });
 
     it('retrieves one studio by id', () => {
+        const studios = getStudios();
+        const films = getFilms();
+
         return request(app)
-            .get(`/studios/${createdStudios[0]._id}`)
+            .get(`/studios/${studios[0]._id}`)
             .then(retrievedStudio => {
                 expect(retrievedStudio.body).toEqual({ 
-                    _id: createdStudios[0]._id,
-                    name: createdStudios[0].name,
-                    address: createdStudios[0].address, 
+                    _id: studios[0]._id,
+                    name: studios[0].name,
+                    address: studios[0].address, 
                     films:[
-                        { _id: createdFilms[0]._id, title: createdFilms[0].title },
-                        { _id: createdFilms[1]._id, title: createdFilms[1].title }
+                        { _id: films[0]._id, title: films[0].title },
+                        { _id: films[1]._id, title: films[1].title }
                     ] 
                 });
             });
@@ -113,16 +82,24 @@ describe('studio', () => {
     });
 
     it('deletes one studio by id if no films', () => {
+        const studios = getStudios();
+        const reviewerTokens = getReviewerTokens();
+
         return request(app)
-            .delete(`/studios/${createdStudios[2]._id}`)
+            .delete(`/studios/${studios[2]._id}`)
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .then(deletedStatus => {
                 expect(deletedStatus.body).toEqual({ removed: true });
             });
     });
 
     it('does not delete one studio by id if has films', () => {
+        const studios = getStudios();
+        const reviewerTokens = getReviewerTokens();
+
         return request(app)
-            .delete(`/studios/${createdStudios[0]._id}`)
+            .delete(`/studios/${studios[0]._id}`)
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .then(deletedStatus => {
                 expect(deletedStatus.body).toEqual({ removed: false });
             });
@@ -130,8 +107,11 @@ describe('studio', () => {
 
     it('tries to delete one studio by id and returns false when supplied a bogus id', () => {
         const bogusId = '123456789012345678901234';
+        const reviewerTokens = getReviewerTokens();
+
         return request(app)
             .delete(`/studios/${bogusId}`)
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .then(deletedStatus => {
                 expect(deletedStatus.body).toEqual({ removed: false });
             });
