@@ -1,5 +1,5 @@
 const Reviewer = require('../../lib/models/Reviewer');
-const { getErrors } = require('./helpers');
+const { getErrors } = require('./getErrors');
 const bcrypt = require('bcryptjs');
 
 

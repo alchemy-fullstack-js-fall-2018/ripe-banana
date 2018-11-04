@@ -9,6 +9,5 @@ const port = 7890;
 const server = createServer(app);
 
 server.listen(port, () => {
-    /* eslint-disable-next-line no-console */
-    console.log(`Listening on ${port}`);
+    console.log(`Listening on ${port}`);  /* eslint-disable-line no-console */
 });
