@@ -95,7 +95,7 @@ beforeEach(() => {
     filmsData[0].cast[0].actor = actors[0]._id;
     filmsData[0].cast[1].actor = actors[1]._id;
 
-    filmsData[1].studio = studios[1]._id;
+    filmsData[1].studio = studios[0]._id;
     filmsData[1].cast[0].actor = actors[0]._id;
     filmsData[1].cast[1].actor = actors[1]._id;
 

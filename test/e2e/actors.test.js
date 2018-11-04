@@ -83,7 +83,7 @@ describe('actors', () => {
             });
     });
 
-    it('deletes one actor by id who is not in any films', () => {
+    it('deletes one actor by id who is not in any films (admin required)', () => {
         const reviewerTokens = getReviewerTokens();
         const actors = getActors();
         const id = actors[2]._id;
@@ -120,7 +120,7 @@ describe('actors', () => {
             });
     });
 
-    it('updates an actor when supplied id and new data', () => {
+    it('updates an actor when supplied id and new data (admin required)', () => {
         const reviewerTokens = getReviewerTokens();
         const actors = getActors();
         const id = actors[0]._id;
