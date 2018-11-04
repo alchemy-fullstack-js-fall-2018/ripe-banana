@@ -14,29 +14,29 @@ const checkStatus = statusCode => res => {
 
 const checkOk = res => checkStatus(200)(res);
 
-const withToken = reviewer => {
-    return request(app)
-        .post('/auth/signin')
-        .send({ name: `${reviewer.name}`, clearPassword: `${reviewer.clearPassword}` })
-        .then(({ body }) => body.token);
-};
+// const withToken = reviewer => {
+//     return request(app)
+//         .post('/auth/signin')
+//         .send({ name: `${reviewer.name}`, clearPassword: `${reviewer.clearPassword}` })
+//         .then(({ body }) => body.token);
+// };
 
 describe('auth', () => {
-    const users = Array.apply(null, { length: 1 })
-    .map(() => ({ name: chance.name(), clearPassword: chance.word(), company: chance.company() }));
+    let reviewers = Array.apply(null, { length: 1 })
+        .map(() => ({ name: chance.name(), clearPassword: chance.word(), company: chance.company() }));
 
-    let createdReviewers;
+    // let createdReviewers;
     
     let token;
     beforeEach(async() => {
         await dropCollection('reviewers');
-        await createReviewers()
-            .then(reviewersRes => { 
-                createdReviewers = reviewersRes;
-            });
-        await withToken(createdReviewers[0]).then(createdToken => {
-            token = createdToken;
-        });
+        // await createReviewers()
+        //     .then(reviewersRes => { 
+        //         reviewers = reviewersRes;
+        //     });
+        // await withToken(reviewers[0]).then(createdToken => {
+        //     token = createdToken;
+        // });
     });
 
     it('hashes a reviewer\'s password', () => {
@@ -60,35 +60,29 @@ describe('auth', () => {
             });
     });
     
-    it.only('signs in a user', () => {
-
-        const newReviewer = { name: 'mike', company: 'Alphabet', clearPassword: 'testing1234' };
-
+    it('signs in a user', () => {
         return request(app)
             .post('/auth/signup')
-            .send(newReviewer)
+            .send(reviewers[0])
             .then(reviewer => {
                 return request(app)
                     .post('/auth/signin')
-                    .send({ name: reviewer.body.name, clearPassword: 'Banana' })
+                    .send({ name: reviewer.body.name, clearPassword: reviewers[0].clearPassword })
                     .then(res => {
                         checkOk(res);
-            
                         expect(res.body.token).toEqual(expect.any(String));
                     });
             });
     });
     
     it('rejects signing in a bad user', () => {
-
-        const newReviewer = { name: 'mike', company: 'Alphabet', clearPassword: 'testing1234' };
         return request(app)
             .post('/auth/signup')
-            .send(newReviewer)
+            .send(reviewers[0])
             .then(reviewer => {
                 return request(app)
                     .post('/auth/signin')
-                    .send({ name: reviewer.body.name, clearPassword: `${newReviewer.clearPassword}` })
+                    .send({ name: reviewer.body.name, clearPassword: `${reviewers[0].clearPassword}123` })
                     .then(checkStatus(401));
             });
 
@@ -96,9 +90,15 @@ describe('auth', () => {
     
     it('rejects signing in a user with bad email', () => {
         return request(app)
-            .post('/api/auth/signin')
-            .set('Authorization', `Bearer ${token}`)
-            .send({ email: `${createdUsers[0].email}`, clearPassword: `${users[0].clearPassword}1234` })
-            .then(checkStatus(401));
+            .post('/auth/signup')
+            .send(reviewers[0])
+            .then(reviewer => { 
+                return request(app)
+                    .post('/api/auth/signin')
+                    .set('Authorization', `Bearer ${token}`)
+                    .send({ name: `${reviewer.body.name}123`, clearPassword: `${reviewers[0].clearPassword}` })
+                    .then(checkStatus(401));
+
+            });
     });
 });
