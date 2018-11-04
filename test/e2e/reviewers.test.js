@@ -3,7 +3,7 @@ const app = require('../../lib/app');
 const bcrypt = require('bcryptjs');
 const Reviewer = require('../../lib/models/Reviewer');
 require('./db');
-const { getReviewers, getReviewerTokens, getActors, getStudios, getFilms, getReviews } = require('./created');
+const { getReviewers, getReviewerTokens, getFilms, getReviews } = require('./created');
 
 describe('reviewers', () => {
 
@@ -90,16 +90,35 @@ describe('reviewers', () => {
             });
     });
 
-    it('updates a reviewers info', () => {
+    it('updates a reviewers info if user is an admin', () => {
         const reviewers = getReviewers();
+        const reviewerTokens = getReviewerTokens();
         const id = reviewers[0]._id;
         const newData = reviewers[0];
         newData.company = 'Founder\'s films';
+
         return request(app)
             .put(`/reviewers/${id}`)
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .send(newData)
             .then(result => {
                 expect(result.body).toEqual(newData);
+            });
+    });
+
+    it('won\'t updates a reviewers info if user is not an admin', () => {
+        const reviewers = getReviewers();
+        const reviewerTokens = getReviewerTokens();
+        const id = reviewers[0]._id;
+        const newData = reviewers[0];
+        newData.company = 'Founder\'s films';
+
+        return request(app)
+            .put(`/reviewers/${id}`)
+            .set('Authorization', `Bearer ${reviewerTokens[1]}`)
+            .send(newData)
+            .then(result => {
+                expect(result.body).toEqual({});
             });
     });
 

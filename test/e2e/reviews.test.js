@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 require('./db');
-const { getReviewers, getReviewerTokens, getActors, getStudios, getFilms, getReviews } = require('./created');
+const { getReviewers, getReviewerTokens, getFilms, getReviews } = require('./created');
 
 describe('reviews', () => {
 
