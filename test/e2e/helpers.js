@@ -1,7 +1,7 @@
 const app = require('../../lib/app');
 const request = require('supertest');
 require('./db');
-const { actors, studios, reviewers } = require('./data');
+const { actorsData, studiosData, reviewersData } = require('./data');
 
 
 const createActor = actor => {
@@ -33,19 +33,19 @@ const createReviewerToken = reviewer => {
 };
 
 const createActors = () => {
-    return Promise.all(actors.map(createActor));
+    return Promise.all(actorsData.map(createActor));
 };
 
 const createStudios = () => {
-    return Promise.all(studios.map(createStudio));
+    return Promise.all(studiosData.map(createStudio));
 };
 
 const createReviewers = () => {
-    return Promise.all(reviewers.map(createReviewer));
+    return Promise.all(reviewersData.map(createReviewer));
 };
 
 const createReviewerTokens = () => {
-    return Promise.all(reviewers.map(createReviewerToken));
+    return Promise.all(reviewersData.map(createReviewerToken));
 };
 
 
