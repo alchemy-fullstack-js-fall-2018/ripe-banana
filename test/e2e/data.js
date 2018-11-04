@@ -1,4 +1,21 @@
-const actors = [
+const reviewersData = [
+    { 
+        name: 'George Watchington', 
+        company: 'Patriot Films',
+        email: 'georgieHotStuff@hotmail.com',
+        clearPassword: 'georgessecret',
+        roles: ['admin'] 
+    },
+    { 
+        name: 'Abraham Linkoln', 
+        company: 'Great Conflict Productions',
+        clearPassword: 'fourScoreAndPasswordAgo',
+        email: 'Abe1809@askjeeves.com',
+        roles: ['editor']
+    }
+];
+
+const actorsData = [
     {
         name: 'Matt Diamond',
         dob: new Date('11-11-1911'),
@@ -16,7 +33,7 @@ const actors = [
     }
 ];
 
-const studios = [
+const studiosData = [
     {
         name: 'YuraqYana Studios',
         address: {
@@ -43,25 +60,46 @@ const studios = [
     }
 ];
 
-const reviewers = [
-    { 
-        name: 'George Watchington', 
-        company: 'Patriot Films',
-        email: 'georgieHotStuff@hotmail.com',
-        clearPassword: 'georgessecret',
-        roles: ['admin'] 
+const filmsData = [
+    {
+        title: 'The Programinator',
+        // studio:
+        released: 1984,
+        cast: [
+            { role: 'Chief Troublemaker' }, // actor:
+            { role: 'Sidekick' } // actor:
+        ]
     },
-    { 
-        name: 'Abraham Linkoln', 
-        company: 'Great Conflict Productions',
-        clearPassword: 'fourScoreAndPasswordAgo',
-        email: 'Abe1809@askjeeves.com',
-        roles: ['editor']
+    {
+        title: 'Thelma and Luigi',
+        // studio: 
+        released: 1972,
+        cast: [
+            { role: 'Thelma' }, // actor:
+            { role: 'Luigi' } // actor:
+        ]
+    }
+];
+
+const reviewsData = [
+    {
+        rating: 5,
+        // reviewer: 
+        text: 'Amazeballs!',
+        // film:
+    },
+    {
+        rating: 1,
+        // reviewer: 
+        text: 'I want the last 1.5 hours of my life back.',
+        // film: 
     }
 ];
 
 module.exports = {
-    actors,
-    studios,
-    reviewers
+    actorsData,
+    studiosData,
+    reviewersData,
+    filmsData,
+    reviewsData
 };
