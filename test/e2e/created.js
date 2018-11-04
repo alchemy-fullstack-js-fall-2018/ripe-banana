@@ -116,13 +116,18 @@ beforeEach(() => {
     });
 });
 
-const created = {
-    reviewers,
-    reviewerTokens,
-    actors,
-    studios,
-    films,
-    reviews
-};
+const getReviewers = () => reviewers;
+const getReviewerTokens = () => reviewerTokens;
+const getActors = () => actors;
+const getStudios = () => studios;
+const getFilms = () => films;
+const getReviews = () => reviews;
 
-module.exports = created;
+module.exports = {
+    getReviewers,
+    getReviewerTokens,
+    getActors,
+    getStudios,
+    getFilms,
+    getReviews
+};

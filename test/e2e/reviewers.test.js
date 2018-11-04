@@ -2,123 +2,17 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const bcrypt = require('bcryptjs');
 const Reviewer = require('../../lib/models/Reviewer');
-const { dropCollection } = require('./db');
-const { createReviewers, createActors, createStudios, createReviewerTokens } = require('./helpers');
+require('./db');
+const { getReviewers, getReviewerTokens, getActors, getStudios, getFilms, getReviews } = require('./created');
 
 describe('reviewers', () => {
-
-    let createdReviewers;
-    let createdActors;
-    let createdStudios;
-    let createdFilms;
-    let createdReviews;
-    let createdReviewerTokens;
 
     const checkStatus = statusCode => res => {
         expect(res.status).toEqual(statusCode);
     };
-    
-    const createReview = review => {
-        return request(app)
-            .post('/reviews')
-            .set('Authorization', `Bearer ${createdReviewerTokens[0]}`)
-            .send(review)
-            .then(res => res.body);
-    };
-
-    const createFilm = film => {
-        return request(app)
-            .post('/films')
-            .send(film)
-            .then(res => res.body);
-    };
-    
-    beforeEach(() => {
-        return Promise.all([
-            dropCollection('reviewers'),
-            dropCollection('actors'),
-            dropCollection('studios'),
-            dropCollection('films'),
-            dropCollection('reviews')
-        ]);
-    });
-    
-    beforeEach(() => {
-        return createReviewers()
-            .then(reviewersRes => { 
-                createdReviewers = reviewersRes;
-            });
-    });
-
-    beforeEach(() => {
-        return createReviewerTokens()
-            .then(tokensRes => { 
-                createdReviewerTokens = tokensRes;
-            });
-    });
-
-    beforeEach(() => {
-        return createActors()
-            .then(actorsRes => { 
-                createdActors = actorsRes;
-            });
-    });
-
-    beforeEach(() => {
-        return createStudios()
-            .then(studiosRes => { 
-                createdStudios = studiosRes;
-            });
-    });
-
-    beforeEach(() => {
-        let films = [
-            {
-                title: 'The Programinator',
-                studio: createdStudios[0]._id,
-                released: 1984,
-                cast: [
-                    { role: 'Chief Troublemaker', actor: createdActors[0]._id }, 
-                    { role: 'Sidekick', actor: createdActors[1]._id }
-                ]
-            },
-            {
-                title: 'Thelma and Luigi',
-                studio: createdStudios[0]._id,
-                released: 1972,
-                cast: [
-                    { role: 'Thelma', actor: createdActors[1]._id }, 
-                    { role: 'Luigi', actor: createdActors[0]._id }
-                ]
-            }
-        ];
-    
-        return Promise.all(films.map(createFilm))
-            .then(filmsRes => { createdFilms = filmsRes;});
-    });
-
-    beforeEach(() => {
-        let reviews = [
-            {
-                rating: 5,
-                reviewer: createdReviewers[0]._id,
-                text: 'Amazeballs!',
-                film: createdFilms[0]._id 
-            },
-            {
-                rating: 1,
-                reviewer: createdReviewers[1]._id,
-                text: 'I want the last 1.5 hours of my life back.',
-                film: createdFilms[1]._id 
-            }
-        ];
-
-        return Promise.all(reviews.map(createReview))
-            .then(reviewsRes => { createdReviews = reviewsRes;});
-
-    });
 
     it('signs up a reviewer', () => {
+
         const newReviewer = {
             name: 'Roger Siskel',
             company: 'At the Movies',
@@ -151,31 +45,45 @@ describe('reviewers', () => {
     });
 
     it('gets all reviewers', () => {
+        const reviewers = getReviewers();
         return request(app)
             .get('/reviewers')
             .then(retrievedReviewers => {
-                createdReviewers.forEach(createdReviewer => {
-                    expect(retrievedReviewers.body).toContainEqual(createdReviewer);
+                reviewers.forEach(reviewer => {
+                    expect(retrievedReviewers.body).toContainEqual(reviewer);
                 });
             });
     });
 
     it('gets a specific reviewer when passed an id', () => {
-        const id = createdReviewers[0]._id;
+        const reviewers = getReviewers();
+        const reviews = getReviews();
+        const films = getFilms();
+        const id = reviewers[0]._id;
+
         return request(app)
             .get(`/reviewers/${id}`)
             .then(retrievedReviewer => {
                 expect(retrievedReviewer.body).toEqual({
-                    _id: createdReviewers[0]._id,
-                    name: createdReviewers[0].name,
-                    company: createdReviewers[0].company,
+                    _id: reviewers[0]._id,
+                    name: reviewers[0].name,
+                    company: reviewers[0].company,
                     reviews:[{
-                        _id: createdReviews[0]._id,
-                        rating: createdReviews[0].rating,
-                        text: createdReviews[0].text,
+                        _id: reviews[0]._id,
+                        rating: reviews[0].rating,
+                        text: reviews[0].text,
                         film: {
-                            _id: createdFilms[0]._id,
-                            title: createdFilms[0].title
+                            _id: films[0]._id,
+                            title: films[0].title
+                        }
+                    },
+                    {
+                        _id: reviews[1]._id,
+                        rating: reviews[1].rating,
+                        text: reviews[1].text,
+                        film: {
+                            _id: films[1]._id,
+                            title: films[1].title
                         }
                     }]
                 });
@@ -183,8 +91,9 @@ describe('reviewers', () => {
     });
 
     it('updates a reviewers info', () => {
-        const id = createdReviewers[0]._id;
-        const newData = createdReviewers[0];
+        const reviewers = getReviewers();
+        const id = reviewers[0]._id;
+        const newData = reviewers[0];
         newData.company = 'Founder\'s films';
         return request(app)
             .put(`/reviewers/${id}`)
