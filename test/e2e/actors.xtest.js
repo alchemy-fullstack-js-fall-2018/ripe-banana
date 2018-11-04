@@ -1,13 +1,15 @@
 const request = require('supertest');
 const app = require('../../lib/app');
 const { dropCollection } = require('./db');
-const { createActors, createStudios } = require('./helpers');
+const { createActors, createStudios, createReviewers, createReviewerTokens } = require('./helpers');
 
 describe('actors', () => {
     
     let createdActors;
     let createdFilms;
     let createdStudios;
+    let createdReviewers;
+    let createdReviewerTokens;
 
     const createFilm = film => {
         return request(app)
@@ -18,10 +20,26 @@ describe('actors', () => {
 
     beforeEach(() => {
         return Promise.all([
+            dropCollection('reviewers'),
+            dropCollection('studios'),
             dropCollection('actors'),
             dropCollection('films'),
-            dropCollection('studios')
+            dropCollection('reviews')
         ]);
+    });
+
+    beforeEach(() => {
+        return createReviewers()
+            .then(reviewersRes => { 
+                createdReviewers = reviewersRes;
+            });
+    });
+
+    beforeEach(() => {
+        return createReviewerTokens()
+            .then(tokensRes => { 
+                createdReviewerTokens = tokensRes;
+            });
     });
 
     beforeEach(() => {
@@ -65,7 +83,7 @@ describe('actors', () => {
     });
 
 
-    it('creates an actor', () => {
+    it('creates an actor if user is an admin', () => {
         const newActor = {
             name: 'Sir Clancy Yorkshire IV',
             dob: '1934-12-12T08:00:00.000Z',
@@ -73,6 +91,7 @@ describe('actors', () => {
         };
         return request(app)
             .post('/actors')
+            .set('Authorization', `Bearer ${createdReviewerTokens[0]}`)
             .send(newActor)
             .then(result => {
                 expect(result.body).toEqual({
@@ -82,6 +101,21 @@ describe('actors', () => {
                 });
             });
     });
+
+    it('won\'t create an actor if user is not an admin', () => {
+        const newActor = {
+            name: 'Sir Clancy Yorkshire IV',
+            dob: '1934-12-12T08:00:00.000Z',
+            pob: 'New Jersey'
+        };
+        return request(app)
+            .post('/actors')
+            .set('Authorization', `Bearer ${createdReviewerTokens[1]}`)
+            .send(newActor)
+            .then(result => {
+                expect(result.body).toEqual({});
+            });
+    })
 
     it('retrieve all actors on get request', () => {
         return request(app)
