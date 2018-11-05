@@ -1,4 +1,4 @@
-const { dropCollection } = require('./db');
+require('./db');
 const request = require('supertest');
 const app = require('../../lib/app');
 const { getReviewers, getReviews, getFilms } = require('./helpers');
