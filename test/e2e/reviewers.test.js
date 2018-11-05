@@ -45,8 +45,7 @@ describe('end to end reviewer testing', () => {
             name: chance.name(),
             company: chance.company(),
             email: chance.email(),
-            role: 'admin',
-            password: chance.string()
+            clearPassword: chance.string()
         };
         return request(app)
             .post('/reviewer')
@@ -55,7 +54,9 @@ describe('end to end reviewer testing', () => {
                 expect(body).toEqual({
                     ...reviewer,
                     _id: expect.any(String),
-                    __v: expect.any(Number)
+                    __v: expect.any(Number),
+                    email: reviewer.email,
+                    roles: []
                 });
             });
     });
@@ -98,7 +99,7 @@ describe('end to end reviewer testing', () => {
     it('signs in a reviwer', () => {
         return request(app)
             .post('/api/reviewers/signin')
-            .send({ email: 'douglefir@gmail.com', password: 'animals123' })
+            .send({ email: 'douglefir@gmail.com', clearPassword: 'animals123' })
             .then(res => {
                 checkOk(res);
                 expect(res.body.token).toEqual(expect.any(String));
@@ -108,7 +109,7 @@ describe('end to end reviewer testing', () => {
     it('rejects a sign in with a bad password', () => {
         return request(app)
             .post('/api/reviewers/signin')
-            .send({ email: 'douglefir@gmail.com', password: 'badpassword' })
+            .send({ email: 'douglefir@gmail.com', clearPassword: 'badpassword' })
             .then(checkStatus(401));
     });
 
@@ -116,14 +117,14 @@ describe('end to end reviewer testing', () => {
         let token;
         return request(app)
             .post('/api/reviewers/signin')
-            .send({ email: 'wtree@gmail.com', password: 'wtree123' })
+            .send({ email: 'wtree@gmail.com', clearPassword: 'wtree123' })
             .then(res => {
                 token = res;
             })
             .then(request(app)
                 .post('/api/reviewers/signin')
                 .set('Authorization', `Bearer ${token}`)
-                .send({ email: 'dfir@gmail.com', password: 'dfir12345' })
+                .send({ email: 'dfir@gmail.com', clearPassword: 'dfir12345' })
                 .then(checkStatus(401)));
     });
 
@@ -158,13 +159,13 @@ describe('end to end reviewer testing', () => {
         const newReviewer = {
             name: chance.name(),
             company: chance.company(),
-            password: 'animals123'
+            clearPassword: 'animals123'
         };
 
         return request(app)
             .put(`/reviewer/${rh.createdReviewers[0]._id}`)
             .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .send(newReviewer)
-            .then(({ body }) => expect(body).toEqual({ _id: expect.any(String), name: newReviewer.name, company: newReviewer.company, password: newReviewer.password }));
+            .then(({ body }) => expect(body).toEqual({ _id: expect.any(String), name: newReviewer.name, company: newReviewer.company, clearPassword: newReviewer.clearPassword }));
     }); 
 });

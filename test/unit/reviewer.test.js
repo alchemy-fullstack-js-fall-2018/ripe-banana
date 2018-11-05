@@ -2,6 +2,7 @@ const { getErrors } = require('../util/helpers');
 const Reviewer = require('../../lib/models/Reviewer');
 const Chance = require('chance');
 const chance = new Chance();
+const bcrypt = require('bcryptjs');
 
 describe('Reviewer model', () => {
 
@@ -10,6 +11,8 @@ describe('Reviewer model', () => {
         const data = {
             name: chance.name(),
             company: chance.company()
+            email: chance.email(),
+            roles: ['admin']
         };
 
         const reviewer = new Reviewer(data);
@@ -20,16 +23,12 @@ describe('Reviewer model', () => {
     it('requires a name', () => {
 
         const reviewer = new Reviewer({
-            company: chance.company()
+            company: chance.company(),
+            email: chance.email(),
         });
 
         const errors = getErrors(reviewer.validateSync(), 3);
         expect(errors.name.properties.message).toEqual('Path `name` is required.');
     });
-
-
-
-
-
 
 });

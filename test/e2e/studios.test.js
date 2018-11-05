@@ -4,7 +4,7 @@ const Chance = require('chance');
 const chance = new Chance();
 const { ResourceHelper } = require('../util/helpers');
 const { dropCollection } = require('../util/db');
-// const bcrypt = require('bcrypt');
+const { getReviewerTokens, getStudios, getFilms } = require('./created');
 
 describe('end to end studo testing', () => {
 
@@ -27,7 +27,10 @@ describe('end to end studo testing', () => {
         })();
     });
 
-    it('this creates a studio', () => {
+    it('this creates a studio if user an admin', () => {
+        
+        const reviewerTokens = getReviewerTokens();
+
         const studio = {
             name: chance.name(),
             address: {
@@ -38,6 +41,7 @@ describe('end to end studo testing', () => {
         };
         return request(app)
             .post('/studios')
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .send(studio)
             .then(({ body }) => {
                 expect(body).toEqual({
@@ -46,6 +50,27 @@ describe('end to end studo testing', () => {
                 });
             });
     });
+
+    it('won\'t create a studio if user is not an admin', () => {
+        const reviewerTokens = getReviewerTokens();
+        const newStudio = {
+            name: chance.name(),
+            address: {
+                city: chance.city(),
+                state: chance.state(),
+                country: chance.country({ full: true })
+            }
+        };
+        
+        return request(app)
+            .post('/studios')
+            .set('Authorization', `Bearer ${reviewerTokens[1]}`)
+            .send(newStudio)
+            .then(result => {
+                expect(result.body).toEqual({});
+            });
+    });
+
 
     it('gets all studios', () => {
         return request(app)
@@ -65,6 +90,9 @@ describe('end to end studo testing', () => {
 
     it('deletes a studio by id', () => {
         
+        // const studios = getStudios();
+        const reviewerTokens = getReviewerTokens();
+
         let studio = {
             name: chance.name(),
             address: {
@@ -82,14 +110,20 @@ describe('end to end studo testing', () => {
                 .then(({ body }) => studio.id = body._id);
             await request(app)
                 .delete(`/studios/${studio.id}`)
+                .set('Authorization', `Bearer ${reviewerTokens[0]}`)
                 .then(({ body }) => expect(body).toEqual({ removed: true }));
 
         })();
     });
 
     it('does not delete a studio if there are films', () => {
+        
+        // const studios = getStudios();
+        const reviewerTokens = getReviewerTokens();
+
         return request(app)
             .delete(`/studios/${rh.createdStudios[0]._id}`)
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .then(({ body }) => expect(body).toEqual({ removed: false }));
     });
 });

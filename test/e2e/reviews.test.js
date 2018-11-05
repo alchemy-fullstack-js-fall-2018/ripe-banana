@@ -31,7 +31,11 @@ describe('end to end review testing', () => {
         })();
     });
 
-    it('this creates a review', () => {
+    it('this creates a review when your signed in', () => {
+        const reviewers = getReviewers();
+        const reviewerTokens = getReviewerTokens();
+        // const films = getFilms();
+        
         const review = {
             rating: chance.natural({ min: 1, max: 5 }),
             review: chance.string({ length: 50 }),
@@ -40,11 +44,13 @@ describe('end to end review testing', () => {
         };
         return request(app)
             .post('/reviews')
+            .set('Authorization', `Bearer ${reviewerTokens[0]}`)
             .send(review)
             .then(({ body }) => {
                 expect(body).toEqual({
                     ...review,
                     _id: expect.any(String)
+                    // ...reviewData
                 });
             });
     });
@@ -84,7 +90,23 @@ describe('end to end review testing', () => {
             });
     });
 
-
+    it('won\'t allow review creation if you are not signed in', () => {
+        const reviewers = getReviewers();
+        const films = getFilms();
+        const reviewData = {
+            rating: 3,
+            reviewer: reviewers[0]._id,
+            text: 'Meh...I\'ve seen better',
+            film: films[0]._id
+        };
+        return request(app)
+            .post('/reviews')
+            .send(reviewData)
+            .then(result => {
+                // expect(result.body).toEqual({ error: 'Sign-in required' });
+                expect(result.body).toEqual({});
+            });
+    });
 });
 
 
