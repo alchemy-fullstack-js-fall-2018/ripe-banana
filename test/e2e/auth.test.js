@@ -4,7 +4,6 @@ const app = require('../../lib/app');
 const request = require('supertest');
 const bcrypt = require('bcryptjs');
 const Chance = require('chance');
-const { createReviewers } = require('./helpers');
 const chance = new Chance();
 
 
@@ -14,29 +13,14 @@ const checkStatus = statusCode => res => {
 
 const checkOk = res => checkStatus(200)(res);
 
-// const withToken = reviewer => {
-//     return request(app)
-//         .post('/auth/signin')
-//         .send({ name: `${reviewer.name}`, clearPassword: `${reviewer.clearPassword}` })
-//         .then(({ body }) => body.token);
-// };
-
 describe('auth', () => {
     let reviewers = Array.apply(null, { length: 1 })
         .map(() => ({ name: chance.name(), clearPassword: chance.word(), company: chance.company() }));
 
-    // let createdReviewers;
-    
     let token;
+
     beforeEach(async() => {
         await dropCollection('reviewers');
-        // await createReviewers()
-        //     .then(reviewersRes => { 
-        //         reviewers = reviewersRes;
-        //     });
-        // await withToken(reviewers[0]).then(createdToken => {
-        //     token = createdToken;
-        // });
     });
 
     it('hashes a reviewer\'s password', () => {
