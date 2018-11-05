@@ -87,26 +87,26 @@ describe('auth routes', () => {
             .then(checkStatus(401));
     });
 
-    // it('rejects signing in a user with a bad email', () => {
-    //     return request(app)
-    //         .post('api/auth/signin')
-    //         .set('Authorization', `Bearer ${token}`)
-    //         .send({ email: `${createdUsers[0].email}`, clearPassword: `${users[0].clearPassword}1234` })
-    //         .then(checkStatus(401));
-    // });
+    it.skip('rejects signing in a user with a bad email', () => {
+        return request(app)
+            .post('api/auth/signin')
+            .set('Authorization', `Bearer ${token}`)
+            .send({ email: `${createdUsers[0].email}`, clearPassword: `${users[0].clearPassword}1234` })
+            .then(checkStatus(401));
+    });
 
-    // it('verifies a signed in user', () => {
-    //     return withToken(users[0])
-    //         .then(token => {
-    //             return request(app)
-    //                 .get('/api/auth/verify')
-    //                 .set('Authorization', `Bearer ${token}`)
-    //                 .then(res => {
-    //                     expect(res.body).toEqual({ success: true });
-    //                 });
-    //         });
+    it.skip('verifies a signed in user', () => {
+        return withToken(users[0])
+            .then(token => {
+                return request(app)
+                    .get('/api/auth/verify')
+                    .set('Authorization', `Bearer ${token}`)
+                    .then(res => {
+                        expect(res.body).toEqual({ success: true });
+                    });
+            });
 
-    // });
+    });
 
 
 });
