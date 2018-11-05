@@ -15,7 +15,7 @@ const checkOk = res => checkStatus(200)(res);
 
 describe('auth', () => {
     let reviewers = Array.apply(null, { length: 1 })
-        .map(() => ({ name: chance.name(), clearPassword: chance.word(), company: chance.company() }));
+        .map(() => ({ name: chance.name(), email: chance.email(), roles: 'Admin', clearPassword: chance.word(), company: chance.company() }));
 
     let token;
 
@@ -27,8 +27,9 @@ describe('auth', () => {
         return Reviewer.create({
             name: 'mike',
             company: 'Enron',
+            email: 'mike@enron.com',
             clearPassword: 'testing1234',
-            email: 'mike@test.com'
+            roles: 'Admin'
         }).then(reviewer => {
             expect(reviewer.clearPassword).not.toEqual('testing1234');
             expect(bcrypt.compareSync('testing1234', reviewer.passwordHash));
@@ -38,9 +39,9 @@ describe('auth', () => {
     it('creates a user on signup', () => {
         return request(app)
             .post('/auth/signup')
-            .send({ name: 'mike', company: 'Alphabet', clearPassword: 'testing1234' })
+            .send(reviewers[0])
             .then(({ body: reviewer }) => {
-                expect(reviewer).toEqual({ _id: expect.any(String), name: 'mike', company: 'Alphabet' });
+                expect(reviewer).toEqual({ _id: expect.any(String), company: reviewers[0].company, name: reviewers[0].name, roles: reviewers[0].roles, email: reviewers[0].email });
             });
     });
     
@@ -51,7 +52,7 @@ describe('auth', () => {
             .then(reviewer => {
                 return request(app)
                     .post('/auth/signin')
-                    .send({ name: reviewer.body.name, clearPassword: reviewers[0].clearPassword })
+                    .send({ email: reviewer.body.email, clearPassword: reviewers[0].clearPassword })
                     .then(res => {
                         checkOk(res);
                         expect(res.body.token).toEqual(expect.any(String));

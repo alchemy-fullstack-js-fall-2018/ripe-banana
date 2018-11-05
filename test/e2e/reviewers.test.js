@@ -107,7 +107,9 @@ describe('reviewers', () => {
         const newReviewer = {
             name: 'Roger Siskel',
             company: 'At the Movies',
-            clearPassword: 'abcd'
+            clearPassword: 'abcd',
+            email: 'roger@roger.com',
+            roles: 'Admin'
         };
         return request(app)
             .post('/reviewers')
@@ -116,6 +118,8 @@ describe('reviewers', () => {
                 expect(result.body).toEqual({
                     name: 'Roger Siskel',
                     company: 'At the Movies',
+                    email: 'roger@roger.com',
+                    roles: 'Admin',
                     _id: expect.any(String)
                 });
             });
@@ -140,6 +144,8 @@ describe('reviewers', () => {
                     _id: createdReviewers[0]._id,
                     name: createdReviewers[0].name,
                     company: createdReviewers[0].company,
+                    email: createdReviewers[0].email,
+                    roles: createdReviewers[0].roles,
                     reviews:[{
                         _id: createdReviews[0]._id,
                         rating: createdReviews[0].rating,
