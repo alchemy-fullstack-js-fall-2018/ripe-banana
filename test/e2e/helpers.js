@@ -155,6 +155,7 @@ beforeEach(() => {
         createdActors = actorsRes;
         films[0].cast[0].actor = createdActors[0]._id;
         films[1].cast[0].actor = createdActors[1]._id;
+        return createdActors;
     });
 });
 
@@ -163,6 +164,7 @@ beforeEach(() => {
         createdStudios = studiosRes;
         films[0].studio = createdStudios[0]._id;
         films[1].studio = createdStudios[1]._id;
+        return createdStudios;
     });
 });
     
@@ -171,6 +173,7 @@ beforeEach(() => {
         createdFilms = filmsRes;
         reviews[0].film = createdFilms[0]._id;
         reviews[1].film = createdFilms[1]._id;
+        return createdFilms;
     });
 });
 
@@ -179,12 +182,14 @@ beforeEach(() => {
         createdReviewers = reviewersRes;
         reviews[0].reviewer = createdReviewers[0]._id;
         reviews[1].reviewer = createdReviewers[1]._id;
+        return createdReviewers;
     });
 });
 
 beforeEach(() => {
     return Promise.all(reviews.map(createReview)).then(reviewsRes => {
         createdReviews = reviewsRes;
+        return createdReviews;
     });
 });
 
