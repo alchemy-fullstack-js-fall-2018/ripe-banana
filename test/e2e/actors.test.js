@@ -132,6 +132,7 @@ describe('end to end actor testing', () => {
     it('does not delete an actor if they are in films', () => {
         
         const reviewerTokens = getReviewerTokens();
+        console.log(reviewerTokens, 'hiihhiihi show me the money');
         
         return request(app)
             .delete(`/actors/${rh.createdActors[0]._id}`)

@@ -1,11 +1,12 @@
 const request = require('supertest');
 const app = require('../../lib/app');
+const bcrypt = require('bcryptjs');
 const Chance = require('chance');
 const chance = new Chance();
 const { ResourceHelper } = require('../util/helpers');
 const { dropCollection } = require('../util/db');
 const Reviewer = require('../../lib/models/Reviewer');
-const { getReviewers, getReviewerTokens, getFilms, getReviews } = require('./create');
+const { getReviewers, getReviewerTokens,  } = require('./create');
 
 const checkStatus = statusCode => res => {
     expect(res.status).toEqual(statusCode);
@@ -50,18 +51,28 @@ describe('end to end reviewer testing', () => {
         return request(app)
             .post('/reviewer')
             .send(reviewer)
-            .then(({ body }) => {
-                expect(body).toEqual({
-                    ...reviewer,
+            .then((result) => {
+                expect(result.body).toEqual({
                     _id: expect.any(String),
                     __v: expect.any(Number),
+                    name: reviewer.name,
+                    company: reviewer.company,
                     email: reviewer.email,
-                    roles: []
+                    role: []
+
+                    
+                    // ...reviewer,
+                    // _id: expect.any(String),
+                    // __v: expect.any(Number),
+                    // email: reviewer.email,
+                    // roles: []
                 });
             });
     });
 
     it('gets all reviewers', () => {
+        const reviewers = getReviewers();
+        
         return request(app)
             .get('/reviewer')
             .then(retrievedReviewers => {
@@ -75,9 +86,10 @@ describe('end to end reviewer testing', () => {
         return Reviewer.create({
             name: chance.name(),
             company: chance.company(),
-            password: 'animals123'
+            clearPassword: 'animals123',
+            email: chance.email()
         }).then(user => {
-            expect(user.password).not.toEqual('animals123');
+            expect(user.clearPassword).not.toEqual('animals123');
             expect(bcrypt.compareSync('animals123', user.passwordHash));
         });
     });

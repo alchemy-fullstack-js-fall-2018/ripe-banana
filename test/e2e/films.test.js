@@ -3,39 +3,39 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const Chance = require('chance');
 const chance = new Chance();
-const { ResourceHelper } = require('../util/helpers');
+// const { ResourceHelper } = require('../util/helpers');
 const { getReviewers, getReviewerTokens, getActors, getStudios, getFilms, getReviews } = require('./create');
 
 describe('end to end film testing', () => {
 
-    const rh = new ResourceHelper;
+    // const rh = new ResourceHelper;
 
-    beforeEach(() => {
-        return (async() => {
-            await Promise.all([dropCollection('films'), dropCollection('reviews')]);
-            await Promise.all([rh.init('reviews', 104), rh.init('films', 104)]);
+    // beforeEach(() => {
+    //     return (async() => {
+    //         await Promise.all([dropCollection('films'), dropCollection('reviews')]);
+    //         await Promise.all([rh.init('reviews', 104), rh.init('films', 104)]);
 
-            await rh.wrapper('reviewers', 2);
-            await rh.assign('reviews', 'createdReviewers', 'reviewer');
+    //         await rh.wrapper('reviewers', 2);
+    //         await rh.assign('reviews', 'createdReviewers', 'reviewer');
 
-            await rh.wrapper('actors', 2);
-            await rh.assign('films', 'createdActors', 'cast[0].actor');
+    //         await rh.wrapper('actors', 2);
+    //         await rh.assign('films', 'createdActors', 'cast[0].actor');
 
-            await rh.wrapper('studios', 2);
-            await rh.assign('films', 'createdStudios', 'studio');
+    //         await rh.wrapper('studios', 2);
+    //         await rh.assign('films', 'createdStudios', 'studio');
 
-            await rh.taskRunner('films');
-            await rh.assign('reviews', 'createdFilms', 'film');
+    //         await rh.taskRunner('films');
+    //         await rh.assign('reviews', 'createdFilms', 'film');
 
-            await rh.taskRunner('reviews');
-        })();
-    });
+    //         await rh.taskRunner('reviews');
+    //     })();
+    // });
 
-    it('this creates a film', () => {
+    it('this creates a film if you are an admin', () => {
 
         const reviewerTokens = getReviewerTokens();
-        const studios = getStudios();
-        const actors = getActors();
+        // const studios = getStudios();
+        // const actors = getActors();
 
         const film = {
             title: chance.word(),

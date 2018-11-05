@@ -4,7 +4,7 @@ const Chance = require('chance');
 const chance = new Chance();
 const { ResourceHelper } = require('../util/helpers');
 const { dropCollection } = require('../util/db');
-const { getReviewerTokens, getStudios, getFilms } = require('./created');
+const { getReviewerTokens, getStudios, getFilms } = require('./create');
 
 describe('end to end studo testing', () => {
 
@@ -39,6 +39,7 @@ describe('end to end studo testing', () => {
                 country: chance.country({ full: true })
             }
         };
+
         return request(app)
             .post('/studios')
             .set('Authorization', `Bearer ${reviewerTokens[0]}`)

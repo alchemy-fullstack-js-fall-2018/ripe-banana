@@ -1,5 +1,6 @@
 require('dotenv').config();
-require('../lib/connector');
+require('./lib/util/connect');
+
 const { createServer } = require('http');
 const app = require('./lib/app');
 

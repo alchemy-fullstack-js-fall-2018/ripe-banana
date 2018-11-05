@@ -44,7 +44,7 @@ class ResourceHelper {
                 company: chance.company(),
                 email: chance.email(),
                 role: 'admin',
-                password: chance.string()
+                clearPassword: chance.string()
 
             },
             films: {

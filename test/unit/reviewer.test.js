@@ -1,8 +1,8 @@
 const { getErrors } = require('../util/helpers');
 const Reviewer = require('../../lib/models/Reviewer');
+const bcrypt = require('bcryptjs');
 const Chance = require('chance');
 const chance = new Chance();
-const bcrypt = require('bcryptjs');
 
 describe('Reviewer model', () => {
 
@@ -10,7 +10,7 @@ describe('Reviewer model', () => {
 
         const data = {
             name: chance.name(),
-            company: chance.company()
+            company: chance.company(),
             email: chance.email(),
             roles: ['admin']
         };

@@ -5,15 +5,15 @@ const reviewersData = [
     { 
         name: chance.name(), 
         company: chance.company(),
-        email: chance.email(),
-        clearPassword: chance.string(),
+        email: 'mikepaul@gmail.com',
+        clearPassword: 'ilovesushi',
         roles: ['admin'] 
     },
     { 
         name: chance.name(), 
         company: chance.company(),
-        email: chance.email(),
-        clearPassword: chance.string(),
+        email: 'doglover@email.com',
+        clearPassword: 'puppies123',
         roles: ['editor']
     }
 ];

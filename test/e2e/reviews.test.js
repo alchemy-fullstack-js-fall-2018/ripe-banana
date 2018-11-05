@@ -4,7 +4,7 @@ const app = require('../../lib/app');
 const Chance = require('chance');
 const chance = new Chance();
 const { ResourceHelper } = require('../util/helpers');
-const { getReviewers, getReviewerTokens, getFilms, getReviews } = require('./created');
+const { getReviewers, getReviewerTokens, getFilms, getReviews } = require('./create');
 
 describe('end to end review testing', () => {
 
