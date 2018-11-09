@@ -57,7 +57,7 @@ describe('film routes', () => {
             .set('Authorization', `Bearer ${reviewerTokens[1]}`)
             .send(newFilm)
             .then(result => {
-                expect(result.body).toEqual({});
+                expect(result.body).toEqual({ error: 'You must be an administrator to use this function.' });
             });
     });
 
@@ -153,7 +153,7 @@ describe('film routes', () => {
             .delete(`/films/${id}`)
             .set('Authorization', `Bearer ${reviewerTokens[1]}`)
             .then(deletedStatus => {
-                expect(deletedStatus.body).toEqual({});
+                expect(deletedStatus.body).toEqual({ error: 'You must be an administrator to use this function.' });
             });
     });
 

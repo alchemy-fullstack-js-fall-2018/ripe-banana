@@ -118,7 +118,7 @@ describe('reviewers', () => {
             .set('Authorization', `Bearer ${reviewerTokens[1]}`)
             .send(newData)
             .then(result => {
-                expect(result.body).toEqual({});
+                expect(result.body).toEqual({ error: 'You must be an administrator to use this function.' });
             });
     });
 

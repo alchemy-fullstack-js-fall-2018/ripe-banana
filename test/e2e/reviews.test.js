@@ -46,8 +46,7 @@ describe('reviews', () => {
             .post('/reviews')
             .send(reviewData)
             .then(result => {
-                // expect(result.body).toEqual({ error: 'Sign-in required' });
-                expect(result.body).toEqual({});
+                expect(result.body).toEqual({ error: 'Sign-in required' });
             });
     });
 
