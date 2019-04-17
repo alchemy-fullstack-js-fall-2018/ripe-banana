@@ -3,7 +3,7 @@ const app = require('../../lib/app');
 const { getActors, getFilms } = require('./helpers');
 
 describe('validates a vertical slice of the Actor route', () => {
-    
+
     it('Posts to Actor', () => {
         return request(app)
             .post('/api/actors')
@@ -19,7 +19,7 @@ describe('validates a vertical slice of the Actor route', () => {
                     name: 'Anna Peel',
                     dob: expect.any(String),
                     pob: 'Brazil'
-                });            
+                });
             });
     });
 
@@ -88,7 +88,7 @@ describe('validates a vertical slice of the Actor route', () => {
                     name: 'Ananna Peel',
                     dob: expect.any(String),
                     pob: 'Brazil'
-                });            
+                });
             });
     });
 
