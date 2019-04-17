@@ -1,0 +1,52 @@
+{
+  "name": "ripe-banana",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "coverage": "jest --coverage --detectOpenHandles",
+    "jest": "jest --verbose --runInBand",
+    "test": "npm run jest",
+    "test:watch": "npm run jest -- --watch",
+    "start": "nodemon index.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "reporters": [
+      [
+        "jest-nyan-reporter",
+        {
+          "suppressErrorReporter": false
+        }
+      ]
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarahflynn/ripe-banana.git"
+  },
+  "keywords": [],
+  "author": "Sarah Flynn <sflynn.pdx@gmail.com> (https://github.com/sarahflynn) & Ryan Luras",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sarahflynn/ripe-banana/issues"
+  },
+  "homepage": "https://github.com/sarahflynn/ripe-banana#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.2"
+  },
+  "devDependencies": {
+    "chance": "^1.0.18",
+    "dotenv": "^6.2.0",
+    "eslint": "^5.16.0",
+    "jest": "^24.7.1",
+    "jest-nyan-reporter": "^1.0.2",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.11",
+    "supertest": "^3.4.2"
+  }
+}
