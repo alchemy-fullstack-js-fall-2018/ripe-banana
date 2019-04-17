@@ -5,7 +5,6 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const { Types } = require('mongoose');
 
-
 beforeEach(() => {
     return dropCollection('studios');
 });
@@ -34,87 +33,98 @@ let reviews = [
         review: 'This is a badass review of of film 0',
         reviewer: Types.ObjectId(),
         film: Types.ObjectId()
-        
     },
     {
         rating: 2,
         review: 'This is mediocre review of of film 1',
         reviewer: Types.ObjectId(),
         film: Types.ObjectId()
-        
-    }];
-
-let actors =  [{
-    name: 'Anna Peel',
-    dob: new Date(),
-    pob: 'Brazil'
-},
-{
-    name: 'Lud Orange',
-    dob: new Date(),
-    pob: 'Florida'
-},
-{
-    name: 'Ocado Pitt',
-    dob: new Date(),
-    pob: 'Mexico'
-}];
-
-let studios =  [{
-    name: 'Compost Cinema', 
-    address: {
-        city: 'Portland',
-        state: 'OR',
-        country: 'United States'
     }
-},
-{
-    name: 'Compost Cinema2', 
-    address: {
-        city: 'Portland2',
-        state: 'OR',
-        country: 'United States'
-    }
-},
-{
-    name: 'Compost Budget Cinema', 
-    address: {
-        city: 'Portland2',
-        state: 'OR',
-        country: 'United States'
-    }
-}];
+];
 
-let films =  [{
-    title: 'Bladecrawler',
-    released: 1991,
-    cast: [{
-        role: 'lead',
-    }]
-},
-{
-    title: 'Bladewalker',
-    released: 1992,
-    cast: [{
-        role: 'Deckard',
-    }]
-}];
+let actors = [
+    {
+        name: 'Anna Peel',
+        dob: new Date(),
+        pob: 'Brazil'
+    },
+    {
+        name: 'Lud Orange',
+        dob: new Date(),
+        pob: 'Florida'
+    },
+    {
+        name: 'Ocado Pitt',
+        dob: new Date(),
+        pob: 'Mexico'
+    }
+];
 
-let reviewers =  [{
-    name: 'CreatedReviewer1', 
-    company: 'CreatedCompany1',
-    email: 'email1@email.com',
-    role: 'admin',
-    password: '1234asdf'
-},
-{
-    name: 'CreatedReviewer2', 
-    company: 'CreatedCompany2',
-    email: 'email2@email.com',
-    role: 'user',
-    password: '9876lkjh'
-}];
-    
+let studios = [
+    {
+        name: 'Compost Cinema',
+        address: {
+            city: 'Portland',
+            state: 'OR',
+            country: 'United States'
+        }
+    },
+    {
+        name: 'Compost Cinema2',
+        address: {
+            city: 'Portland2',
+            state: 'OR',
+            country: 'United States'
+        }
+    },
+    {
+        name: 'Compost Budget Cinema',
+        address: {
+            city: 'Portland2',
+            state: 'OR',
+            country: 'United States'
+        }
+    }
+];
+
+let films = [
+    {
+        title: 'Bladecrawler',
+        released: 1991,
+        cast: [
+            {
+                role: 'lead'
+            }
+        ]
+    },
+    {
+        title: 'Bladewalker',
+        released: 1992,
+        cast: [
+            {
+                role: 'Deckard'
+            }
+        ]
+    }
+];
+
+let reviewers = [
+    {
+        name: 'CreatedReviewer1',
+        company: 'CreatedCompany1',
+        email: 'email1@email.com',
+        role: 'admin',
+        password: '1234asdf'
+    },
+    {
+        name: 'CreatedReviewer2',
+        company: 'CreatedCompany2',
+        email: 'email2@email.com',
+        role: 'user',
+        password: '9876lkjh'
+    }
+];
+
 const createActor = actor => {
     return request(app)
         .post('/api/actors')
@@ -167,7 +177,7 @@ beforeEach(() => {
         return createdStudios;
     });
 });
-    
+
 beforeEach(() => {
     return Promise.all(films.map(createFilm)).then(filmsRes => {
         createdFilms = filmsRes;
@@ -205,5 +215,4 @@ module.exports = {
     getFilms,
     getReviewers,
     getReviews
-}
-;
+};

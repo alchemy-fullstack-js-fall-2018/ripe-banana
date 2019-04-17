@@ -3,7 +3,6 @@ const Review = require('../../lib/models/Review');
 const { Types } = require('mongoose');
 
 describe('Review Model', () => {
-
     it('creates a new Review when valid data is passed', () => {
         const data = {
             rating: 2,
@@ -23,6 +22,8 @@ describe('Review Model', () => {
         });
 
         const errors = getErrors(review.validateSync(), 4);
-        expect(errors.rating.properties.message).toEqual('Path `rating` is required.');
+        expect(errors.rating.properties.message).toEqual(
+            'Path `rating` is required.'
+        );
     });
 });

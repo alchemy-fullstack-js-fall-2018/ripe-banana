@@ -21,8 +21,8 @@ describe('Reviewer Model', () => {
         });
 
         const errors = getErrors(reviewer.validateSync(), 3);
-        expect(errors.name.properties.message).toEqual('Path `name` is required.');
+        expect(errors.name.properties.message).toEqual(
+            'Path `name` is required.'
+        );
     });
 });
-
-

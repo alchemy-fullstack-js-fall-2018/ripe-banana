@@ -3,7 +3,6 @@ const app = require('../../lib/app');
 const { getActors, getFilms } = require('./helpers');
 
 describe('validates a vertical slice of the Actor route', () => {
-
     it('Posts to Actor', () => {
         return request(app)
             .post('/api/actors')
@@ -28,8 +27,14 @@ describe('validates a vertical slice of the Actor route', () => {
         return request(app)
             .get('/api/actors')
             .then(res => {
-                expect(res.body).toContainEqual({ _id: createdActors[0]._id, name: createdActors[0].name });
-                expect(res.body).toContainEqual({ _id: createdActors[1]._id, name: createdActors[1].name });
+                expect(res.body).toContainEqual({
+                    _id: createdActors[0]._id,
+                    name: createdActors[0].name
+                });
+                expect(res.body).toContainEqual({
+                    _id: createdActors[1]._id,
+                    name: createdActors[1].name
+                });
             });
     });
 
@@ -39,19 +44,19 @@ describe('validates a vertical slice of the Actor route', () => {
         return request(app)
             .get(`/api/actors/${createdActors[1]._id}`)
             .then(res => {
-                expect(res.body).toEqual(
-                    {
-                        name: createdActors[1].name,
-                        dob: createdActors[1].dob,
-                        pob: createdActors[1].pob,
-                        films: [{
+                expect(res.body).toEqual({
+                    name: createdActors[1].name,
+                    dob: createdActors[1].dob,
+                    pob: createdActors[1].pob,
+                    films: [
+                        {
                             _id: createdFilms[1]._id,
                             title: createdFilms[1].title,
                             released: createdFilms[1].released
-                        }]
-                    });
+                        }
+                    ]
+                });
             });
-
     });
 
     it('deletes a actor that is not in any film casts', () => {
@@ -68,7 +73,9 @@ describe('validates a vertical slice of the Actor route', () => {
         return request(app)
             .delete(`/api/actors/${createdActors[1]._id}`)
             .then(modifiedList => {
-                expect(modifiedList.body).toEqual({ Error: 'Cannot remove an actor referenced in a film' });
+                expect(modifiedList.body).toEqual({
+                    Error: 'Cannot remove an actor referenced in a film'
+                });
             });
     });
 
@@ -91,5 +98,4 @@ describe('validates a vertical slice of the Actor route', () => {
                 });
             });
     });
-
 });

@@ -18,16 +18,17 @@ describe('Studio Model', () => {
     });
 
     it('fails when no name is invalid', () => {
-        const studio = new Studio ({
+        const studio = new Studio({
             address: {
                 city: 'Dumpsville',
                 state: 'ZZ',
                 country: 'Sarahstan'
             }
         });
-        
-        const errors = getErrors(studio.validateSync(), 2);
-        expect(errors.name.properties.message).toEqual('Path `name` is required.');
-    });
 
+        const errors = getErrors(studio.validateSync(), 2);
+        expect(errors.name.properties.message).toEqual(
+            'Path `name` is required.'
+        );
+    });
 });

@@ -3,14 +3,12 @@ const request = require('supertest');
 const app = require('../../lib/app');
 const { getReviewers, getReviews, getFilms } = require('./helpers');
 
-
 describe('validates a vertical slice of the Reviewer route', () => {
-
     it('Posts to Reviewer', () => {
         return request(app)
             .post('/api/reviewers')
             .send({
-                name: 'CreatedReviewer4', 
+                name: 'CreatedReviewer4',
                 company: 'CreatedCompany4',
                 email: 'email4@email.com',
                 role: 'admin',
@@ -19,11 +17,11 @@ describe('validates a vertical slice of the Reviewer route', () => {
             .then(res => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
-                    name: 'CreatedReviewer4', 
+                    name: 'CreatedReviewer4',
                     company: 'CreatedCompany4',
                     email: 'email4@email.com',
-                    role: 'admin',
-                });            
+                    role: 'admin'
+                });
             });
     });
 
@@ -64,18 +62,19 @@ describe('validates a vertical slice of the Reviewer route', () => {
                     company: createdReviewers[1].company,
                     email: createdReviewers[1].email,
                     role: createdReviewers[1].role,
-                    reviews: [{
-                        _id: createdReviews[1]._id,
-                        rating: createdReviews[1].rating,
-                        review: createdReviews[1].review,
-                        film: {
-                            _id: createdReviews[1].film,
-                            title: createdFilms[1].title
+                    reviews: [
+                        {
+                            _id: createdReviews[1]._id,
+                            rating: createdReviews[1].rating,
+                            review: createdReviews[1].review,
+                            film: {
+                                _id: createdReviews[1].film,
+                                title: createdFilms[1].title
+                            }
                         }
-                    }]
+                    ]
                 });
             });
-
     });
 
     it('deletes a Reviewer by id', () => {
@@ -94,7 +93,7 @@ describe('validates a vertical slice of the Reviewer route', () => {
         return request(app)
             .put(`/api/reviewers/${createdReviewers[1]._id}`)
             .send({
-                name: 'CreatedReviewer5', 
+                name: 'CreatedReviewer5',
                 company: 'CreatedCompany5',
                 email: 'email5@email.com',
                 role: 'user'
@@ -102,16 +101,11 @@ describe('validates a vertical slice of the Reviewer route', () => {
             .then(res => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
-                    name: 'CreatedReviewer5', 
+                    name: 'CreatedReviewer5',
                     company: 'CreatedCompany5',
                     email: 'email5@email.com',
                     role: 'user'
-                });            
+                });
             });
     });
-
 });
-
-
-
-

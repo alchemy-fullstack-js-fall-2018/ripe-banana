@@ -1,9 +1,14 @@
 const request = require('supertest');
 const app = require('../../lib/app');
-const { getReviewers, getReviews, getActors, getFilms, getStudios } = require('./helpers');
+const {
+    getReviewers,
+    getReviews,
+    getActors,
+    getFilms,
+    getStudios
+} = require('./helpers');
 
 describe('validates a vertical slice of the Films route', () => {
-
     it('Posts to Films', () => {
         const createdStudios = getStudios();
         const createdActors = getActors();
@@ -14,10 +19,12 @@ describe('validates a vertical slice of the Films route', () => {
                 title: 'Bladewalker',
                 studio: createdStudios[0]._id,
                 released: 1991,
-                cast: [{
-                    role: 'Pris',
-                    actor: createdActors[0]._id
-                }]
+                cast: [
+                    {
+                        role: 'Pris',
+                        actor: createdActors[0]._id
+                    }
+                ]
             })
             .then(res => {
                 expect(res.body).toEqual({
@@ -26,15 +33,17 @@ describe('validates a vertical slice of the Films route', () => {
                     title: 'Bladewalker',
                     studio: createdStudios[0]._id,
                     released: 1991,
-                    cast: [{
-                        _id: expect.any(String),
-                        role: 'Pris',
-                        actor: createdActors[0]._id
-                    }]
-                });            
+                    cast: [
+                        {
+                            _id: expect.any(String),
+                            role: 'Pris',
+                            actor: createdActors[0]._id
+                        }
+                    ]
+                });
             });
     });
-    
+
     it('gets all Films', () => {
         const createdFilms = getFilms();
         const createdStudios = getStudios();
@@ -44,20 +53,20 @@ describe('validates a vertical slice of the Films route', () => {
             .then(res => {
                 expect(res.body).toContainEqual({
                     _id: createdFilms[0]._id,
-                    title: createdFilms[0].title, 
-                    released: createdFilms[0].released, 
-                    studio: { 
-                        _id: createdFilms[0].studio, 
-                        name: createdStudios[0].name 
+                    title: createdFilms[0].title,
+                    released: createdFilms[0].released,
+                    studio: {
+                        _id: createdFilms[0].studio,
+                        name: createdStudios[0].name
                     }
                 });
                 expect(res.body).toContainEqual({
                     _id: createdFilms[1]._id,
-                    title: createdFilms[1].title, 
-                    released: createdFilms[1].released, 
-                    studio: { 
-                        _id: createdFilms[1].studio, 
-                        name: createdStudios[1].name 
+                    title: createdFilms[1].title,
+                    released: createdFilms[1].released,
+                    studio: {
+                        _id: createdFilms[1].studio,
+                        name: createdStudios[1].name
                     }
                 });
             });
@@ -73,23 +82,25 @@ describe('validates a vertical slice of the Films route', () => {
         return request(app)
             .get(`/api/films/${createdFilms[1]._id}`)
             .then(res => {
-                expect(res.body).toEqual(
-                    { 
-                        title: createdFilms[1].title, 
-                        released: createdFilms[1].released, 
-                        studio: { 
-                            _id: createdFilms[1].studio, 
-                            name: createdStudios[1].name 
-                        }, 
-                        cast: [{
-                            _id: createdFilms[1].cast[0]._id, 
-                            role: createdFilms[1].cast[0].role, 
+                expect(res.body).toEqual({
+                    title: createdFilms[1].title,
+                    released: createdFilms[1].released,
+                    studio: {
+                        _id: createdFilms[1].studio,
+                        name: createdStudios[1].name
+                    },
+                    cast: [
+                        {
+                            _id: createdFilms[1].cast[0]._id,
+                            role: createdFilms[1].cast[0].role,
                             actor: {
-                                _id: createdActors[1]._id, 
-                                name: createdActors[1].name 
+                                _id: createdActors[1]._id,
+                                name: createdActors[1].name
                             }
-                        }],
-                        reviews: [{
+                        }
+                    ],
+                    reviews: [
+                        {
                             _id: createdReviews[1]._id,
                             rating: createdReviews[1].rating,
                             review: createdReviews[1].review,
@@ -97,8 +108,9 @@ describe('validates a vertical slice of the Films route', () => {
                                 _id: createdReviews[1].reviewer,
                                 name: createdReviewers[1].name
                             }
-                        }] 
-                    });
+                        }
+                    ]
+                });
             });
     });
 
@@ -111,5 +123,4 @@ describe('validates a vertical slice of the Films route', () => {
                 expect(modifiedList.body).toEqual({ removed: true });
             });
     });
-
 });

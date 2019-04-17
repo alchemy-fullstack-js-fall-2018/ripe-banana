@@ -3,7 +3,6 @@ const app = require('../../lib/app');
 const { getReviewers, getReviews, getFilms } = require('./helpers');
 
 describe('end to end test of reviews', () => {
-
     it('posts a review', () => {
         const createdFilms = getFilms();
         const createdReviewers = getReviewers();
@@ -23,18 +22,17 @@ describe('end to end test of reviews', () => {
                     rating: 1,
                     reviewer: createdReviewers[0]._id,
                     review: 'This is a terrible review of of film 0',
-                    film: createdFilms[0]._id, 
+                    film: createdFilms[0]._id,
                     created_at: expect.any(String),
                     updated_at: expect.any(String)
                 });
-            
             });
     });
 
     it('gets all reviews', () => {
         const createdReviews = getReviews();
         const createdFilms = getFilms();
-        
+
         return request(app)
             .get('/api/reviews')
             .then(res => {
@@ -60,8 +58,6 @@ describe('end to end test of reviews', () => {
                     created_at: expect.any(String),
                     updated_at: expect.any(String)
                 });
-             
             });
     });
-
 });

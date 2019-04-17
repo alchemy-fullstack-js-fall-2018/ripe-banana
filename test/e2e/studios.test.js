@@ -3,12 +3,11 @@ const app = require('../../lib/app');
 const { getStudios, getFilms } = require('./helpers');
 
 describe('validates a vertical slice of the Studio route', () => {
-
     it('Posts to Studio', () => {
         return request(app)
             .post('/api/studios')
             .send({
-                name: 'Compost Cinema', 
+                name: 'Compost Cinema',
                 address: {
                     city: 'Portland',
                     state: 'OR',
@@ -25,7 +24,7 @@ describe('validates a vertical slice of the Studio route', () => {
                         state: 'OR',
                         country: 'United States'
                     }
-                });            
+                });
             });
     });
 
@@ -61,13 +60,14 @@ describe('validates a vertical slice of the Studio route', () => {
                     _id: createdStudios[1]._id,
                     name: createdStudios[1].name,
                     address: createdStudios[1].address,
-                    films: [{
-                        _id: createdFilms[1]._id,
-                        title: createdFilms[1].title
-                    }]
+                    films: [
+                        {
+                            _id: createdFilms[1]._id,
+                            title: createdFilms[1].title
+                        }
+                    ]
                 });
             });
-
     });
 
     it('deletes a studio by id', () => {
@@ -86,7 +86,9 @@ describe('validates a vertical slice of the Studio route', () => {
         return request(app)
             .delete(`/api/studios/${createdStudios[1]._id}`)
             .then(modifiedList => {
-                expect(modifiedList.body).toEqual({ Error: 'Cannot remove a studio referenced in a film' });
+                expect(modifiedList.body).toEqual({
+                    Error: 'Cannot remove a studio referenced in a film'
+                });
             });
     });
 
@@ -96,7 +98,7 @@ describe('validates a vertical slice of the Studio route', () => {
         return request(app)
             .put(`/api/studios/${createdStudios[1]._id}`)
             .send({
-                name: 'Compost Cinema5', 
+                name: 'Compost Cinema5',
                 address: {
                     city: 'Portland5',
                     state: 'OR',
@@ -107,7 +109,7 @@ describe('validates a vertical slice of the Studio route', () => {
                 expect(res.body).toEqual({
                     _id: expect.any(String),
                     __v: expect.any(Number),
-                    name: 'Compost Cinema5', 
+                    name: 'Compost Cinema5',
                     address: {
                         city: 'Portland5',
                         state: 'OR',
@@ -116,9 +118,4 @@ describe('validates a vertical slice of the Studio route', () => {
                 });
             });
     });
-
 });
-
-
-
-
